@@ -97,7 +97,8 @@ def _auto_load_saved_portfolio():
     res = sb.load_latest_portfolio(st.session_state["auth"]["session"])
     if res["ok"] and res.get("portfolio") is not None:
         st.session_state["portfolio_df"] = res["portfolio"]
-        st.session_state["portfolio_label"] = f"Saved - {res.get('name') or 'my portfolio'}"
+        st.session_state["portfolio_label"] = f"{res.get('name') or 'my portfolio'} (saved)"
+        st.session_state["_last_upload"] = "_autoloaded_"  # avoid re-upload churn
 
 
 def render_account_sidebar():
@@ -106,15 +107,16 @@ def render_account_sidebar():
         return
     with st.sidebar:
         st.markdown("### Account")
-        if st.button("Save current portfolio to my profile", use_container_width=True):
+        st.caption("Your uploaded portfolio is saved to your profile automatically "
+                   "and reloads on your next login.")
+        if st.button("Re-save current portfolio", use_container_width=True):
             df = st.session_state.get("portfolio_df")
             if df is None:
                 st.warning("No portfolio to save.")
             else:
-                name = st.session_state.get("portfolio_label") or "my portfolio"
-                r = sb.save_portfolio(st.session_state["auth"]["session"], name, df)
+                r = sb.save_portfolio(st.session_state["auth"]["session"],
+                                      _SAVED_PORTFOLIO_NAME, df)
                 st.success("Saved to your profile.") if r["ok"] else st.error(r["message"])
-        st.caption("Logged-in users auto-load their most recent saved portfolio on sign-in.")
         st.divider()
 
 
@@ -168,18 +170,36 @@ def _init_portfolio_state():
         st.session_state["portfolio_label"] = None
 
 
+# Stable name so re-saving updates the same row (no duplicate drift).
+_SAVED_PORTFOLIO_NAME = "my portfolio"
+
+
 def _handle_upload(uploaded, container):
-    """Apply an uploaded portfolio, keeping the previous one on failure (Req 1.6)."""
+    """Apply an uploaded portfolio, keeping the previous one on failure (Req 1.6).
+
+    When the user is logged in, the uploaded portfolio is AUTOMATICALLY saved to
+    their Supabase profile so it reloads on next login - no manual step needed.
+    """
     if uploaded is None or uploaded == st.session_state.get("_last_upload"):
         return
     st.session_state["_last_upload"] = uploaded
     res = engine.load_portfolio(uploaded)
-    if res["ok"]:
-        st.session_state["portfolio_df"] = res["portfolio"]
-        st.session_state["portfolio_label"] = f"Uploaded - {uploaded.name}"
-        container.success(f"Loaded {uploaded.name}")
-    else:
+    if not res["ok"]:
         container.error(res["message"])  # keep previous portfolio
+        return
+    st.session_state["portfolio_df"] = res["portfolio"]
+    st.session_state["portfolio_label"] = uploaded.name
+    container.success(f"Loaded {uploaded.name}")
+
+    # Auto-persist for logged-in users (Req 12.1).
+    if _is_logged_in():
+        r = sb.save_portfolio(st.session_state["auth"]["session"],
+                              _SAVED_PORTFOLIO_NAME, res["portfolio"])
+        if r["ok"]:
+            container.success("Saved to your profile - it will reload next login.")
+            st.session_state["portfolio_label"] = f"{uploaded.name} (saved)"
+        else:
+            container.warning(f"Loaded, but could not save to profile: {r['message']}")
 
 
 def render_portfolio_panel():
@@ -535,18 +555,26 @@ def section_news(analysis: dict):
                "practice return mostly recent items. With full API access the window "
                "would scan the entire selected period.")
 
-    # Recompute when the user refreshes or changes the window.
+    # Only run when the user explicitly clicks the button (never auto-run, so
+    # changing the slider does not fire an API call until they confirm).
     cache = analysis.get("news")
-    cached_window = analysis.get("news_window")
-    if refresh or cache is None or cached_window != lookback:
+    if refresh:
         with st.spinner("Fetching headlines and assessing impact against the rubric..."):
             companies = [c["company"] for c in m["contributions"]]
             res = news_mod.news_overlay(theme, taxonomy, companies,
-                                        lookback_days=lookback, force_refresh=refresh)
+                                        lookback_days=lookback, force_refresh=True)
         analysis["news"] = res
         analysis["news_window"] = lookback
         st.session_state["analysis"] = analysis
         cache = res
+
+    # Before any fetch, prompt the user to pick a window and click the button.
+    if cache is None:
+        st.info("Select a lookback window above and click **Fetch news & compute "
+                "overlay** to assess recent events against the baseline. "
+                "No news is fetched until you do.")
+        _render_rubric()
+        return
 
     if not cache or not cache.get("ok"):
         msg = (cache or {}).get("message", "News overlay is unavailable right now.")
