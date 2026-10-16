@@ -230,35 +230,4 @@ where the adjustment came from.
   only reaches back a few days regardless of the window selected; we note this
   on screen.
 
----
 
-## 7. How it's built (one-paragraph technical summary)
-
-Python throughout. `engine.py` holds all the deterministic logic (data loading,
-company matching, the offline similarity scoring, and the portfolio arithmetic)
-and has no UI code, which makes it independently testable — there are 40
-automated tests, including property-based tests that check the maths holds for
-thousands of generated cases. `app.py` is the Streamlit web dashboard (branded
-UI, charts, tabs). `news.py` handles the optional news overlay. `supabase_client.py`
-handles login and saving portfolios. The AI model is Groq's hosted
-`openai/gpt-oss-120b`; the offline text-similarity model is `model2vec`;
-accounts and saved portfolios use Supabase; the app is deployed on Streamlit
-Community Cloud.
-
----
-
-## 8. Running it yourself
-
-```bash
-pip install -r requirements.txt
-# add your keys to a .env file (see .env.example)
-streamlit run app.py
-```
-
-The app opens in your browser. Log in (or use it anonymously if accounts aren't
-configured), upload a portfolio, type a theme, and click **Analyze**.
-
-> **Keys needed:** `GROQ_API_KEY` (the AI model). Optional: `SUPABASE_URL` /
-> `SUPABASE_ANON_KEY` for login & saved portfolios, and a news API key
-> (`CURRENTS_API_KEY` or `NEWSDATA_API_KEY`) for the news overlay. The app runs
-> without the optional ones — those features simply switch off gracefully.
