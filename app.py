@@ -105,22 +105,16 @@ def render_account_sidebar():
     if not _is_logged_in():
         return
     with st.sidebar:
-        user = st.session_state["auth"]["user"]
         st.markdown("### Account")
-        st.caption(f"Signed in as {user.get('email','user')}")
         if st.button("Save current portfolio to my profile", use_container_width=True):
             df = st.session_state.get("portfolio_df")
             if df is None:
                 st.warning("No portfolio to save.")
             else:
-                name = st.session_state.get("portfolio_label", "my portfolio")
+                name = st.session_state.get("portfolio_label") or "my portfolio"
                 r = sb.save_portfolio(st.session_state["auth"]["session"], name, df)
                 st.success("Saved to your profile.") if r["ok"] else st.error(r["message"])
-        if st.button("Log out", use_container_width=True):
-            sb.sign_out()
-            for k in ("auth", "_autoloaded", "analysis"):
-                st.session_state.pop(k, None)
-            st.rerun()
+        st.caption("Logged-in users auto-load their most recent saved portfolio on sign-in.")
         st.divider()
 
 
@@ -130,6 +124,14 @@ def render_account_sidebar():
 def render_header():
     groq = "Connected" if _groq_ok() else "No API key"
     pill_color = T.GOLD if _groq_ok() else T.BAD
+
+    # Right-side chrome: Groq status + (when logged in) the user's email.
+    right = f'<div class="sch-pill">Groq&nbsp;API&nbsp;<b style="color:{pill_color}">&#9679; {groq}</b></div>'
+    if _is_logged_in():
+        email = st.session_state["auth"]["user"].get("email", "account")
+        right = (f'<div class="sch-pill">&#128100; <b style="color:{T.TEXT}">{email}</b></div>'
+                 + right)
+
     st.markdown(
         f"""
         <div class="sch-header">
@@ -140,11 +142,22 @@ def render_header():
               <div class="sch-sub">AI-Powered Thematic Exposure &middot; Schroders</div>
             </div>
           </div>
-          <div class="sch-pill">Groq&nbsp;API&nbsp;<b style="color:{pill_color}">&#9679; {groq}</b></div>
+          <div style="display:flex;gap:10px;align-items:center;">{right}</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+
+    # A real logout button, right-aligned just under the header bar.
+    if _is_logged_in():
+        spacer, btn = st.columns([6, 1])
+        with btn:
+            if st.button("Log out", use_container_width=True, key="header_logout"):
+                sb.sign_out()
+                for k in ("auth", "_autoloaded", "analysis", "news", "news_window",
+                          "portfolio_df", "portfolio_label", "_last_upload"):
+                    st.session_state.pop(k, None)
+                st.rerun()
 
 
 def _init_portfolio_state():

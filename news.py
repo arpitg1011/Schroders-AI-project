@@ -61,25 +61,31 @@ def _fetch_newsapi(theme: str, api_key: str) -> list[dict]:
     return out
 
 
-def _fetch_freenews(theme: str, api_key: str) -> list[dict]:
-    """freenewsapi.io - 5000 req/day. Auth via x-api-key header, /v1/news,
-    'search' query param. Articles under 'data'; no URL on the free tier."""
-    url = "https://api.freenewsapi.io/v1/news?" + urllib.parse.urlencode({
-        "search": theme, "language": "en",
+def _fetch_currents(theme: str, api_key: str) -> list[dict]:
+    """CurrentsAPI (currentsapi.services) - 250 req/day. Real keyword search
+    (verified), returns a usable URL. /v1/search with keywords + apiKey."""
+    url = "https://api.currentsapi.services/v1/search?" + urllib.parse.urlencode({
+        "keywords": theme, "language": "en", "apiKey": api_key,
     })
-    data = _http_json(url, headers={
-        "User-Agent": "ThemeIQ/1.0", "Accept": "application/json",
-        "x-api-key": api_key,
-    })
+    data = _http_json(url)
+    if data.get("status") != "ok":
+        return []
     out = []
-    for a in data.get("data", []):
+    for a in data.get("news", []):
         out.append({
             "title": (a.get("title") or "").encode("utf-8", "ignore").decode("utf-8"),
-            "domain": a.get("publisher") or "",
-            "date": (a.get("published_at") or "")[:10],
-            "url": a.get("url") or a.get("link") or "",
+            "domain": _domain_from_url(a.get("url") or "") or "",
+            "date": (a.get("published") or "")[:10],
+            "url": a.get("url") or "",
         })
     return out
+
+
+def _domain_from_url(u: str) -> str:
+    try:
+        return urllib.parse.urlparse(u).netloc.replace("www.", "")
+    except Exception:
+        return ""
 
 
 def _fetch_newsdata(theme: str, api_key: str) -> list[dict]:
@@ -152,19 +158,26 @@ def fetch_headlines(theme: str, lookback_days: int = 7) -> dict:
     Returns {ok, headlines, source, fetched_count, window_count}.
     """
     raw, source = [], None
-    # Preferred: newsdata.io - its keyword search actually returns relevant,
-    # on-theme results (verified), and it works server-side.
-    newsdata_key = get_secret("NEWSDATA_API_KEY")
-    if newsdata_key:
+    # Preferred: CurrentsAPI - real keyword search (verified on-theme per query)
+    # with a usable article URL, works server-side.
+    currents_key = get_secret("CURRENTS_API_KEY")
+    if currents_key:
         try:
-            heads = _fetch_newsdata(theme, newsdata_key)
+            heads = _fetch_currents(theme, currents_key)
             if heads:
-                raw, source = heads, "newsdata.io"
+                raw, source = heads, "CurrentsAPI"
         except Exception:
             pass
-    # Note: freenewsapi.io has a generous quota but its free `search` ignores
-    # the query and returns an irrelevant general feed, so it is NOT used for
-    # themed search. _fetch_freenews is retained only as a last-resort stub.
+    # Secondary: newsdata.io - also real keyword search, works server-side.
+    if not raw:
+        newsdata_key = get_secret("NEWSDATA_API_KEY")
+        if newsdata_key:
+            try:
+                heads = _fetch_newsdata(theme, newsdata_key)
+                if heads:
+                    raw, source = heads, "newsdata.io"
+            except Exception:
+                pass
     # Secondary: NewsAPI (dev/localhost only on free tier).
     if not raw:
         newsapi_key = get_secret("NEWSAPI_KEY")
