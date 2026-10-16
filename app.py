@@ -13,6 +13,7 @@ from streamlit_echarts import st_echarts
 from streamlit_option_menu import option_menu
 
 import engine
+import supabase_client as sb
 import theme as T
 
 DEFAULT_PORTFOLIO = "data/portfolio_80.xlsx"
@@ -42,6 +43,90 @@ def _confidence_label(conf: float) -> str:
     if conf >= 0.33:
         return "Medium"
     return "Low"
+
+
+# ---------------------------------------------------------------------------
+# Authentication (Phase 2 - only active when Supabase is configured)
+# ---------------------------------------------------------------------------
+def _is_logged_in() -> bool:
+    return bool(st.session_state.get("auth"))
+
+
+def render_login_gate() -> bool:
+    """Render login/signup. Returns True if the user may proceed.
+
+    If Supabase is not configured, returns True immediately (anonymous Phase 1,
+    Req 11.5). If configured, requires login before showing the app.
+    """
+    if not sb.is_configured():
+        return True  # anonymous mode - full Phase 1 experience
+    if _is_logged_in():
+        return True
+
+    _, mid, _ = st.columns([1, 1.4, 1])
+    with mid:
+        st.markdown('<div class="panel" style="margin-top:8px;">', unsafe_allow_html=True)
+        st.markdown('<div class="panel-title">Sign in to ThemeIQ</div>'
+                    '<div class="panel-sub">Log in to save and auto-load your portfolios</div>',
+                    unsafe_allow_html=True)
+        tab_login, tab_signup = st.tabs(["Log in", "Create account"])
+        with tab_login:
+            email = st.text_input("Email", key="li_email")
+            pw = st.text_input("Password", type="password", key="li_pw")
+            if st.button("Log in", type="primary", use_container_width=True):
+                res = sb.sign_in(email.strip(), pw)
+                if res["ok"]:
+                    st.session_state["auth"] = {"user": res["user"], "session": res["session"]}
+                    st.rerun()
+                else:
+                    st.error(res["message"])
+        with tab_signup:
+            email2 = st.text_input("Email", key="su_email")
+            pw2 = st.text_input("Password (min 6 chars)", type="password", key="su_pw")
+            if st.button("Create account", use_container_width=True):
+                res = sb.sign_up(email2.strip(), pw2)
+                if res["ok"]:
+                    st.session_state["auth"] = {"user": res["user"], "session": res["session"]}
+                    st.rerun()
+                else:
+                    st.error(res["message"])
+        st.markdown('</div>', unsafe_allow_html=True)
+    return False
+
+
+def _auto_load_saved_portfolio():
+    """On first login, auto-load the user's most recent saved portfolio (Req 12.2)."""
+    if not _is_logged_in() or st.session_state.get("_autoloaded"):
+        return
+    st.session_state["_autoloaded"] = True
+    res = sb.load_latest_portfolio(st.session_state["auth"]["session"])
+    if res["ok"] and res.get("portfolio") is not None:
+        st.session_state["portfolio_df"] = res["portfolio"]
+        st.session_state["portfolio_label"] = f"Saved - {res.get('name') or 'my portfolio'}"
+
+
+def render_account_sidebar():
+    """Account controls in the sidebar (only when logged in)."""
+    if not _is_logged_in():
+        return
+    with st.sidebar:
+        user = st.session_state["auth"]["user"]
+        st.markdown("### Account")
+        st.caption(f"Signed in as {user.get('email','user')}")
+        if st.button("Save current portfolio to my profile", use_container_width=True):
+            df = st.session_state.get("portfolio_df")
+            if df is None:
+                st.warning("No portfolio to save.")
+            else:
+                name = st.session_state.get("portfolio_label", "my portfolio")
+                r = sb.save_portfolio(st.session_state["auth"]["session"], name, df)
+                st.success("Saved to your profile.") if r["ok"] else st.error(r["message"])
+        if st.button("Log out", use_container_width=True):
+            sb.sign_out()
+            for k in ("auth", "_autoloaded", "analysis"):
+                st.session_state.pop(k, None)
+            st.rerun()
+        st.divider()
 
 
 # ---------------------------------------------------------------------------
@@ -426,7 +511,14 @@ def main():
     st.markdown(T.inject_css(), unsafe_allow_html=True)
 
     render_header()
+
+    # Phase 2 auth gate (no-op when Supabase is not configured - Req 11.5).
+    if not render_login_gate():
+        return
+
     _ensure_default_portfolio()
+    _auto_load_saved_portfolio()
+    render_account_sidebar()
     render_sidebar()
     render_portfolio_panel()
 
