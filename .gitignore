@@ -1,0 +1,26 @@
+﻿# Secrets - never commit
+.env
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Test / tooling caches
+.pytest_cache/
+.hypothesis/
+
+# Taxonomy cache (reproducibility)
+.taxonomy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

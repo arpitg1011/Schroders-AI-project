@@ -1,0 +1,19 @@
+# ---- Phase 1 (core platform) ----
+streamlit>=1.37
+groq>=0.11
+pandas>=2.2
+numpy>=2.0            # 2.0+ required by pyarrow / Streamlit dataframes
+openpyxl>=3.1
+python-dotenv>=1.0
+rapidfuzz>=3.9
+pyarrow>=16            # Streamlit st.dataframe backend
+model2vec>=0.3        # offline deterministic static embeddings (semantic matching)
+streamlit-option-menu>=0.3   # branded top navbar
+streamlit-echarts>=0.4       # institutional gauge/donut/bar charts
+
+# ---- Phase 2 (Supabase auth + persistence; not needed for Phase 1) ----
+supabase>=2.7
+
+# ---- dev / test ----
+hypothesis>=6.100
+pytest>=8.2
