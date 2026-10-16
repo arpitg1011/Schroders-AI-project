@@ -794,3 +794,42 @@ The UI renders the taxonomy as a hierarchy (tree / inverted-pyramid) and shows p
 ```
 model2vec>=0.3        # offline deterministic static embeddings for semantic matching
 ```
+
+
+## Revision R3 - News-Driven Exposure Overlay (Requirement 16)
+
+### Principle: transparent baseline + bounded, cited overlay
+
+The deterministic filings-based exposure (R1-R7) is the **Baseline_Exposure** and is never silently altered. News produces a **separate, visible** adjustment so the analyst always sees three numbers: baseline, news adjustment, and news-adjusted total. This preserves auditability (the credibility of the tool) while answering the "something big happened - am I over-exposed now?" workflow.
+
+### New module: `news.py` (pluggable source + LLM adjustment)
+
+- `fetch_headlines(theme, timespan) -> dict`: fetches recent headlines from a **pluggable** source. Default implementation is GDELT (free, no key); the fetcher is a swappable function so a keyed API (NewsAPI/Brave) can replace it via config without touching the adjustment logic. Returns `{"ok": True, "headlines": [{title, domain, date, url}]}` or a handled error. GDELT is rate-limited (HTTP 429) and sometimes flaky, so failures are handled gracefully (R16.9) and the headline list can be injected for testing.
+- `news_adjustment(theme, taxonomy, headlines, portfolio_companies) -> dict`: one LLM call that, given the sub-themes and the dated headlines, returns a signed per-sub-theme adjustment (percentage points) with a cited rationale and the most-affected portfolio companies. The model reasons about the **value chain** (e.g. oil-price shock -> energy-derived names; rare-earth curbs -> chip supply chains), not sentiment. Output validated and **clamped** so the total adjustment stays within +/-`NEWS_ADJUSTMENT_CAP` (default 10 points).
+
+### Data shapes
+
+```python
+NewsAdjustment = {
+    "ok": True,
+    "total_adjustment": float,          # signed, bounded to +/- cap
+    "per_sub_theme": [                   # one entry per affected sub-industry
+        {"sub_industry": str, "adjustment": float, "rationale": str,
+         "affected_companies": [str], "cited_headlines": [int]},  # idx into headlines
+    ],
+    "headlines": [{"title","domain","date","url"}],
+    "as_of": "YYYY-MM-DD",
+}
+```
+
+### Determinism & caching
+
+The baseline stays reproducible (cached by theme). The news overlay is explicitly a **point-in-time, non-reproducible** signal; it is cached by (theme, date) so it is stable within a day and labelled as such in the UI. The LLM news call is separate from the taxonomy call and never assigns the baseline numbers.
+
+### UI: "News & Events" tab (R16.6)
+
+A new tab shows: the baseline vs news-adjusted exposure (three distinct figures), the per-sub-theme adjustments with their cited, dated headlines and affected companies, and a clear label that this is a point-in-time overlay. If the source/LLM is unavailable, the baseline is shown normally with a handled "news overlay unavailable" note (R16.9).
+
+### Dependency
+
+No new hard dependency (GDELT via stdlib `urllib`). A keyed news API would add a client + a secret, kept in `.env`/`st.secrets` like `GROQ_API_KEY`.

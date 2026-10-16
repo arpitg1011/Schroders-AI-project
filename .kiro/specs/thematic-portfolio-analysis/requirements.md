@@ -41,6 +41,10 @@ The platform is built in two phases. Phase 1 delivers the core thematic analysis
 - **Semantic_Similarity**: The cosine similarity, in the range [0.0, 1.0], between the Embedding_Model vector of a Segment's text and the vector of a Business_Activity or Sub_Industry.
 - **Confidence_Score**: A per-company value in the range [0.0, 1.0] indicating how strongly the available evidence supports the company's thematic classification.
 - **Sub_Theme_Attribution**: The decomposition of a company's or the portfolio's Company_Exposure across the taxonomy's Sub_Industries, showing how much exposure each sub-theme contributes.
+- **Baseline_Exposure**: The deterministic, filings-based Portfolio_Thematic_Exposure computed from S&P segment revenue. Unaffected by news.
+- **News_Overlay**: The component that fetches recent news for a Theme and uses the LLM to produce a bounded, cited, per-sub-theme adjustment to exposure.
+- **News_Adjustment**: A signed, bounded adjustment in percentage points derived from recent events, decomposed per Sub_Industry, with a cited rationale.
+- **News_Adjusted_Exposure**: Baseline_Exposure plus News_Adjustment, presented as a distinct point-in-time figure alongside (never replacing) the Baseline_Exposure.
 
 ## Requirements
 
@@ -228,6 +232,22 @@ The platform is built in two phases. Phase 1 delivers the core thematic analysis
 2. THE Company_Scorer SHALL attribute each company's Company_Exposure across the Taxonomy Sub_Industries as a Sub_Theme_Attribution, and the attributions SHALL sum to the company's Company_Exposure.
 3. THE Portfolio_Calculator SHALL aggregate Sub_Theme_Attribution to the portfolio level so that Portfolio_Thematic_Exposure can be broken down by Sub_Industry.
 4. WHERE a company's Segment data is insufficient to classify it, THE System SHALL flag the company as low confidence or insufficient data rather than reporting a misleadingly precise exposure.
+
+### Requirement 16: News-Driven Exposure Overlay
+
+**User Story:** As a Schroders analyst, I want recent news events to produce a transparent, bounded adjustment on top of the filings-based exposure, so that after a major event I can judge whether the portfolio is suddenly more or less exposed to a theme than the quarterly snapshot implies.
+
+#### Acceptance Criteria
+
+1. THE System SHALL compute a Baseline_Exposure from S&P segment revenue exactly as specified in Requirements 4, 6, and 7, and SHALL NOT alter it based on news.
+2. THE System SHALL fetch recent news headlines relevant to the Theme from a configurable news source, and SHALL treat the news source as pluggable so it can be changed without altering the adjustment logic.
+3. THE News_Overlay SHALL use the LLM to judge, for each Sub_Industry, whether the recent events increase or decrease exposure to that sub-theme and SHALL return a signed adjustment in percentage points with a plain-language rationale that cites specific dated headlines.
+4. THE News_Overlay SHALL name the portfolio companies most affected by each event via the theme's value chain (for example an oil-price event affecting energy-derived companies).
+5. THE System SHALL constrain the total news adjustment to a bounded range (default plus or minus 10 percentage points) so that news informs but never dominates the structural Baseline_Exposure.
+6. THE System SHALL present Baseline_Exposure, the News_Adjustment, and the News_Adjusted_Exposure as three distinct values so that the contribution of news is always decomposable and auditable.
+7. IF no relevant news is found, THEN THE News_Adjustment SHALL be 0 and the News_Adjusted_Exposure SHALL equal the Baseline_Exposure.
+8. THE System SHALL label the News_Overlay as a point-in-time, non-reproducible signal distinct from the deterministic Baseline_Exposure, and SHALL cache news results by Theme and date so they are stable within a day.
+9. IF the news source is unreachable or the LLM news call fails, THEN THE System SHALL present the Baseline_Exposure normally and SHALL show a handled message that the news overlay is unavailable, without crashing.
 
 ### Requirement 15: Taxonomy and Sub-Theme Visualization
 

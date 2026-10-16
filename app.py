@@ -13,6 +13,7 @@ from streamlit_echarts import st_echarts
 from streamlit_option_menu import option_menu
 
 import engine
+import news as news_mod
 import supabase_client as sb
 import theme as T
 
@@ -493,6 +494,86 @@ def section_company(analysis: dict):
         )
 
 
+def section_news(analysis: dict):
+    """News & Events: baseline vs news-adjusted exposure (Req 16)."""
+    m = analysis["metrics"]
+    taxonomy = analysis["taxonomy"]
+    theme = taxonomy.get("theme", "")
+    baseline = m["portfolio_thematic_exposure"]
+
+    st.markdown('<div class="panel-title">News-Driven Exposure Overlay</div>'
+                '<div class="panel-sub">Recent events applied as a bounded, cited '
+                'adjustment on top of the filings-based baseline. Point-in-time, '
+                'not a reproducible figure.</div>', unsafe_allow_html=True)
+
+    cols = st.columns([1, 1])
+    refresh = cols[0].button("Fetch latest news & recompute overlay", type="primary")
+    cols[1].caption("Baseline exposure is unchanged by news; the overlay is shown separately.")
+
+    cache = analysis.get("news")
+    if refresh or cache is None:
+        with st.spinner("Fetching headlines and assessing impact..."):
+            companies = [c["company"] for c in m["contributions"]]
+            res = news_mod.news_overlay(theme, taxonomy, companies, force_refresh=refresh)
+        analysis["news"] = res
+        st.session_state["analysis"] = analysis
+        cache = res
+
+    if not cache or not cache.get("ok"):
+        msg = (cache or {}).get("message", "News overlay is unavailable right now.")
+        st.info(f"{msg}  Baseline exposure stands at {baseline:.0f}%.")
+        return
+
+    total = cache.get("total_adjustment", 0.0)
+    adjusted = max(0.0, min(100.0, baseline + total))
+
+    k1, k2, k3 = st.columns(3)
+    _kpi_card(k1, "Baseline Exposure", f"{baseline:.0f}%", "from S&P filings", "kpi-accent")
+    sign = "+" if total >= 0 else ""
+    tone = "pos" if total > 0 else ("neg" if total < 0 else "")
+    _kpi_card(k2, "News Adjustment", f"<span class='{tone}'>{sign}{total:.1f}%</span>",
+              f"bounded to +/-{int(news_mod.NEWS_ADJUSTMENT_CAP)} pts")
+    _kpi_card(k3, "News-Adjusted Exposure", f"{adjusted:.0f}%",
+              f"as of {cache.get('as_of','today')} &middot; {cache.get('source','')}", "kpi-gold")
+
+    per = cache.get("per_sub_theme", [])
+    heads = cache.get("headlines", [])
+    if not per:
+        st.success("No recent events materially change exposure to this theme. "
+                   "News-adjusted exposure equals the baseline.")
+    else:
+        st.write("")
+        st.markdown('<div class="panel-title">Per Sub-Theme Impact</div>', unsafe_allow_html=True)
+        for p in per:
+            adj = p["adjustment"]
+            tone = "pos" if adj > 0 else ("neg" if adj < 0 else "")
+            cited = "".join(
+                f'<div class="chip">{heads[i]["date"]} &middot; {heads[i]["domain"]}</div>'
+                for i in p.get("cited_headlines", []) if i < len(heads)
+            )
+            affected = ", ".join(p.get("affected_companies", [])) or "none identified"
+            st.markdown(
+                f"""<div class="sub-row">
+                      <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span class="sub-name">{p['sub_industry']}</span>
+                        <span class="sub-exp {tone}">{'+' if adj>=0 else ''}{adj:.1f} pts</span>
+                      </div>
+                      <div style="color:{T.MUTED};font-size:13px;margin:6px 0;">{p['rationale']}</div>
+                      <div style="font-size:12px;color:{T.MUTED};"><b>Affected:</b> {affected}</div>
+                      <div style="margin-top:6px;">{cited}</div>
+                    </div>""",
+                unsafe_allow_html=True,
+            )
+
+    if heads:
+        with st.expander(f"All {len(heads)} headlines used"):
+            for i, h in enumerate(heads):
+                title = h.get("title", "")
+                url = h.get("url", "")
+                link = f"[{title}]({url})" if url else title
+                st.markdown(f"{i}. {h.get('date','')} &middot; *{h.get('domain','')}* - {link}")
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -584,8 +665,8 @@ def main():
         st.caption("Taxonomy served from cache (reproducible). Tick 'Regenerate' to refresh.")
 
     nav = option_menu(
-        None, ["Overview", "Taxonomy", "Contributors", "Company Detail"],
-        icons=["speedometer2", "diagram-3", "bar-chart-line", "building"],
+        None, ["Overview", "Taxonomy", "Contributors", "Company Detail", "News & Events"],
+        icons=["speedometer2", "diagram-3", "bar-chart-line", "building", "newspaper"],
         orientation="horizontal",
         styles={
             "container": {"background-color": T.PANEL, "border": f"1px solid {T.BORDER}",
@@ -606,6 +687,8 @@ def main():
         section_contributors(analysis)
     elif nav == "Company Detail":
         section_company(analysis)
+    elif nav == "News & Events":
+        section_news(analysis)
 
 
 if __name__ == "__main__":
