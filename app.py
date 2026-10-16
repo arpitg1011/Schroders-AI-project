@@ -16,18 +16,12 @@ import engine
 import supabase_client as sb
 import theme as T
 
-DEFAULT_PORTFOLIO = "data/portfolio_80.xlsx"
 DEFAULT_SEGMENTS = "data/spglobal_segments.xlsx"
 
 
 # ---------------------------------------------------------------------------
 # Cached data loaders
 # ---------------------------------------------------------------------------
-@st.cache_data(show_spinner=False)
-def _load_default_portfolio():
-    return engine.load_portfolio(DEFAULT_PORTFOLIO)
-
-
 @st.cache_data(show_spinner=False)
 def _load_segments():
     return engine.load_segments(DEFAULT_SEGMENTS)
@@ -152,16 +146,12 @@ def render_header():
     )
 
 
-def _ensure_default_portfolio():
-    """Load the default portfolio into session once."""
+def _init_portfolio_state():
+    """Initialize portfolio session state. No portfolio is loaded until the
+    user uploads one (there is no preloaded default)."""
     if "portfolio_df" not in st.session_state:
-        res = _load_default_portfolio()
-        if res["ok"]:
-            st.session_state["portfolio_df"] = res["portfolio"]
-            st.session_state["portfolio_label"] = "Default - portfolio_80.xlsx"
-        else:
-            st.session_state["portfolio_df"] = None
-            st.error(res["message"])
+        st.session_state["portfolio_df"] = None
+        st.session_state["portfolio_label"] = None
 
 
 def _handle_upload(uploaded, container):
@@ -182,13 +172,14 @@ def render_portfolio_panel():
     """Portfolio status + upload shown on the MAIN page so it is never hidden."""
     df = st.session_state.get("portfolio_df")
     n = len(df) if df is not None else 0
-    label = st.session_state.get("portfolio_label", "None")
-    with st.expander(f"Portfolio: {label}  ({n} holdings)", expanded=True):
+    label = st.session_state.get("portfolio_label") or "none uploaded yet"
+    with st.expander(f"Portfolio: {label}  ({n} holdings)", expanded=(df is None)):
         up = st.file_uploader("Upload a portfolio (CSV or XLSX)", type=["csv", "xlsx"],
                               key="main_uploader")
         _handle_upload(up, st)
-        st.caption("Defaults to the preloaded 80-stock APAC portfolio. "
-                   "Upload your own to override.")
+        st.caption("Upload a holdings file (columns: Company, Bloomberg ticker, "
+                   "Country, Sector, SEDOL, Portfolio wt, Reference wt, Active wt) "
+                   "to run an analysis.")
 
 
 def render_sidebar():
@@ -198,7 +189,7 @@ def render_sidebar():
                                     key="sidebar_uploader")
         _handle_upload(uploaded, st.sidebar)
 
-        label = st.session_state.get("portfolio_label", "None")
+        label = st.session_state.get("portfolio_label") or "none uploaded yet"
         df = st.session_state.get("portfolio_df")
         n = len(df) if df is not None else 0
         st.caption(f"Active: {label}")
@@ -516,7 +507,7 @@ def main():
     if not render_login_gate():
         return
 
-    _ensure_default_portfolio()
+    _init_portfolio_state()
     _auto_load_saved_portfolio()
     render_account_sidebar()
     render_sidebar()
@@ -537,8 +528,18 @@ def main():
 
     portfolio_df = st.session_state.get("portfolio_df")
     if portfolio_df is None:
-        st.error("No portfolio loaded. Check the data/ folder or upload a portfolio.")
+        st.markdown(
+            '<div class="panel" style="text-align:center;padding:40px;">'
+            '<div class="panel-title" style="font-size:18px;">Upload a portfolio to begin</div>'
+            '<div class="panel-sub">Use the <b>Portfolio</b> panel above to upload your '
+            'holdings (CSV or XLSX). Once loaded, enter an investment theme and click '
+            '<b>Analyze</b>.</div></div>',
+            unsafe_allow_html=True,
+        )
         return
+
+    if analyze and not theme.strip():
+        st.warning("Enter an investment theme to analyze.")
 
     seg_res = _load_segments()
     if not seg_res["ok"]:
