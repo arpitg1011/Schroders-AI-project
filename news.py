@@ -61,6 +61,27 @@ def _fetch_newsapi(theme: str, api_key: str) -> list[dict]:
     return out
 
 
+def _fetch_freenews(theme: str, api_key: str) -> list[dict]:
+    """freenewsapi.io - 5000 req/day. Auth via x-api-key header, /v1/news,
+    'search' query param. Articles under 'data'; no URL on the free tier."""
+    url = "https://api.freenewsapi.io/v1/news?" + urllib.parse.urlencode({
+        "search": theme, "language": "en",
+    })
+    data = _http_json(url, headers={
+        "User-Agent": "ThemeIQ/1.0", "Accept": "application/json",
+        "x-api-key": api_key,
+    })
+    out = []
+    for a in data.get("data", []):
+        out.append({
+            "title": (a.get("title") or "").encode("utf-8", "ignore").decode("utf-8"),
+            "domain": a.get("publisher") or "",
+            "date": (a.get("published_at") or "")[:10],
+            "url": a.get("url") or a.get("link") or "",
+        })
+    return out
+
+
 def _fetch_newsdata(theme: str, api_key: str) -> list[dict]:
     """newsdata.io - free tier works server-side (good for Streamlit Cloud)."""
     url = "https://newsdata.io/api/1/news?" + urllib.parse.urlencode({
@@ -100,73 +121,191 @@ def _fetch_gdelt(theme: str) -> list[dict]:
     return out
 
 
-def fetch_headlines(theme: str) -> dict:
-    """Fetch recent headlines for a theme from the best available source.
+def _filter_by_window(heads: list, lookback_days: int) -> list:
+    """Keep only headlines within the lookback window (client-side).
 
-    Order: NewsAPI (if key present) -> GDELT fallback. Returns a handled error
-    if all sources fail, so the UI can show the baseline normally (Req 16.9).
+    The free newsdata.io tier has no server-side date range, so we filter here.
+    Headlines with no parseable date are kept (treated as current).
     """
-    # Preferred: newsdata.io (works server-side, incl. Streamlit Cloud).
+    if not lookback_days or lookback_days <= 0:
+        return heads
+    cutoff = _dt.date.today() - _dt.timedelta(days=lookback_days)
+    kept = []
+    for h in heads:
+        d = h.get("date", "")
+        try:
+            adate = _dt.date.fromisoformat(d[:10])
+        except Exception:
+            kept.append(h)  # undated -> keep
+            continue
+        if adate >= cutoff:
+            kept.append(h)
+    return kept
+
+
+def fetch_headlines(theme: str, lookback_days: int = 7) -> dict:
+    """Fetch recent headlines for a theme from the best available source,
+    then filter to the lookback window client-side.
+
+    Order: newsdata.io -> NewsAPI -> GDELT. Returns a handled error if all
+    sources fail, so the UI can show the baseline normally (Req 16.9).
+    Returns {ok, headlines, source, fetched_count, window_count}.
+    """
+    raw, source = [], None
+    # Preferred: newsdata.io - its keyword search actually returns relevant,
+    # on-theme results (verified), and it works server-side.
     newsdata_key = get_secret("NEWSDATA_API_KEY")
     if newsdata_key:
         try:
             heads = _fetch_newsdata(theme, newsdata_key)
             if heads:
-                return ok(headlines=heads[:_MAX_HEADLINES], source="newsdata.io")
-        except Exception:
-            pass  # fall through
-    # Secondary: NewsAPI (dev/localhost only on free tier).
-    newsapi_key = get_secret("NEWSAPI_KEY")
-    if newsapi_key:
-        try:
-            heads = _fetch_newsapi(theme, newsapi_key)
-            if heads:
-                return ok(headlines=heads[:_MAX_HEADLINES], source="NewsAPI")
+                raw, source = heads, "newsdata.io"
         except Exception:
             pass
+    # Note: freenewsapi.io has a generous quota but its free `search` ignores
+    # the query and returns an irrelevant general feed, so it is NOT used for
+    # themed search. _fetch_freenews is retained only as a last-resort stub.
+    # Secondary: NewsAPI (dev/localhost only on free tier).
+    if not raw:
+        newsapi_key = get_secret("NEWSAPI_KEY")
+        if newsapi_key:
+            try:
+                heads = _fetch_newsapi(theme, newsapi_key)
+                if heads:
+                    raw, source = heads, "NewsAPI"
+            except Exception:
+                pass
     # Fallback: GDELT (free, no key, but rate-limited).
-    try:
-        heads = _fetch_gdelt(theme)
-        return ok(headlines=heads[:_MAX_HEADLINES], source="GDELT")
-    except Exception as exc:
+    if not raw:
+        try:
+            heads = _fetch_gdelt(theme)
+            if heads:
+                raw, source = heads, "GDELT"
+        except Exception as exc:
+            return err(NEWS_UNAVAILABLE,
+                       "Live news is temporarily unavailable; showing filings-based exposure only.",
+                       detail=str(exc))
+
+    if not raw:
         return err(NEWS_UNAVAILABLE,
-                   "Live news is temporarily unavailable; showing filings-based exposure only.",
-                   detail=str(exc))
+                   "No recent news found for this theme; showing filings-based exposure only.")
+
+    deduped = _dedupe_headlines(raw)
+    windowed = _filter_by_window(deduped, lookback_days)
+    # Stable ordering (date desc, then title) so the LLM sees a consistent set
+    # regardless of source ordering -> more reproducible assessments.
+    windowed.sort(key=lambda h: (h.get("date", ""), h.get("title", "")), reverse=True)
+    windowed = windowed[:_MAX_HEADLINES]
+    return ok(headlines=windowed, source=source,
+              fetched_count=len(raw), window_count=len(windowed),
+              lookback_days=lookback_days)
+
+
+def _dedupe_headlines(heads: list) -> list:
+    """Collapse near-duplicate stories (same event from multiple outlets) so a
+    single event is not double-counted and the headline set is stable."""
+    import re
+    seen = set()
+    out = []
+    for h in heads:
+        title = (h.get("title") or "").lower().strip()
+        # Normalize to the first ~8 significant words as a crude fingerprint.
+        words = [w for w in re.sub(r"[^a-z0-9 ]", " ", title).split() if w]
+        fp = " ".join(words[:8])
+        if not fp or fp in seen:
+            continue
+        seen.add(fp)
+        out.append(h)
+    return out
 
 
 # ---------------------------------------------------------------------------
 # LLM adjustment (takes headlines as input -> injectable & testable)
 # ---------------------------------------------------------------------------
+# --- Rubric: the LLM judges direction + strength; WE map to points. ---
+# This is the auditable core: the magnitude is NOT the model's guess, it comes
+# from this fixed, published table. The analyst can see this rubric in the UI.
+DIRECTIONS = ("Tailwind", "Headwind", "Neutral")
+STRENGTHS = ("High", "Medium", "Low", "None")
+
+# strength -> magnitude in percentage points (direction sets the sign)
+_STRENGTH_POINTS = {"High": 4.0, "Medium": 2.0, "Low": 1.0, "None": 0.0}
+
+RUBRIC = {
+    "what_llm_judges": (
+        "For each sub-theme, the model classifies recent news on two axes only: "
+        "DIRECTION (Tailwind = increases exposure, Headwind = decreases, Neutral) "
+        "and STRENGTH (how material and direct the event is to that sub-theme's "
+        "revenue drivers)."
+    ),
+    "strength_definitions": {
+        "High": "A confirmed, material event that directly affects a core revenue "
+                "driver of named portfolio holdings (e.g. export ban on a key input, "
+                "major capacity commitment).",
+        "Medium": "A credible development with a clear but partial or indirect link "
+                  "to the sub-theme's revenue (e.g. demand signal, mid-size deal).",
+        "Low": "A relevant but minor or speculative item (early-stage, rumoured, or "
+               "small-scale).",
+        "None": "No materially relevant news for this sub-theme.",
+    },
+    "point_mapping": {
+        "High": "+/- 4 pts", "Medium": "+/- 2 pts", "Low": "+/- 1 pt", "None": "0 pts",
+    },
+    "caps": {
+        "per_sub_theme": f"+/- {int(_PER_SUB_CAP)} pts",
+        "total": f"+/- {int(NEWS_ADJUSTMENT_CAP)} pts (adjustments scaled down "
+                 "proportionally if the sum exceeds this)",
+    },
+    "note": (
+        "The point magnitude is assigned deterministically by this rubric, not by "
+        "the model. The model only supplies direction, strength, a cited rationale, "
+        "and the affected holdings. The overlay is a point-in-time signal and is "
+        "shown separately from the deterministic filings-based baseline."
+    ),
+}
+
 _NEWS_SYSTEM_PROMPT = (
     "You are an equity strategist assessing how RECENT NEWS changes a "
     "portfolio's exposure to an investment theme, relative to a slow-moving "
     "filings-based baseline. Reason about the VALUE CHAIN, not sentiment: an "
     "event propagates to the kinds of businesses it affects (e.g. an oil-price "
-    "shock raises exposure for energy-derived names; rare-earth export curbs "
-    "affect chip supply chains).\n"
-    "You are given the theme's sub-industries, a list of dated headlines (each "
-    "with an index), and the portfolio company names. Output ONLY a JSON object "
-    "with key \"adjustments\": an array where each item has \"sub_industry\" "
-    "(must match one given), \"adjustment\" (signed number of PERCENTAGE "
-    "POINTS, typically between -6 and 6; positive = more exposed), \"rationale\" "
-    "(one sentence citing the event), \"cited_headlines\" (array of integer "
-    "indices into the headlines list), and \"affected_companies\" (array of the "
-    "given company names most affected). Only include sub-industries genuinely "
-    "affected by the news; omit the rest. If no headline is materially relevant, "
-    "return an empty array."
+    "shock is a tailwind for energy-derived names; rare-earth export curbs are a "
+    "headwind for chip supply chains).\n\n"
+    "For each sub-industry, classify the recent news on TWO axes only:\n"
+    "- direction: one of Tailwind (raises exposure), Headwind (lowers exposure), Neutral.\n"
+    "- strength: one of High, Medium, Low, None, defined as:\n"
+    "  High = confirmed, material event directly affecting a core revenue driver "
+    "of named holdings;\n"
+    "  Medium = credible development with a clear but partial/indirect link;\n"
+    "  Low = relevant but minor or speculative;\n"
+    "  None = no materially relevant news.\n"
+    "Do NOT output any percentage or point number - only direction and strength.\n\n"
+    "Output ONLY a JSON object with key \"assessments\": an array where each item "
+    "has \"sub_industry\" (must match one given), \"direction\", \"strength\", "
+    "\"rationale\" (one sentence citing the specific event), \"cited_headlines\" "
+    "(array of integer indices into the headlines list), and \"affected_companies\" "
+    "(array of the given company names most affected via the value chain). "
+    "Include every sub-industry; use strength \"None\" / direction \"Neutral\" "
+    "for those with no relevant news."
 )
 
 
-def _clamp(x: float, lo: float, hi: float) -> float:
-    return max(lo, min(hi, x))
+def _points_for(direction: str, strength: str) -> float:
+    """Deterministic rubric mapping: (direction, strength) -> signed points."""
+    mag = _STRENGTH_POINTS.get(strength, 0.0)
+    if direction == "Tailwind":
+        return mag
+    if direction == "Headwind":
+        return -mag
+    return 0.0  # Neutral
 
 
-def _validate_adjustments(obj, taxonomy: dict, headlines: list) -> list:
-    """Validate + clamp the LLM output into clean per-sub-theme adjustments."""
+def _validate_assessments(obj, taxonomy: dict, headlines: list) -> list:
+    """Validate LLM direction/strength output and apply the rubric mapping."""
     if not isinstance(obj, dict):
         return []
     valid_subs = {s.get("sub_industry") for s in taxonomy.get("layer1", [])}
-    items = obj.get("adjustments")
+    items = obj.get("assessments")
     if not isinstance(items, list):
         return []
     out = []
@@ -176,18 +315,22 @@ def _validate_adjustments(obj, taxonomy: dict, headlines: list) -> list:
         sub = it.get("sub_industry")
         if sub not in valid_subs:
             continue
-        try:
-            adj = float(it.get("adjustment", 0))
-        except (TypeError, ValueError):
-            continue
-        adj = _clamp(round(adj, 2), -_PER_SUB_CAP, _PER_SUB_CAP)
+        direction = it.get("direction") if it.get("direction") in DIRECTIONS else "Neutral"
+        strength = it.get("strength") if it.get("strength") in STRENGTHS else "None"
+        adj = max(-_PER_SUB_CAP, min(_PER_SUB_CAP, _points_for(direction, strength)))
+        if adj == 0 and strength == "None":
+            continue  # omit no-news sub-themes from the impact list
         cites = [i for i in it.get("cited_headlines", [])
                  if isinstance(i, int) and 0 <= i < len(headlines)]
         companies = [c for c in it.get("affected_companies", []) if isinstance(c, str)]
+        rationale = str(it.get("rationale", "")).strip()[:300]
+        rationale = rationale.encode("utf-8", "ignore").decode("utf-8")
         out.append({
             "sub_industry": sub,
+            "direction": direction,
+            "strength": strength,
             "adjustment": adj,
-            "rationale": str(it.get("rationale", "")).strip()[:300],
+            "rationale": rationale,
             "cited_headlines": cites,
             "affected_companies": companies[:8],
         })
@@ -237,7 +380,7 @@ def compute_news_adjustment(theme: str, taxonomy: dict, headlines: list,
     except Exception as exc:
         return err(NEWS_LLM_FAILED, "Could not compute the news overlay.", detail=str(exc))
 
-    per_sub = _validate_adjustments(obj, taxonomy, headlines)
+    per_sub = _validate_assessments(obj, taxonomy, headlines)
 
     # Enforce the overall cap: if the summed magnitude exceeds the total cap,
     # scale all adjustments down proportionally (Req 16.5).
@@ -259,17 +402,18 @@ _overlay_cache: dict[str, dict] = {}
 
 
 def news_overlay(theme: str, taxonomy: dict, portfolio_companies: list,
-                 force_refresh: bool = False) -> dict:
-    """Fetch headlines + compute the bounded per-sub-theme adjustment.
+                 lookback_days: int = 7, force_refresh: bool = False) -> dict:
+    """Fetch headlines (within lookback window) + compute the bounded overlay.
 
-    Cached by (theme, today) so the point-in-time overlay is stable within a
-    day. Returns a NewsAdjustment dict, or a handled error (UI shows baseline).
+    Cached by (theme, lookback, today) so the point-in-time overlay is stable
+    within a day. Returns a NewsAdjustment dict, or a handled error.
     """
-    cache_key = f"{theme.strip().lower()}|{_dt.date.today().isoformat()}"
+    cache_key = (f"{theme.strip().lower()}|{lookback_days}|"
+                 f"{_dt.date.today().isoformat()}")
     if not force_refresh and cache_key in _overlay_cache:
         return _overlay_cache[cache_key]
 
-    fetched = fetch_headlines(theme)
+    fetched = fetch_headlines(theme, lookback_days=lookback_days)
     if not fetched["ok"]:
         return fetched  # NEWS_UNAVAILABLE - UI falls back to baseline (Req 16.9)
 
@@ -277,5 +421,8 @@ def news_overlay(theme: str, taxonomy: dict, portfolio_companies: list,
                                      portfolio_companies)
     if result["ok"]:
         result["source"] = fetched.get("source")
+        result["lookback_days"] = lookback_days
+        result["fetched_count"] = fetched.get("fetched_count")
+        result["window_count"] = fetched.get("window_count")
         _overlay_cache[cache_key] = result
     return result

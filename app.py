@@ -494,34 +494,51 @@ def section_company(analysis: dict):
         )
 
 
+_LOOKBACK_OPTIONS = {"Today": 1, "Last 3 days": 3, "Last week": 7, "Last month": 30}
+
+
 def section_news(analysis: dict):
-    """News & Events: baseline vs news-adjusted exposure (Req 16)."""
+    """News & Events: baseline vs news-adjusted exposure (Req 16, rubric-based)."""
     m = analysis["metrics"]
     taxonomy = analysis["taxonomy"]
     theme = taxonomy.get("theme", "")
     baseline = m["portfolio_thematic_exposure"]
 
     st.markdown('<div class="panel-title">News-Driven Exposure Overlay</div>'
-                '<div class="panel-sub">Recent events applied as a bounded, cited '
-                'adjustment on top of the filings-based baseline. Point-in-time, '
-                'not a reproducible figure.</div>', unsafe_allow_html=True)
+                '<div class="panel-sub">Recent events applied as a bounded, '
+                'rubric-based adjustment on top of the filings-based baseline. '
+                'Point-in-time signal, shown separately from the deterministic '
+                'baseline.</div>', unsafe_allow_html=True)
 
-    cols = st.columns([1, 1])
-    refresh = cols[0].button("Fetch latest news & recompute overlay", type="primary")
-    cols[1].caption("Baseline exposure is unchanged by news; the overlay is shown separately.")
+    c1, c2 = st.columns([1.4, 1])
+    window_label = c1.select_slider("News lookback window",
+                                    options=list(_LOOKBACK_OPTIONS.keys()),
+                                    value="Last week")
+    lookback = _LOOKBACK_OPTIONS[window_label]
+    refresh = c2.button("Fetch news & compute overlay", type="primary", use_container_width=True)
 
+    st.caption("Note: the free news API returns only the most recent articles, so "
+               "longer windows (e.g. Last month) are shown for completeness but in "
+               "practice return mostly recent items. With full API access the window "
+               "would scan the entire selected period.")
+
+    # Recompute when the user refreshes or changes the window.
     cache = analysis.get("news")
-    if refresh or cache is None:
-        with st.spinner("Fetching headlines and assessing impact..."):
+    cached_window = analysis.get("news_window")
+    if refresh or cache is None or cached_window != lookback:
+        with st.spinner("Fetching headlines and assessing impact against the rubric..."):
             companies = [c["company"] for c in m["contributions"]]
-            res = news_mod.news_overlay(theme, taxonomy, companies, force_refresh=refresh)
+            res = news_mod.news_overlay(theme, taxonomy, companies,
+                                        lookback_days=lookback, force_refresh=refresh)
         analysis["news"] = res
+        analysis["news_window"] = lookback
         st.session_state["analysis"] = analysis
         cache = res
 
     if not cache or not cache.get("ok"):
         msg = (cache or {}).get("message", "News overlay is unavailable right now.")
         st.info(f"{msg}  Baseline exposure stands at {baseline:.0f}%.")
+        _render_rubric()
         return
 
     total = cache.get("total_adjustment", 0.0)
@@ -532,9 +549,15 @@ def section_news(analysis: dict):
     sign = "+" if total >= 0 else ""
     tone = "pos" if total > 0 else ("neg" if total < 0 else "")
     _kpi_card(k2, "News Adjustment", f"<span class='{tone}'>{sign}{total:.1f}%</span>",
-              f"bounded to +/-{int(news_mod.NEWS_ADJUSTMENT_CAP)} pts")
+              f"bounded to +/-{int(news_mod.NEWS_ADJUSTMENT_CAP)} pts (rubric)")
     _kpi_card(k3, "News-Adjusted Exposure", f"{adjusted:.0f}%",
               f"as of {cache.get('as_of','today')} &middot; {cache.get('source','')}", "kpi-gold")
+
+    wc = cache.get("window_count")
+    fc = cache.get("fetched_count")
+    if wc is not None:
+        st.caption(f"{wc} headline(s) within '{window_label}' "
+                   f"(of {fc} most-recent fetched) via {cache.get('source','')}.")
 
     per = cache.get("per_sub_theme", [])
     heads = cache.get("headlines", [])
@@ -543,10 +566,15 @@ def section_news(analysis: dict):
                    "News-adjusted exposure equals the baseline.")
     else:
         st.write("")
-        st.markdown('<div class="panel-title">Per Sub-Theme Impact</div>', unsafe_allow_html=True)
+        st.markdown('<div class="panel-title">Per Sub-Theme Impact</div>'
+                    '<div class="panel-sub">Direction &amp; strength are judged by the '
+                    'model; the point value comes from the rubric below.</div>',
+                    unsafe_allow_html=True)
         for p in per:
             adj = p["adjustment"]
             tone = "pos" if adj > 0 else ("neg" if adj < 0 else "")
+            direction = p.get("direction", "Neutral")
+            strength = p.get("strength", "None")
             cited = "".join(
                 f'<div class="chip">{heads[i]["date"]} &middot; {heads[i]["domain"]}</div>'
                 for i in p.get("cited_headlines", []) if i < len(heads)
@@ -556,7 +584,7 @@ def section_news(analysis: dict):
                 f"""<div class="sub-row">
                       <div style="display:flex;justify-content:space-between;align-items:center;">
                         <span class="sub-name">{p['sub_industry']}</span>
-                        <span class="sub-exp {tone}">{'+' if adj>=0 else ''}{adj:.1f} pts</span>
+                        <span class="sub-exp {tone}">{direction} &middot; {strength} &rarr; {'+' if adj>=0 else ''}{adj:.0f} pts</span>
                       </div>
                       <div style="color:{T.MUTED};font-size:13px;margin:6px 0;">{p['rationale']}</div>
                       <div style="font-size:12px;color:{T.MUTED};"><b>Affected:</b> {affected}</div>
@@ -572,6 +600,24 @@ def section_news(analysis: dict):
                 url = h.get("url", "")
                 link = f"[{title}]({url})" if url else title
                 st.markdown(f"{i}. {h.get('date','')} &middot; *{h.get('domain','')}* - {link}")
+
+    _render_rubric()
+
+
+def _render_rubric():
+    """Show the scoring rubric so the analyst can audit where numbers come from."""
+    r = news_mod.RUBRIC
+    with st.expander("Scoring rubric - how the adjustment is calculated"):
+        st.markdown(f"**What the model judges:** {r['what_llm_judges']}")
+        st.markdown("**Strength definitions:**")
+        for k, v in r["strength_definitions"].items():
+            st.markdown(f"- **{k}** ({r['point_mapping'][k]}): {v}")
+        st.markdown(
+            f"**Direction** sets the sign: Tailwind = positive (more exposed), "
+            f"Headwind = negative, Neutral = 0.  \n"
+            f"**Caps:** per sub-theme {r['caps']['per_sub_theme']}; total "
+            f"{r['caps']['total']}.")
+        st.info(r["note"])
 
 
 # ---------------------------------------------------------------------------
