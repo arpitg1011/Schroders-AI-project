@@ -11,9 +11,8 @@ __pycache__/
 .pytest_cache/
 .hypothesis/
 
-# Taxonomy + segment-match caches (reproducibility)
+# Taxonomy cache (reproducibility)
 .taxonomy_cache/
-.match_cache/
 
 # Virtual environments
 .venv/

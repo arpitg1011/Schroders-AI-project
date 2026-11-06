@@ -32,6 +32,14 @@ def _groq_ok() -> bool:
     return bool(engine.get_secret("GROQ_API_KEY"))
 
 
+def _confidence_label(conf: float) -> str:
+    if conf >= 0.66:
+        return "High"
+    if conf >= 0.33:
+        return "Medium"
+    return "Low"
+
+
 # ---------------------------------------------------------------------------
 # Taxonomy resolution (per-profile permanent cache + count slider)
 # ---------------------------------------------------------------------------
@@ -355,10 +363,9 @@ def render_sidebar():
 
         st.divider()
         st.caption(
-            "The LLM expands the theme into sub-themes and judges which segments "
-            "belong (yes/no). Exposure is then the revenue share of the matched "
-            "segments - computed, never guessed by the model. Results are cached, "
-            "so the same theme + portfolio reproduces exactly."
+            "Exposure is computed deterministically from reported S&P segment "
+            "revenue using offline embeddings. The LLM only expands the theme "
+            "into sub-themes. Same theme -> same result."
         )
 
 
@@ -462,7 +469,7 @@ def section_overview(analysis: dict):
                 st.rerun()
 
     _render_coverage(m.get("coverage", {}))
-    _render_methodology(analysis.get("metadata", {}), m)
+    _render_methodology(analysis.get("metadata", {}))
 
 
 def _render_coverage(cov: dict):
@@ -494,45 +501,25 @@ def _render_coverage(cov: dict):
                 st.write(", ".join(insuf))
 
 
-def _render_methodology(meta: dict, metrics: dict | None = None):
+def _render_methodology(meta: dict):
     """Plain-English 'how this was computed' trace."""
     if not meta:
         return
-    metrics = metrics or {}
-    mode = metrics.get("scoring_mode", "llm")
     with st.expander("How this was computed (methodology & assumptions)"):
         st.markdown(meta.get("notes", ""))
-        if mode == "llm":
-            st.markdown(
-                "**Scoring:** the LLM reads each company's reported segment names "
-                "and decides, per segment, whether it belongs to the theme "
-                "(a yes/no judgement by business meaning, with a short reason). "
-                "A matched segment contributes **100%** of its revenue share to "
-                "exposure; unmatched segments contribute 0%. The model never "
-                "outputs a number - every percentage comes from reported S&P "
-                "segment revenue. The decision is cached per theme + portfolio, "
-                "so results reproduce exactly."
-            )
-        else:
-            st.warning(
-                "**Scoring (fallback mode):** the LLM matcher was unavailable "
-                "(no Groq key or a rate limit), so exposure was computed with the "
-                "offline embedding similarity fallback. Numbers are approximate; "
-                "re-run once the LLM is reachable for the authoritative result."
-            )
         a, b = st.columns(2)
         a.markdown(
             f"- **Taxonomy model (LLM):** `{meta.get('taxonomy_model','-')}`\n"
-            f"- **Segment matcher (LLM):** `{meta.get('taxonomy_model','-')}` "
-            "(binary, cached)\n"
-            f"- **Fallback embedding model:** `{meta.get('embedding_model','-')}`"
+            f"- **Embedding model:** `{meta.get('embedding_model','-')}` (offline, deterministic)\n"
+            f"- **Similarity threshold:** {meta.get('similarity_threshold','-')} "
+            "(segments below this score 0)"
         )
         bands = meta.get("exposure_bands", [])
         band_txt = "  ·  ".join(f"**{label}** &ge;{int(low)}%" for low, label in bands)
         b.markdown(
             f"- **Company matching:** normalized + fuzzy (threshold {meta.get('fuzzy_match_threshold','-')})\n"
             f"- **Exposure bands:** {band_txt}\n"
-            "- **Reproducibility:** matches are cached per theme + portfolio.",
+            "- **Reproducibility:** same theme is cached, so results do not drift run-to-run.",
             unsafe_allow_html=True,
         )
 
@@ -763,6 +750,7 @@ def section_contributors(analysis: dict):
         "Portfolio Wt %": round(c["portfolio_wt"] * 100, 1),
         "Exposure %": round(c["company_exposure"]),
         "Contribution %": round(c["contribution"], 2),
+        "Confidence": _confidence_label(c.get("confidence", 0.0)),
     } for c in rows])
     st.dataframe(df, use_container_width=True, hide_index=True)
 
@@ -780,26 +768,23 @@ def section_company(analysis: dict):
         st.warning(f"{choice}: no S&P segment data available - flagged, exposure 0%.")
         return
 
-    matched_rev = sum(b["revenue_pct"] for b in sr["segment_breakdown"]
-                      if b["alignment_score"] > 0)
-
     c1, c2, c3 = st.columns(3)
     _kpi_card(c1, "Company Exposure", f"{sr['company_exposure']:.0f}%",
               f"{T.band_badge(sr.get('exposure_band','-'))} &nbsp; exact {sr['company_exposure']:.2f}%", "kpi-accent")
-    _kpi_card(c2, "Matched Revenue", f"{matched_rev:.0f}%",
-              "share of revenue in theme-matched segments")
+    _kpi_card(c2, "Confidence", _confidence_label(sr.get("confidence", 0.0)),
+              f"score {sr.get('confidence',0.0):.2f}")
     _kpi_card(c3, "Matched Sub-Themes", str(len(sr["matched_sub_industries"])),
               ", ".join(sr["matched_sub_industries"]) or "none")
 
     if sr.get("insufficient_data"):
-        st.warning("Insufficient data: no segment matched this theme, exposure 0%.")
+        st.warning("Insufficient data: no segment confidently matched this theme.")
 
-    # Exposure is purely revenue-based: a segment the model judged part of the
-    # theme contributes 100% of its revenue share, everything else 0%.
+    # Confidence rationale in plain English (why High/Medium/Low).
+    matched_rev = sum(b["revenue_pct"] for b in sr["segment_breakdown"]
+                      if b["alignment_score"] > 0)
     st.caption(
-        f"Exposure = the {matched_rev:.0f}% of this company's segment revenue that "
-        f"sits in segments judged part of the theme. No similarity weighting is "
-        f"applied; see the per-segment decision and rationale below."
+        f"Confidence rationale: {matched_rev:.0f}% of this company's segment revenue "
+        f"matched the theme, at a revenue-weighted alignment of {sr.get('confidence',0.0):.2f}."
     )
 
     st.write("")
@@ -812,16 +797,14 @@ def section_company(analysis: dict):
         else:
             st.caption("No sub-theme attribution for this company.")
     with right:
-        st.markdown('<div class="panel-title">Segment Revenue &amp; Match</div>'
-                    '<div class="panel-sub">Per-segment yes/no decision, the sub-theme '
-                    'it was mapped to, and why &mdash; auditable</div>',
-                    unsafe_allow_html=True)
+        st.markdown('<div class="panel-title">Segment Revenue &amp; Alignment</div>'
+                    '<div class="panel-sub">Per-segment similarity (0-1) to the best-matching '
+                    'sub-theme &mdash; auditable</div>', unsafe_allow_html=True)
         seg_df = pd.DataFrame([{
             "Segment": (b["name"] or f"Segment {i+1}"),
             "Revenue Weight %": round(b["revenue_pct"], 1),
-            "In Theme": "Yes" if b["alignment_score"] > 0 else "No",
+            "Similarity": b["alignment_score"],
             "Matched Sub-Theme": b.get("matched_sub_industry") or "-",
-            "Why": b.get("match_reason") or "-",
         } for i, b in enumerate(sr["segment_breakdown"])])
         if not seg_df.empty:
             st.dataframe(seg_df, use_container_width=True, hide_index=True)
@@ -1099,13 +1082,6 @@ def main():
 
     if analysis.get("cached"):
         st.caption("Taxonomy served from cache (reproducible). Tick 'Regenerate' to refresh.")
-
-    if (analysis.get("metrics", {}) or {}).get("scoring_mode") == "embedding_fallback":
-        st.warning(
-            "Scored with the offline fallback (the LLM segment matcher was "
-            "unavailable - missing Groq key or a rate limit). Exposure numbers "
-            "are approximate; re-run Analyze to get the LLM-judged result."
-        )
 
     # A programmatic jump (e.g. a sub-theme drill button) sets _goto_tab_index;
     # pass it via manual_select so the menu moves, then clear it so manual
