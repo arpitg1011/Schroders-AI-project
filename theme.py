@@ -142,6 +142,22 @@ small, .stCaption, [data-testid="stCaptionContainer"] {{ color: {MUTED} !importa
 /* Dataframe */
 [data-testid="stDataFrame"] {{ border:1px solid {BORDER}; border-radius:10px; }}
 
+/* Branded accordions (st.expander) - make them look like panels, not plain boxes */
+[data-testid="stExpander"] {{
+  background:{PANEL_2}; border:1px solid {BORDER}; border-left:4px solid {BLUE};
+  border-radius:12px; margin-bottom:12px; overflow:hidden;
+}}
+[data-testid="stExpander"] details {{ background:transparent; border:0; }}
+[data-testid="stExpander"] summary {{
+  padding:14px 18px; font-weight:700; font-size:15px; color:{TEXT};
+  background:transparent;
+}}
+[data-testid="stExpander"] summary:hover {{ color:{GOLD}; }}
+[data-testid="stExpander"] summary p {{ font-weight:700; font-size:15px; color:inherit; }}
+[data-testid="stExpander"] [data-testid="stExpanderDetails"] {{ padding:4px 18px 16px; }}
+/* when open, lift the left accent to gold so the focused one stands out */
+[data-testid="stExpander"]:has(details[open]) {{ border-left-color:{GOLD}; }}
+
 /* Sidebar */
 section[data-testid="stSidebar"] {{ background:{PANEL}; border-right:1px solid {BORDER}; }}
 section[data-testid="stSidebar"] * {{ color:{TEXT}; }}

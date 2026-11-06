@@ -279,27 +279,6 @@ def _donut(sub_exposure: dict) -> dict:
     }
 
 
-def _hbar(contribs: list) -> dict:
-    rows = [c for c in contribs if c["company_exposure"] > 0][:10][::-1]
-    names = [c["company"][:22] for c in rows]
-    vals = [round(c["company_exposure"]) for c in rows]
-    colors = [T.BAND_COLORS.get(c.get("exposure_band", ""), T.BLUE) for c in rows]
-    data = [{"value": v, "itemStyle": {"color": col}} for v, col in zip(vals, colors)]
-    return {
-        "grid": {"left": 150, "right": 30, "top": 10, "bottom": 20},
-        "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"},
-                    "formatter": "{b}: {c}%"},
-        "xAxis": {"type": "value", "max": 100,
-                  "axisLabel": {"color": T.MUTED}, "splitLine": {"lineStyle": {"color": T.BORDER}}},
-        "yAxis": {"type": "category", "data": names,
-                  "axisLabel": {"color": T.TEXT, "fontSize": 11},
-                  "axisLine": {"lineStyle": {"color": T.BORDER}}},
-        "series": [{"type": "bar", "data": data, "barWidth": "60%",
-                    "label": {"show": True, "position": "right",
-                              "formatter": "{c}%", "color": T.MUTED}}],
-    }
-
-
 # ---------------------------------------------------------------------------
 # Sections
 # ---------------------------------------------------------------------------
@@ -342,6 +321,20 @@ def section_overview(analysis: dict):
                     '<div class="panel-sub">How the thematic exposure decomposes</div>',
                     unsafe_allow_html=True)
         st_echarts(_donut(m.get("sub_theme_exposure", {})), height="300px")
+
+    # Deterministic drill-down: a button per sub-theme that jumps to the
+    # Taxonomy tab with that sub-theme opened. (Reliable across reruns, unlike
+    # chart click events on this component version.)
+    sub_exp = m.get("sub_theme_exposure", {})
+    if sub_exp:
+        st.caption("Drill into a sub-theme:")
+        cols = st.columns(max(1, len(sub_exp)))
+        for i, (sub_name, exp_val) in enumerate(sub_exp.items()):
+            label = f"{sub_name}  ({exp_val:.1f}%)"
+            if cols[i].button(label, key=f"drill_{i}", use_container_width=True):
+                st.session_state["_focus_sub_theme"] = sub_name
+                st.session_state["_goto_tab_index"] = 1  # Taxonomy
+                st.rerun()
 
     _render_coverage(m.get("coverage", {}))
     _render_methodology(analysis.get("metadata", {}))
@@ -399,66 +392,161 @@ def _render_methodology(meta: dict):
         )
 
 
+def _companies_by_sub_theme(analysis: dict) -> dict:
+    """Invert per-company sub_theme_attribution -> {sub_theme: [(company, pts, pwt, contrib)]}.
+
+    'pts' is the company's exposure attributed to that sub-theme (0-100).
+    'contrib' is that weighted by the company's portfolio weight (what actually
+    flows into the portfolio sub-theme exposure).
+    """
+    scores = analysis.get("scores", {})
+    contribs = {c["company"]: c for c in analysis["metrics"]["contributions"]}
+    out: dict[str, list] = {}
+    for company, sr in scores.items():
+        pwt = float(contribs.get(company, {}).get("portfolio_wt", 0.0))
+        for sub, pts in (sr.get("sub_theme_attribution") or {}).items():
+            out.setdefault(sub, []).append({
+                "company": company,
+                "sub_exposure": round(float(pts), 2),
+                "portfolio_wt": pwt,
+                "contribution": round(float(pts) * pwt, 3),
+            })
+    for sub in out:
+        out[sub].sort(key=lambda r: r["contribution"], reverse=True)
+    return out
+
+
 def section_taxonomy(analysis: dict):
     taxonomy = analysis["taxonomy"]
     m = analysis["metrics"]
     sub_exposure = m.get("sub_theme_exposure", {})
     total = sum(sub_exposure.values()) or 1.0
+    by_sub = _companies_by_sub_theme(analysis)
+    focus = st.session_state.pop("_focus_sub_theme", None)  # from an Overview click
 
     st.markdown(f'<div class="panel-title">{taxonomy.get("theme","Theme")}</div>'
-                '<div class="panel-sub">Theme &rarr; sub-themes &rarr; activities, '
-                'with portfolio exposure attributed to each sub-theme</div>',
+                '<div class="panel-sub">Theme &rarr; sub-themes &rarr; activities. '
+                'Expand a sub-theme to see the holdings driving it. '
+                '(Tip: use the drill buttons on the Overview tab to jump straight '
+                'to a sub-theme.)</div>',
                 unsafe_allow_html=True)
 
     # Ordered by exposure (inverted-pyramid feel: biggest driver on top).
     subs = sorted(taxonomy.get("layer1", []),
                   key=lambda s: sub_exposure.get(s["sub_industry"], 0.0), reverse=True)
+
     for sub in subs:
         name = sub["sub_industry"]
         exp = sub_exposure.get(name, 0.0)
         share = min(1.0, exp / total)
-        chips = "".join(f'<span class="chip">{a}</span>' for a in sub.get("activities", []))
-        bar = f"""<div style="height:6px;background:{T.PANEL_2};border-radius:4px;margin:8px 0 6px;">
-                    <div style="height:6px;width:{share*100:.0f}%;background:{T.BLUE};border-radius:4px;"></div>
-                  </div>"""
-        st.markdown(
-            f"""<div class="sub-row">
-                  <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <span class="sub-name">{name}</span>
-                    <span class="sub-exp">{exp:.1f}%</span>
-                  </div>
-                  {bar}
-                  <div>{chips}</div>
-                </div>""",
-            unsafe_allow_html=True,
-        )
+        companies = by_sub.get(name, [])
+        header = f"{name}   ·   {exp:.1f}% exposure   ·   {len(companies)} holding(s)"
+        # Auto-open the sub-theme the user drilled into from the Overview tab.
+        with st.expander(header, expanded=(focus == name)):
+            # Branded share bar with the gold exposure figure.
+            st.markdown(
+                f'<div style="display:flex;justify-content:space-between;'
+                f'align-items:center;margin-bottom:4px;">'
+                f'<span style="color:{T.MUTED};font-size:12px;">Share of total thematic exposure</span>'
+                f'<span class="sub-exp">{exp:.1f}%</span></div>'
+                f'<div style="height:8px;background:{T.NAVY_BG};border-radius:5px;margin-bottom:14px;">'
+                f'<div style="height:8px;width:{share*100:.0f}%;background:'
+                f'linear-gradient(90deg,{T.BLUE},{T.BLUE_LIGHT});border-radius:5px;"></div>'
+                f'</div>', unsafe_allow_html=True)
+
+            # Activities as branded chips.
+            chips = "".join(f'<span class="chip">{a}</span>' for a in sub.get("activities", []))
+            st.markdown(
+                f'<div style="color:{T.MUTED};font-size:12px;margin-bottom:4px;">Activities / keywords</div>'
+                f'<div style="margin-bottom:14px;">{chips}</div>', unsafe_allow_html=True)
+
+            # Holdings driving this sub-theme.
+            if companies:
+                st.markdown(
+                    f'<div style="color:{T.MUTED};font-size:12px;margin-bottom:6px;">'
+                    'Holdings contributing (contribution = sub-theme exposure &times; '
+                    'portfolio weight)</div>', unsafe_allow_html=True)
+                df = pd.DataFrame([{
+                    "Company": r["company"],
+                    "Sub-Theme Exposure %": r["sub_exposure"],
+                    "Portfolio Wt %": round(r["portfolio_wt"] * 100, 2),
+                    "Contribution %": r["contribution"],
+                } for r in companies])
+                st.dataframe(df, use_container_width=True, hide_index=True)
+            else:
+                st.markdown(
+                    f'<div style="color:{T.MUTED};font-size:13px;">No holdings currently '
+                    'contribute to this sub-theme (no matched segment revenue).</div>',
+                    unsafe_allow_html=True)
 
 
 def section_contributors(analysis: dict):
     m = analysis["metrics"]
     st.markdown('<div class="panel-title">Top Contributors</div>'
-                '<div class="panel-sub">Ranked by contribution to portfolio thematic exposure</div>',
+                '<div class="panel-sub">Ranked by contribution to portfolio thematic '
+                'exposure. Click a company to open its detail &rarr;</div>',
                 unsafe_allow_html=True)
-    st_echarts(_hbar(m["contributions"]), height="340px")
 
-    rows = [c for c in m["contributions"] if c["company_exposure"] > 0] or m["contributions"]
+    rows = [c for c in m["contributions"] if c["contribution"] > 0] or m["contributions"]
+    rows = sorted(rows, key=lambda c: c["contribution"], reverse=True)[:12]
+    if not rows:
+        st.info("No companies currently contribute to this theme.")
+        return
+
+    scores = analysis.get("scores", {})
+    max_contrib = max((c["contribution"] for c in rows), default=1.0) or 1.0
+
+    # Clickable rows: a company-name button on the left, an HTML bar on the right
+    # sized to its contribution. Clicking jumps to Company Detail for that name.
+    # (Native buttons are 100% reliable, unlike chart click events on this
+    # component version.)
+    for i, c in enumerate(rows):
+        name = c["company"]
+        contrib = c["contribution"]
+        width = max(2.0, 100.0 * contrib / max_contrib)
+        has_data = scores.get(name, {}).get("has_segment_data", True)
+        bc1, bc2 = st.columns([2, 5])
+        with bc1:
+            if st.button(name[:26], key=f"contrib_{i}", use_container_width=True,
+                         disabled=not has_data,
+                         help=None if has_data else "No segment data for this company"):
+                st.session_state["_focus_company"] = name
+                st.session_state["_goto_tab_index"] = 3  # Company Detail
+                st.rerun()
+        with bc2:
+            st.markdown(
+                f'<div style="display:flex;align-items:center;gap:10px;height:38px;">'
+                f'<div style="flex:1;height:22px;background:{T.NAVY_BG};border-radius:5px;'
+                f'overflow:hidden;">'
+                f'<div style="height:22px;width:{width:.1f}%;background:'
+                f'linear-gradient(90deg,{T.GOLD},#FFD24D);border-radius:5px;"></div>'
+                f'</div>'
+                f'<span style="color:{T.TEXT};font-weight:700;font-size:13px;'
+                f'min-width:64px;text-align:right;">{contrib:.2f}%</span>'
+                f'</div>', unsafe_allow_html=True)
+
+    st.caption("Bar length = contribution to portfolio exposure "
+               "(company exposure x portfolio weight). Full figures below.")
+
+    # Full detail table (same order).
     df = pd.DataFrame([{
         "Company": c["company"],
         "Sector": c["sector"],
         "Portfolio Wt %": round(c["portfolio_wt"] * 100, 1),
         "Exposure %": round(c["company_exposure"]),
-        "Band": c.get("exposure_band", "-"),
         "Contribution %": round(c["contribution"], 2),
         "Confidence": _confidence_label(c.get("confidence", 0.0)),
     } for c in rows])
     st.dataframe(df, use_container_width=True, hide_index=True)
-    st.caption("Exposure shown as whole-number %; exact values drive all portfolio math.")
 
 
 def section_company(analysis: dict):
     scores = analysis["scores"]
     companies = sorted(scores.keys())
-    choice = st.selectbox("Select a company", companies)
+    # Honor a company chosen by clicking its row on the Contributors tab.
+    focus = st.session_state.pop("_focus_company", None)
+    default_idx = companies.index(focus) if focus in companies else 0
+    choice = st.selectbox("Select a company", companies, index=default_idx)
     sr = scores[choice]
 
     if not sr["has_segment_data"]:
@@ -770,10 +858,17 @@ def main():
     if analysis.get("cached"):
         st.caption("Taxonomy served from cache (reproducible). Tick 'Regenerate' to refresh.")
 
+    # A programmatic jump (e.g. a sub-theme drill button) sets _goto_tab_index;
+    # pass it via manual_select so the menu moves, then clear it so manual
+    # clicks work normally afterwards.
+    _manual = st.session_state.pop("_goto_tab_index", None)
     nav = option_menu(
         None, ["Overview", "Taxonomy", "Contributors", "Company Detail", "News & Events"],
         icons=["speedometer2", "diagram-3", "bar-chart-line", "building", "newspaper"],
         orientation="horizontal",
+        default_index=0,
+        manual_select=_manual,
+        key="main_nav",
         styles={
             "container": {"background-color": T.PANEL, "border": f"1px solid {T.BORDER}",
                           "border-radius": "12px", "padding": "6px"},
