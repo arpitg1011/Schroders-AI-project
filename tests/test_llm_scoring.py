@@ -4,7 +4,25 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 import engine
+
+
+@pytest.fixture(autouse=True)
+def _isolate_caches(tmp_path, monkeypatch):
+    """Point the taxonomy + match caches at a temp dir and clear in-memory
+    caches, so tests never read or write the committed cache/ directory."""
+    monkeypatch.setattr(engine, "_TAXONOMY_CACHE_DIR", str(tmp_path / "tax"))
+    monkeypatch.setattr(engine, "_MATCH_CACHE_DIR", str(tmp_path / "match"))
+    engine._taxonomy_mem_cache.clear()
+    engine._match_mem_cache.clear()
+    engine._groq_clients.clear()
+    yield
+    engine._taxonomy_mem_cache.clear()
+    engine._match_mem_cache.clear()
+    engine._groq_clients.clear()
+
 
 TAX = {"theme": "semiconductors", "layer1": [
     {"sub_industry": "Integrated Device Manufacturers (IDMs)",
@@ -179,7 +197,7 @@ def test_matcher_splits_when_company_dropped(monkeypatch):
         for i in range(4)
     ]
 
-    def fake_call(messages, max_tokens):
+    def fake_call(messages, max_tokens, model=None):
         # Count how many companies are in this request's user message.
         user = messages[1]["content"]
         names = [f"CO{i}" for i in range(4) if f"CO{i}:" in user]

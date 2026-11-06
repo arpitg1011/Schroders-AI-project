@@ -1,0 +1,36 @@
+{
+  "_v": 2,
+  "taxonomy": {
+    "theme": "artificial intelligence",
+    "layer1": [
+      {
+        "sub_industry": "AI semiconductor chips",
+        "activities": [
+          "design AI accelerators",
+          "fabricate high-performance GPUs"
+        ]
+      },
+      {
+        "sub_industry": "Cloud AI services",
+        "activities": [
+          "host AI models",
+          "provide machine learning platforms"
+        ]
+      },
+      {
+        "sub_industry": "Enterprise AI software",
+        "activities": [
+          "develop predictive analytics",
+          "automate business processes"
+        ]
+      },
+      {
+        "sub_industry": "Autonomous vehicle technology",
+        "activities": [
+          "build self-driving perception",
+          "integrate AI navigation"
+        ]
+      }
+    ]
+  }
+}

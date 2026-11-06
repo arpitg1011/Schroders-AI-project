@@ -1136,7 +1136,10 @@ def _validate_taxonomy(obj, theme: str) -> dict | None:
 # ---------------------------------------------------------------------------
 import os.path as _osp  # noqa: E402
 
-_TAXONOMY_CACHE_DIR = ".taxonomy_cache"
+# Committed cache dir (not hidden, not gitignored) so precomputed demo-theme
+# caches ship with the app and load instantly on the hosted site. Runtime
+# writes for new themes also land here locally.
+_TAXONOMY_CACHE_DIR = "cache/taxonomy"
 _taxonomy_mem_cache: dict[str, dict] = {}
 
 
@@ -1382,11 +1385,13 @@ def _is_json_validation_error(exc) -> bool:
     return "json" in msg and ("validate" in msg or "failed_generation" in msg)
 
 
-def _groq_chat(messages: list, max_tokens: int):
+def _groq_chat(messages: list, max_tokens: int, model: str | None = None):
     """Run a chat completion, failing over across configured keys on a rate
-    limit. Returns the SDK response. Raises the last exception if every key is
-    exhausted (the caller maps it to a handled error).
+    limit. `model` defaults to the taxonomy model when not given. Returns the
+    SDK response. Raises the last exception if every key is exhausted (the
+    caller maps it to a handled error).
     """
+    model = model or TAXONOMY_MODEL
     keys = _groq_keys()
     if not keys:
         raise RuntimeError("No Groq API key configured.")
@@ -1395,7 +1400,7 @@ def _groq_chat(messages: list, max_tokens: int):
         client = _groq_client_for(api_key)
         try:
             return client.chat.completions.create(
-                model=TAXONOMY_MODEL, messages=messages,
+                model=model, messages=messages,
                 response_format={"type": "json_object"},
                 temperature=0, max_tokens=max_tokens,
             )
@@ -1431,7 +1436,7 @@ _MATCH_MAX_TOKENS = 3000  # output cap per chunk (JSON for a chunk of companies)
 _MATCH_CHUNK_TOKEN_BUDGET = 1200   # smaller chunks -> smaller JSON output, fewer truncations
 _MATCH_MAX_RETRIES = 4
 _MATCH_RETRY_WAIT_S = 20   # TPM windows are per-minute; wait out the throttle
-_MATCH_CACHE_DIR = ".match_cache"
+_MATCH_CACHE_DIR = "cache/match"   # committed so precomputed caches ship with the app
 _MATCH_CACHE_VERSION = 1
 _match_mem_cache: dict[str, dict] = {}
 
@@ -1641,7 +1646,7 @@ def match_segments_llm(taxonomy: dict, company_rows: list,
         resp = None
         for attempt in range(_MATCH_MAX_RETRIES):
             try:
-                resp = _groq_chat(messages, _MATCH_MAX_TOKENS)
+                resp = _groq_chat(messages, _MATCH_MAX_TOKENS, model=_MATCH_MODEL)
                 break
             except Exception as exc:
                 if _is_rate_limit(exc) and attempt < _MATCH_MAX_RETRIES - 1:

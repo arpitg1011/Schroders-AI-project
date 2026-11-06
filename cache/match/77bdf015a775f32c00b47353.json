@@ -1,0 +1,143 @@
+{
+  "_v": 1,
+  "match_map": {
+    "TAIWAN SEMICONDUCTOR MFG": {},
+    "SAMSUNG ELECTRONICS CO": {},
+    "SK HYNIX": {},
+    "COMMONWEALTH BANK OF AUS": {},
+    "TENCENT HOLDINGS LI (CN)": {},
+    "ALIBABA GRP HLDG (HK)": {},
+    "BHP GROUP (AU)": {
+      "Coal": {
+        "sub_theme": "Energy",
+        "reason": "energy commodity"
+      }
+    },
+    "WISETECH GLOBAL": {},
+    "DELTA ELECTRONICS": {},
+    "NATIONAL AUSTRALIA BANK": {},
+    "MEDIATEK INC": {},
+    "ICBC H": {},
+    "WESTPAC BANKING": {},
+    "HON HAI PRECISION IND CO": {},
+    "CHINA CONSTRUCTION BK H": {},
+    "DBS GROUP HOLDINGS": {},
+    "BANK OF CHINA H": {
+      "Insurance": {
+        "sub_theme": "Insurance",
+        "reason": "insurance business"
+      }
+    },
+    "SAMSUNG ELECTRO-MECH. CO": {},
+    "MACQUARIE GROUP": {},
+    "RELIANCE INDUSTRIES": {
+      "Oil to Chemicals (O2C)": {
+        "sub_theme": "Energy",
+        "reason": "oil & chemicals"
+      },
+      "Oil and Gas": {
+        "sub_theme": "Energy",
+        "reason": "oil & gas"
+      }
+    },
+    "XIAOMI CORP B": {},
+    "ICICI BANK": {
+      "Life insurance": {
+        "sub_theme": "Insurance",
+        "reason": "insurance business"
+      }
+    },
+    "OCBC BANK": {
+      "Insurance": {
+        "sub_theme": "Insurance",
+        "reason": "insurance business"
+      }
+    },
+    "HYUNDAI MOTOR CO": {},
+    "CHROMA ATE": {},
+    "TATA CONSULTANCY": {},
+    "RIO TINTO LTD (AU)": {},
+    "UNITED MICROELECTRONICS": {},
+    "ANZ GROUP HOLDINGS": {},
+    "KING YUAN ELECTRONICS CO": {},
+    "SK SQUARE CO": {},
+    "MEITUAN B": {
+      "Core Local Commerce": {
+        "sub_theme": "Food & Beverage",
+        "reason": "food delivery platform"
+      }
+    },
+    "BHARTI AIRTEL": {},
+    "HDFC BANK": {},
+    "AIA GROUP": {},
+    "BAIDU (HK)": {},
+    "INFOSYS": {},
+    "LENOVO GROUP": {},
+    "HONGKONG EXCH & CLEARING": {
+      "Commodities": {
+        "sub_theme": "Agriculture",
+        "reason": "trading of agri commodities"
+      }
+    },
+    "GIGABYTE TECHNOLOGY CO": {},
+    "KB FINANCIAL GROUP": {},
+    "GOLD CIRCUIT ELECTRONICS": {},
+    "GDS HOLDINGS A (HK)": {},
+    "ASE TECHNOLOGY HOLDING": {},
+    "CSL": {},
+    "WESFARMERS": {},
+    "SINGAPORE TELECOM": {},
+    "LITE-ON TECHNOLOGY CORP": {},
+    "UNIMICRON TECHNOLOGY": {},
+    "NETEASE": {},
+    "GOODMAN GROUP": {},
+    "ASIA VITAL COMPONENTS": {},
+    "QUANTA COMPUTER": {},
+    "NAN YA PLASTIC": {},
+    "HANMI SEMICONDUCTOR CO": {},
+    "GLOBAL UNICHIP CORP": {},
+    "INFRATIL": {},
+    "ELITE MATERIAL CO": {},
+    "MPI CORP": {},
+    "HCL TECHNOLOGIES": {},
+    "SAMSUNG SDS CO": {},
+    "NAVER": {},
+    "KUAISHOU TECHNOLOGY B": {},
+    "KING SLIDE WORKS CO": {},
+    "PING AN INSURANCE H": {
+      "Life and Health Insurance": {
+        "sub_theme": "Insurance",
+        "reason": "storm damage claims relevance"
+      },
+      "Property and Casualty Insurance": {
+        "sub_theme": "Insurance",
+        "reason": "storm damage claims relevance"
+      }
+    },
+    "ACCTON TECHNOLOGY CORP": {},
+    "ZHONGJI INNO A(HK-C)": {},
+    "WISTRON CORP": {},
+    "ALCHIP TECHNOLOGIES": {},
+    "BIZLINK HOLDING": {},
+    "ZHEN DING TECHNOLOGY": {},
+    "ASPEED TECHNOLOGY": {},
+    "WIWYNN CORPORATION": {},
+    "CAMBRICON TECH A (HK-C)": {},
+    "DELTA ELECTRONICS THAI": {
+      "Power Electronics": {
+        "sub_theme": "Energy",
+        "reason": "Energy equipment"
+      }
+    },
+    "KEPPEL": {},
+    "PERSISTENT SYSTEMS": {
+      "Banking, Financial Services and Insurance (BFSI)": {
+        "sub_theme": "Insurance",
+        "reason": "Insurance services"
+      }
+    },
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
+    "XERO (AU)": {}
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "_v": 2,
+  "taxonomy": {
+    "theme": "digital payments",
+    "layer1": [
+      {
+        "sub_industry": "Payment processors",
+        "activities": [
+          "transaction settlement",
+          "merchant acquiring",
+          "fraud detection"
+        ]
+      },
+      {
+        "sub_industry": "Mobile wallet providers",
+        "activities": [
+          "peer-to-peer transfers",
+          "QR code payments",
+          "in-app purchases"
+        ]
+      },
+      {
+        "sub_industry": "POS hardware manufacturers",
+        "activities": [
+          "card reader production",
+          "contactless terminal integration",
+          "software firmware updates"
+        ]
+      },
+      {
+        "sub_industry": "Digital banking services",
+        "activities": [
+          "online account opening",
+          "instant fund transfers",
+          "digital bill pay"
+        ]
+      }
+    ]
+  }
+}

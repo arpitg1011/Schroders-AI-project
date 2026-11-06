@@ -1,0 +1,40 @@
+{
+  "_v": 2,
+  "taxonomy": {
+    "theme": "cybersecurity",
+    "layer1": [
+      {
+        "sub_industry": "Security Software",
+        "activities": [
+          "threat detection",
+          "software updates",
+          "vulnerability scanning"
+        ]
+      },
+      {
+        "sub_industry": "Managed Security Services",
+        "activities": [
+          "24/7 monitoring",
+          "incident response",
+          "security analytics"
+        ]
+      },
+      {
+        "sub_industry": "Identity & Access Management",
+        "activities": [
+          "user authentication",
+          "privilege management",
+          "single sign-on"
+        ]
+      },
+      {
+        "sub_industry": "Network Security Hardware",
+        "activities": [
+          "packet inspection",
+          "traffic filtering",
+          "intrusion detection"
+        ]
+      }
+    ]
+  }
+}

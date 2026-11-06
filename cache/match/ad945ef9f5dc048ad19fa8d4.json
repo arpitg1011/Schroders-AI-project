@@ -1,0 +1,403 @@
+{
+  "_v": 1,
+  "match_map": {
+    "TAIWAN SEMICONDUCTOR MFG": {},
+    "SAMSUNG ELECTRONICS CO": {},
+    "SK HYNIX": {},
+    "COMMONWEALTH BANK OF AUS": {
+      "Retail Banking Services (Incl. Bankwest)": {
+        "sub_theme": "Financial services",
+        "reason": "retail banking"
+      },
+      "Business Banking": {
+        "sub_theme": "Financial services",
+        "reason": "business banking"
+      },
+      "Institutional Banking and Markets": {
+        "sub_theme": "Financial services",
+        "reason": "institutional banking"
+      },
+      "New Zealand": {
+        "sub_theme": "Financial services",
+        "reason": "NZ banking operations"
+      }
+    },
+    "TENCENT HOLDINGS LI (CN)": {
+      "Fintech and Business Services": {
+        "sub_theme": "Financial services",
+        "reason": "fintech activities"
+      }
+    },
+    "ALIBABA GRP HLDG (HK)": {},
+    "BHP GROUP (AU)": {},
+    "WISETECH GLOBAL": {},
+    "DELTA ELECTRONICS": {},
+    "NATIONAL AUSTRALIA BANK": {
+      "Business and Private Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Personal Banking": {
+        "sub_theme": "Financial services",
+        "reason": "retail banking"
+      },
+      "Corporate and Institutional Banking": {
+        "sub_theme": "Financial services",
+        "reason": "institutional banking"
+      },
+      "New Zealand Banking": {
+        "sub_theme": "Financial services",
+        "reason": "NZ banking"
+      }
+    },
+    "MEDIATEK INC": {},
+    "ICBC H": {
+      "Corporate Banking": {
+        "sub_theme": "Financial services",
+        "reason": "corporate banking"
+      },
+      "Personal Banking": {
+        "sub_theme": "Financial services",
+        "reason": "personal banking"
+      }
+    },
+    "WESTPAC BANKING": {
+      "Consumer": {
+        "sub_theme": "Financial services",
+        "reason": "consumer banking"
+      },
+      "Business & Wealth": {
+        "sub_theme": "Financial services",
+        "reason": "wealth management"
+      },
+      "Institutional": {
+        "sub_theme": "Financial services",
+        "reason": "institutional banking"
+      },
+      "Westpac New Zealand": {
+        "sub_theme": "Financial services",
+        "reason": "NZ banking"
+      }
+    },
+    "HON HAI PRECISION IND CO": {},
+    "CHINA CONSTRUCTION BK H": {
+      "Treasury Business": {
+        "sub_theme": "Financial services",
+        "reason": "bank treasury"
+      },
+      "Personal Banking": {
+        "sub_theme": "Financial services",
+        "reason": "personal banking"
+      },
+      "Corporate Banking": {
+        "sub_theme": "Financial services",
+        "reason": "corporate banking"
+      }
+    },
+    "DBS GROUP HOLDINGS": {
+      "Consumer Banking/Wealth Management": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Institutional Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Markets Trading": {
+        "sub_theme": "Financial services",
+        "reason": "trading"
+      }
+    },
+    "BANK OF CHINA H": {
+      "Corporate Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Personal Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Treasury Operations": {
+        "sub_theme": "Financial services",
+        "reason": "treasury"
+      },
+      "Investment Banking": {
+        "sub_theme": "Financial services",
+        "reason": "investment banking"
+      },
+      "Insurance": {
+        "sub_theme": "Financial services",
+        "reason": "insurance"
+      }
+    },
+    "SAMSUNG ELECTRO-MECH. CO": {},
+    "MACQUARIE GROUP": {
+      "Macquarie Asset Management": {
+        "sub_theme": "Financial services",
+        "reason": "asset management"
+      },
+      "Banking and Financial Services": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Commodities and Global Markets": {
+        "sub_theme": "Financial services",
+        "reason": "markets"
+      },
+      "Macquarie Capital": {
+        "sub_theme": "Financial services",
+        "reason": "capital"
+      }
+    },
+    "RELIANCE INDUSTRIES": {},
+    "XIAOMI CORP B": {
+      "Smart EV, AI and Other New Initiatives": {
+        "sub_theme": "Renewable energy",
+        "reason": "EVs"
+      }
+    },
+    "ICICI BANK": {
+      "Retail banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Wholesale banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Treasury": {
+        "sub_theme": "Financial services",
+        "reason": "treasury"
+      },
+      "Other Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Life insurance": {
+        "sub_theme": "Financial services",
+        "reason": "insurance"
+      }
+    },
+    "OCBC BANK": {
+      "Global Wholesale Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking activities"
+      },
+      "Global Consumer/Private Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Global Markets": {
+        "sub_theme": "Financial services",
+        "reason": "market trading services"
+      },
+      "Insurance": {
+        "sub_theme": "Financial services",
+        "reason": "insurance business"
+      }
+    },
+    "HYUNDAI MOTOR CO": {
+      "Finance": {
+        "sub_theme": "Financial services",
+        "reason": "auto financing"
+      }
+    },
+    "CHROMA ATE": {},
+    "TATA CONSULTANCY": {
+      "Banking, Financial Services and Insurance": {
+        "sub_theme": "Financial services",
+        "reason": "financial services consulting"
+      },
+      "Life Sciences and Healthcare": {
+        "sub_theme": "Healthcare services",
+        "reason": "healthcare consulting"
+      }
+    },
+    "RIO TINTO LTD (AU)": {},
+    "UNITED MICROELECTRONICS": {},
+    "ANZ GROUP HOLDINGS": {
+      "Institutional": {
+        "sub_theme": "Financial services",
+        "reason": "institutional banking"
+      },
+      "Australia Commercial": {
+        "sub_theme": "Financial services",
+        "reason": "commercial banking"
+      },
+      "Suncorp Bank": {
+        "sub_theme": "Financial services",
+        "reason": "banking operations"
+      },
+      "New Zealand": {
+        "sub_theme": "Financial services",
+        "reason": "banking operations"
+      }
+    },
+    "KING YUAN ELECTRONICS CO": {},
+    "SK SQUARE CO": {},
+    "MEITUAN B": {},
+    "BHARTI AIRTEL": {},
+    "HDFC BANK": {
+      "Treasury": {
+        "sub_theme": "Financial services",
+        "reason": "bank treasury activity"
+      },
+      "Retail Banking - Digital Banking": {
+        "sub_theme": "Financial services",
+        "reason": "digital banking services"
+      },
+      "Retail Banking - Non Digital Banking": {
+        "sub_theme": "Financial services",
+        "reason": "traditional banking services"
+      },
+      "Wholesale Banking": {
+        "sub_theme": "Financial services",
+        "reason": "wholesale banking operations"
+      },
+      "Other Banking Operations": {
+        "sub_theme": "Financial services",
+        "reason": "general banking activities"
+      }
+    },
+    "AIA GROUP": {
+      "Writes Life Insurance": {
+        "sub_theme": "Financial services",
+        "reason": "life insurance business"
+      }
+    },
+    "BAIDU (HK)": {},
+    "INFOSYS": {
+      "Financial Services": {
+        "sub_theme": "Financial services",
+        "reason": "financial services business"
+      }
+    },
+    "LENOVO GROUP": {},
+    "HONGKONG EXCH & CLEARING": {
+      "Commodities": {
+        "sub_theme": "Financial services",
+        "reason": "commodity trading platform"
+      },
+      "Equity and Financial Derivatives": {
+        "sub_theme": "Financial services",
+        "reason": "derivatives trading"
+      },
+      "Cash": {
+        "sub_theme": "Financial services",
+        "reason": "cash market services"
+      }
+    },
+    "GIGABYTE TECHNOLOGY CO": {},
+    "KB FINANCIAL GROUP": {
+      "Securities": {
+        "sub_theme": "Financial services",
+        "reason": "securities business"
+      },
+      "Banking Business - Corporate Banking": {
+        "sub_theme": "Financial services",
+        "reason": "corporate banking services"
+      },
+      "Banking Business - Other Banking Services": {
+        "sub_theme": "Financial services",
+        "reason": "other banking services"
+      },
+      "Credit Card": {
+        "sub_theme": "Financial services",
+        "reason": "credit card services"
+      }
+    },
+    "GOLD CIRCUIT ELECTRONICS": {},
+    "GDS HOLDINGS A (HK)": {},
+    "ASE TECHNOLOGY HOLDING": {},
+    "CSL": {
+      "Csl Vifor": {
+        "sub_theme": "Healthcare services",
+        "reason": "pharmaceutical business"
+      },
+      "CSL Seqirus": {
+        "sub_theme": "Healthcare services",
+        "reason": "vaccine business"
+      },
+      "CSL Behring (Incl.CSL Intellectual Property)": {
+        "sub_theme": "Healthcare services",
+        "reason": "biopharma business"
+      }
+    },
+    "WESFARMERS": {
+      "Health": {
+        "sub_theme": "Healthcare services",
+        "reason": "health services"
+      }
+    },
+    "SINGAPORE TELECOM": {},
+    "LITE-ON TECHNOLOGY CORP": {},
+    "UNIMICRON TECHNOLOGY": {},
+    "NETEASE": {},
+    "GOODMAN GROUP": {},
+    "ASIA VITAL COMPONENTS": {},
+    "QUANTA COMPUTER": {},
+    "NAN YA PLASTIC": {},
+    "HANMI SEMICONDUCTOR CO": {},
+    "GLOBAL UNICHIP CORP": {},
+    "INFRATIL": {
+      "Anytime Radiology Group Australia": {
+        "sub_theme": "Healthcare services",
+        "reason": "medical imaging"
+      },
+      "RHCNZ Medical Imaging New Zealand": {
+        "sub_theme": "Healthcare services",
+        "reason": "medical imaging"
+      }
+    },
+    "ELITE MATERIAL CO": {},
+    "MPI CORP": {},
+    "HCL TECHNOLOGIES": {},
+    "SAMSUNG SDS CO": {},
+    "NAVER": {
+      "Fintech": {
+        "sub_theme": "Financial services",
+        "reason": "financial services"
+      }
+    },
+    "KUAISHOU TECHNOLOGY B": {},
+    "KING SLIDE WORKS CO": {},
+    "PING AN INSURANCE H": {
+      "Banking": {
+        "sub_theme": "Financial services",
+        "reason": "financial services"
+      },
+      "Asset Management Business": {
+        "sub_theme": "Financial services",
+        "reason": "financial services"
+      },
+      "Finance Enablement Business": {
+        "sub_theme": "Financial services",
+        "reason": "financial services"
+      }
+    },
+    "ACCTON TECHNOLOGY CORP": {},
+    "ZHONGJI INNO A(HK-C)": {},
+    "WISTRON CORP": {},
+    "ALCHIP TECHNOLOGIES": {},
+    "BIZLINK HOLDING": {},
+    "ZHEN DING TECHNOLOGY": {},
+    "ASPEED TECHNOLOGY": {},
+    "WIWYNN CORPORATION": {},
+    "CAMBRICON TECH A (HK-C)": {},
+    "DELTA ELECTRONICS THAI": {},
+    "KEPPEL": {},
+    "PERSISTENT SYSTEMS": {
+      "Healthcare & Life Sciences": {
+        "sub_theme": "Healthcare services",
+        "reason": "healthcare services"
+      },
+      "Banking, Financial Services and Insurance (BFSI)": {
+        "sub_theme": "Financial services",
+        "reason": "financial services"
+      }
+    },
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
+    "XERO (AU)": {}
+  }
+}

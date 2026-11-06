@@ -11,9 +11,11 @@ __pycache__/
 .pytest_cache/
 .hypothesis/
 
-# Taxonomy + segment-match caches (reproducibility)
+# Legacy hidden caches (superseded by committed cache/ dir)
 .taxonomy_cache/
 .match_cache/
+# NOTE: cache/ (taxonomy + match) IS committed on purpose so precomputed
+# demo-theme caches ship with the app and load instantly on the hosted site.
 
 # Virtual environments
 .venv/

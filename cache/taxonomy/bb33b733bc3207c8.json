@@ -1,0 +1,40 @@
+{
+  "_v": 2,
+  "taxonomy": {
+    "theme": "data centers",
+    "layer1": [
+      {
+        "sub_industry": "Cloud service providers",
+        "activities": [
+          "IaaS offerings",
+          "cloud storage services",
+          "compute rental"
+        ]
+      },
+      {
+        "sub_industry": "Data center REITs",
+        "activities": [
+          "colocation leasing",
+          "facility management",
+          "infrastructure leasing"
+        ]
+      },
+      {
+        "sub_industry": "Server hardware manufacturers",
+        "activities": [
+          "rack server design",
+          "CPU/GPU production",
+          "hardware sales"
+        ]
+      },
+      {
+        "sub_industry": "Cooling and power solutions",
+        "activities": [
+          "energy-efficient cooling",
+          "UPS backup power",
+          "power distribution units"
+        ]
+      }
+    ]
+  }
+}

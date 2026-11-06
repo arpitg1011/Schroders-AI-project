@@ -1,0 +1,36 @@
+{
+  "_v": 2,
+  "taxonomy": {
+    "theme": "US elections",
+    "layer1": [
+      {
+        "sub_industry": "Defense contractors",
+        "activities": [
+          "military procurement",
+          "defense R&D contracts"
+        ]
+      },
+      {
+        "sub_industry": "Healthcare services",
+        "activities": [
+          "drug pricing policy",
+          "Medicare reimbursement"
+        ]
+      },
+      {
+        "sub_industry": "Renewable energy",
+        "activities": [
+          "clean energy subsidies",
+          "tax credit allocation"
+        ]
+      },
+      {
+        "sub_industry": "Financial services",
+        "activities": [
+          "interest rate policy",
+          "regulatory capital rules"
+        ]
+      }
+    ]
+  }
+}
