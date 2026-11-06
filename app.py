@@ -142,6 +142,36 @@ def _resolve_taxonomy(theme: str, n: int, portfolio_df, segments,
             "taxonomy": {"theme": theme, "layer1": merged}, "notice": notice}
 
 
+def _apply_curation(theme: str, kept_names: list, portfolio_df, segments) -> dict:
+    """Trim the current analysis to the chosen sub-themes, re-score, persist.
+
+    For a logged-in user the curated set REPLACES their saved taxonomy, so only
+    the kept sub-themes are reused on future runs for this profile + theme.
+
+    Returns {ok, analysis} with a freshly scored analysis dict, or a handled
+    error.
+    """
+    analysis = st.session_state.get("analysis") or {}
+    full_layer1 = (analysis.get("taxonomy") or {}).get("layer1", [])
+    kept = [s for s in full_layer1 if s["sub_industry"] in set(kept_names)]
+    if not kept:
+        return {"ok": False, "message": "Keep at least one sub-theme."}
+
+    tax = {"theme": theme, "layer1": kept}
+    result = engine.analyze_portfolio(portfolio_df, segments, tax)
+
+    if _is_logged_in():
+        sb.save_taxonomy(st.session_state["auth"]["session"], theme, kept)
+
+    return {"ok": True, "analysis": {
+        "taxonomy": tax,
+        "metrics": result["metrics"],
+        "scores": result["scores"],
+        "metadata": result.get("metadata", {}),
+        "cached": False,
+    }}
+
+
 # ---------------------------------------------------------------------------
 # Authentication (Phase 2 - only active when Supabase is configured)
 # ---------------------------------------------------------------------------
@@ -518,6 +548,71 @@ def _companies_by_sub_theme(analysis: dict) -> dict:
     return out
 
 
+def _render_curation(analysis: dict, sub_exposure: dict):
+    """Let the user pick which sub-themes to keep and save only those.
+
+    Logged-in users: the kept set REPLACES their saved taxonomy for this
+    profile + theme, so future runs reuse only the curated sub-themes.
+    Anonymous users: curation trims the current session's analysis only.
+    """
+    layer1 = analysis.get("taxonomy", {}).get("layer1", [])
+    if len(layer1) <= 1:
+        return  # nothing to curate
+
+    theme = st.session_state.get("theme", "").strip()
+    portfolio_df = st.session_state.get("portfolio_df")
+    seg_res = _load_segments()
+    if portfolio_df is None or not theme or not seg_res["ok"]:
+        return
+    segments = seg_res["segments"]
+
+    saved_hint = ("Unticking a sub-theme and saving permanently removes it from "
+                  "the set stored on your profile for this theme."
+                  if _is_logged_in() else
+                  "Curation trims this session's view. Log in to save a curated "
+                  "set to your profile.")
+
+    with st.expander("Curate sub-themes (choose which to keep)", expanded=False):
+        st.markdown(f'<div style="color:{T.MUTED};font-size:12px;margin-bottom:8px;">'
+                    f'{saved_hint}</div>', unsafe_allow_html=True)
+
+        # Order the checkboxes by exposure so the weakest (likely-drop) ones sit
+        # at the bottom.
+        ordered = sorted(layer1,
+                         key=lambda s: sub_exposure.get(s["sub_industry"], 0.0),
+                         reverse=True)
+        keep: list[str] = []
+        for i, sub in enumerate(ordered):
+            nm = sub["sub_industry"]
+            exp = sub_exposure.get(nm, 0.0)
+            checked = st.checkbox(f"{nm}  ·  {exp:.1f}% exposure",
+                                  value=True, key=f"curate_{i}_{nm}")
+            if checked:
+                keep.append(nm)
+
+        c1, c2 = st.columns([1.2, 4])
+        with c1:
+            save_label = ("Save curated set" if _is_logged_in()
+                          else "Apply to this session")
+            if st.button(save_label, type="primary", use_container_width=True,
+                         key="curate_save"):
+                if len(keep) == len(layer1):
+                    st.info("No change — every sub-theme is kept.")
+                else:
+                    res = _apply_curation(theme, keep, portfolio_df, segments)
+                    if not res["ok"]:
+                        st.warning(res["message"])
+                    else:
+                        st.session_state["analysis"] = res["analysis"]
+                        st.success(
+                            f"Kept {len(keep)} of {len(layer1)} sub-themes."
+                            + (" Saved to your profile." if _is_logged_in() else ""))
+                        st.rerun()
+        with c2:
+            st.caption("Tick 'Regenerate' on the theme bar above and re-run "
+                       "Analyze to restore a full freshly generated set.")
+
+
 def section_taxonomy(analysis: dict):
     taxonomy = analysis["taxonomy"]
     m = analysis["metrics"]
@@ -532,6 +627,8 @@ def section_taxonomy(analysis: dict):
                 '(Tip: use the drill buttons on the Overview tab to jump straight '
                 'to a sub-theme.)</div>',
                 unsafe_allow_html=True)
+
+    _render_curation(analysis, sub_exposure)
 
     # Ordered by exposure (inverted-pyramid feel: biggest driver on top).
     subs = sorted(taxonomy.get("layer1", []),

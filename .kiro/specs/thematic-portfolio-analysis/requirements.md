@@ -239,6 +239,19 @@ The platform is built in two phases. Phase 1 delivers the core thematic analysis
 7. WHEN topping up a saved Taxonomy, THE System SHALL skip near-duplicate Sub_Industries (compared by a normalised name) and, IF fewer unique new Sub_Industries are produced than requested, SHALL inform the user how many were added.
 8. THE saved Taxonomy SHALL take precedence over the selected count unless the user forces regeneration, so changing the count never silently discards a user's saved Sub_Industries.
 
+### Requirement 18: Sub-Theme Curation
+
+**User Story:** As a Schroders analyst, I want to choose which generated sub-themes to keep and save only those, so that my saved taxonomy reflects the decomposition I judge relevant rather than every sub-theme the model produced.
+
+#### Acceptance Criteria
+
+1. WHEN an analysis is displayed, THE UI SHALL provide a curation control listing every Sub_Industry in the current Taxonomy with a per-sub-theme keep/drop selection, defaulting to keep-all.
+2. WHEN a logged-in user saves a curated selection, THE System SHALL replace that user's saved Taxonomy for the Theme with only the kept Sub_Industries, so future runs for that profile and Theme reuse only the curated set.
+3. WHEN a user applies a curated selection, THE System SHALL re-score the portfolio against only the kept Sub_Industries and refresh all views to reflect the curated set.
+4. THE System SHALL require at least one Sub_Industry to remain selected and SHALL reject an empty selection with a handled message.
+5. WHERE the user is anonymous, THE System SHALL apply curation to the current session's analysis only and SHALL NOT persist it, and SHALL indicate that logging in enables saving.
+6. THE System SHALL allow the user to recover a full, freshly generated Taxonomy by forcing regeneration, which overwrites any curated saved set.
+
 ### Requirement 14: Confidence Scores and Sub-Theme Attribution
 
 **User Story:** As a Schroders analyst, I want a confidence score and a per-sub-theme breakdown for each company's exposure, so that I can judge how much to trust a number and see which parts of the theme drive it.
