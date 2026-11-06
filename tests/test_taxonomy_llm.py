@@ -13,11 +13,14 @@ import engine
 @pytest.fixture(autouse=True)
 def _isolate_taxonomy_cache(tmp_path, monkeypatch):
     """Point the taxonomy cache at a temp dir and clear memory for each test,
-    so cross-test cache hits never mask the LLM path (Req 13)."""
+    so cross-test cache hits never mask the LLM path (Req 13). Also reset the
+    Groq client cache so a mock from one test never leaks into the next."""
     monkeypatch.setattr(engine, "_TAXONOMY_CACHE_DIR", str(tmp_path / "tax_cache"))
     engine._taxonomy_mem_cache.clear()
+    engine._groq_clients.clear()
     yield
     engine._taxonomy_mem_cache.clear()
+    engine._groq_clients.clear()
 
 GOOD = json.dumps({"layer1": [
     {"sub_industry": "Grid Equipment", "activities": ["power transformers", "switchgear"]},
@@ -98,6 +101,7 @@ def test_invalid_theme_not_cached(monkeypatch):
     with mock.patch("groq.Groq", return_value=_fake_client([INVALID])):
         engine.generate_taxonomy("arpit")
     # Second call still reaches the model (nothing cached) -> provide a response.
+    engine._groq_clients.clear()  # force a fresh (re-mocked) client
     with mock.patch("groq.Groq", return_value=_fake_client([INVALID])):
         res2 = engine.generate_taxonomy("arpit")
     assert res2["ok"] is False and res2["error_code"] == engine.INVALID_THEME
@@ -140,6 +144,7 @@ def test_force_refresh_bypasses_cache(monkeypatch):
     monkeypatch.setattr(engine, "get_secret", lambda k, d=None: "key")
     with mock.patch("groq.Groq", return_value=_fake_client([GOOD])):
         engine.generate_taxonomy("Forced Theme")
+    engine._groq_clients.clear()  # force a fresh (re-mocked) client
     with mock.patch("groq.Groq", return_value=_fake_client([GOOD])):
         again = engine.generate_taxonomy("Forced Theme", force_refresh=True)
     assert again["ok"] and again.get("cached") is False
@@ -214,6 +219,7 @@ def test_topup_call_is_not_cached(monkeypatch):
                                        existing=["Existing Sub"])
     assert res["ok"] and res.get("cached") is False
     # Nothing was cached, so a follow-up default call still reaches the model.
+    engine._groq_clients.clear()  # force a fresh (re-mocked) client
     with mock.patch("groq.Groq", return_value=_fake_client([GOOD])):
         follow = engine.generate_taxonomy("Power Grid")
     assert follow["ok"] and follow.get("cached") is False

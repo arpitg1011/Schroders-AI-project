@@ -705,11 +705,90 @@ def _extract_evidence(business_description: str, matched_activities: list) -> st
     return snippet[:500]
 
 
-def score_company(company_row: dict, taxonomy: dict) -> dict:
-    """Deterministically score one company's thematic exposure (no LLM).
+def _score_company_binary(base: dict, working: list, total: float,
+                          match_map: dict, business_description: str) -> dict:
+    """Binary pure-revenue scoring for one company given the LLM match map.
+
+    base: the pre-filled ScoreResult skeleton (has_positive_revenue already set).
+    working: cleaned segments with clean_rev. total: sum of clean_rev (>0).
+    match_map: {segment_name: {"sub_theme", "reason"}} for matched segments.
+    """
+    exposure = 0.0
+    matched_subs: list[str] = []
+    matched_reasons: list[str] = []
+    breakdown = []
+    sub_attr: dict[str, float] = {}
+    evidence_sub = None
+
+    for w in working:
+        seg_name = (w["name"] or "").strip()
+        seg_pct = 100.0 * w["clean_rev"] / total
+        hit = match_map.get(seg_name)
+        is_match = hit is not None
+        sub = hit["sub_theme"] if is_match else None
+        reason = hit.get("reason", "") if is_match else ""
+
+        if is_match:
+            exposure += seg_pct  # 100% of this segment's revenue share
+            if sub and sub not in matched_subs:
+                matched_subs.append(sub)
+            if sub:
+                sub_attr[sub] = sub_attr.get(sub, 0.0) + seg_pct
+            if reason:
+                matched_reasons.append(reason)
+            if evidence_sub is None:
+                evidence_sub = (seg_pct, sub, reason)
+
+        breakdown.append({
+            "name": w["name"], "revenue": w["revenue"],
+            "revenue_pct": round(seg_pct, 6),
+            # alignment_score is now binary (1.0 matched / 0.0 not) so existing
+            # UI that reads it still works, but it is no longer a similarity.
+            "alignment_score": 1.0 if is_match else 0.0,
+            "matched_activities": [],
+            "matched_sub_industry": sub,
+            "match_reason": reason,
+            "excluded_missing_revenue": w["excluded_missing_revenue"],
+            "cleaned_to_zero": w["cleaned_to_zero"],
+        })
+
+    company_exposure = round(min(100.0, max(0.0, exposure)), 2)
+    base["company_exposure"] = company_exposure
+    base["exposure_band"] = exposure_band(company_exposure)
+    base["matched_sub_industries"] = matched_subs
+    base["matched_activities"] = []
+    base["segment_breakdown"] = breakdown
+    base["sub_theme_attribution"] = {k: round(v, 2) for k, v in sub_attr.items()}
+    # Numeric confidence is retired (it was exposure relabeled). A qualitative
+    # confidence will replace it later; keep the field as None so the UI can
+    # detect "not computed" rather than show a fake 0.
+    base["confidence"] = None
+    base["match_reasons"] = matched_reasons
+    base["insufficient_data"] = (company_exposure == 0.0)
+
+    # Evidence snippet from the best matched segment's business description.
+    if evidence_sub is not None and business_description:
+        # Use the matched sub-theme name as the search anchor for a verbatim window.
+        anchor = [evidence_sub[1]] if evidence_sub[1] else []
+        base["evidence_snippet"] = _extract_evidence(business_description, anchor)
+    return base
+
+
+def score_company(company_row: dict, taxonomy: dict,
+                  match_map: dict | None = None) -> dict:
+    """Score one company's thematic exposure from reported segment revenue.
 
     company_row keys used: company, sector (optional), segments (list),
     business_description (str), has_segment_data (bool).
+
+    match_map: when provided (the primary path), it is a dict
+    {segment_name: {"sub_theme", "reason"}} of the segments the LLM judged to
+    belong to the theme. Exposure is then PURELY revenue-based: a matched
+    segment contributes 100% of its revenue share, an unmatched one 0%. No
+    similarity, no partial credit.
+
+    When match_map is None (offline fallback, no Groq), the legacy embedding
+    cosine path is used so the app still produces a result without the LLM.
 
     Returns a ScoreResult dict. Requirements: 4.*, 6.*, 3.4, 9.5, 10.4.
     """
@@ -759,7 +838,15 @@ def score_company(company_row: dict, taxonomy: dict) -> dict:
 
     base["has_positive_revenue"] = True
 
-    # --- Semantic alignment scoring per segment (Revision R2, Req 6.1-6.3) ---
+    # --- Primary path: binary LLM match -> pure revenue exposure (Req 6) ---
+    # A segment the LLM judged part of the theme contributes 100% of its
+    # revenue share; everything else contributes 0%. No similarity, no partial
+    # credit. match_map is {segment_name: {"sub_theme", "reason"}}.
+    if match_map is not None:
+        return _score_company_binary(base, working, total, match_map,
+                                     business_description)
+
+    # --- Fallback path: offline embedding cosine (no Groq available) ---
     layer1 = taxonomy.get("layer1", []) if isinstance(taxonomy, dict) else []
     theme_text = (taxonomy.get("theme", "") if isinstance(taxonomy, dict) else "").strip()
     exposure = 0.0
@@ -1134,16 +1221,8 @@ def generate_taxonomy(theme: str, n: int = _DEFAULT_SUBS, force_refresh: bool = 
     except Exception as exc:  # pragma: no cover
         return err(LLM_UNREACHABLE, "Groq client library is unavailable.", detail=str(exc))
 
-    client = Groq(api_key=api_key)
-
     def _call(messages):
-        return client.chat.completions.create(
-            model=TAXONOMY_MODEL,
-            messages=messages,
-            response_format={"type": "json_object"},
-            temperature=0,
-            max_tokens=_TAXONOMY_MAX_TOKENS,
-        )
+        return _groq_chat(messages, _TAXONOMY_MAX_TOKENS)
 
     system = _TAXONOMY_SYSTEM_PROMPT.format(n=n)
     user = theme
@@ -1251,6 +1330,396 @@ def _map_groq_exception(exc) -> dict:
         return err(INVALID_API_KEY, "Groq rejected the API key (invalid or unauthorized).", detail=str(exc))
     return err(LLM_UNREACHABLE, "Could not reach the Groq API.", detail=str(exc))
 
+
+# ---------------------------------------------------------------------------
+# Groq client with multi-key failover.
+# A primary key (GROQ_API_KEY) is used for every call; if it is rate-limited
+# (429 TPM) or a request is too large for its tier (413), we transparently fail
+# over to one or more backup keys (GROQ_API_KEY_2, _3, ...). This roughly
+# multiplies the free-tier TPM budget by the number of keys. Keys live only in
+# .env / st.secrets - never in source.
+# ---------------------------------------------------------------------------
+_GROQ_KEY_NAMES = ("GROQ_API_KEY", "GROQ_API_KEY_2", "GROQ_API_KEY_3")
+_groq_clients: dict[str, object] = {}
+
+
+def _groq_keys() -> list[str]:
+    """Ordered list of configured Groq keys (primary first). Deduplicated."""
+    keys: list[str] = []
+    for name in _GROQ_KEY_NAMES:
+        val = get_secret(name)
+        if val and val not in keys:
+            keys.append(val)
+    return keys
+
+
+def _groq_client_for(api_key: str):
+    """Cached Groq client per key."""
+    client = _groq_clients.get(api_key)
+    if client is None:
+        from groq import Groq  # lazy import
+        client = Groq(api_key=api_key)
+        _groq_clients[api_key] = client
+    return client
+
+
+def _is_rate_limit(exc) -> bool:
+    """True for a throttle / too-large-for-tier error worth failing over on."""
+    status = getattr(exc, "status_code", None)
+    if status in (429, 413):
+        return True
+    msg = str(exc).lower()
+    return "rate_limit" in msg or "rate limit" in msg or "too large" in msg
+
+
+def _is_json_validation_error(exc) -> bool:
+    """True for a 400 where the model's JSON-mode output failed validation
+    (usually truncation on a large batch). The caller splits the batch."""
+    status = getattr(exc, "status_code", None)
+    if status != 400:
+        return False
+    msg = str(exc).lower()
+    return "json" in msg and ("validate" in msg or "failed_generation" in msg)
+
+
+def _groq_chat(messages: list, max_tokens: int):
+    """Run a chat completion, failing over across configured keys on a rate
+    limit. Returns the SDK response. Raises the last exception if every key is
+    exhausted (the caller maps it to a handled error).
+    """
+    keys = _groq_keys()
+    if not keys:
+        raise RuntimeError("No Groq API key configured.")
+    last_exc = None
+    for api_key in keys:
+        client = _groq_client_for(api_key)
+        try:
+            return client.chat.completions.create(
+                model=TAXONOMY_MODEL, messages=messages,
+                response_format={"type": "json_object"},
+                temperature=0, max_tokens=max_tokens,
+            )
+        except Exception as exc:
+            last_exc = exc
+            if _is_rate_limit(exc):
+                continue  # try the next key
+            raise  # non-rate-limit error: surface immediately
+    # Every key was rate-limited.
+    raise last_exc
+
+
+# ---------------------------------------------------------------------------
+# LLM segment matcher (primary scoring path).
+# One batched, cached Groq call per (theme, taxonomy, segment-set) classifies
+# each company segment to a sub-theme (or none). It returns ONLY a binary
+# match + the sub-theme name + a short reason - NEVER a number. Exposure is
+# computed deterministically from reported segment revenue afterwards, so the
+# "LLM never invents exposure percentages" guarantee holds (Req 6.9).
+#
+# Reproducibility: the full match map is cached keyed by a hash of the exact
+# inputs (theme, sub-theme names + activities, and every company/segment name),
+# mirroring the taxonomy cache. Identical inputs reuse the cached decision.
+# ---------------------------------------------------------------------------
+import time  # noqa: E402
+
+_MATCH_MODEL = TAXONOMY_MODEL
+_MATCH_MAX_TOKENS = 3000  # output cap per chunk (JSON for a chunk of companies)
+# Keep each request (input + its JSON output) under the Groq free-tier ~8000
+# TPM per-request cap. We budget the INPUT side to this many tokens so the
+# model's reasoning + JSON output still fits; chunks of companies are sent
+# across multiple calls and merged.
+_MATCH_CHUNK_TOKEN_BUDGET = 1200   # smaller chunks -> smaller JSON output, fewer truncations
+_MATCH_MAX_RETRIES = 4
+_MATCH_RETRY_WAIT_S = 20   # TPM windows are per-minute; wait out the throttle
+_MATCH_CACHE_DIR = ".match_cache"
+_MATCH_CACHE_VERSION = 1
+_match_mem_cache: dict[str, dict] = {}
+
+
+def _estimate_tokens(text: str) -> int:
+    """Cheap token estimate (~4 chars/token) for request-size budgeting."""
+    return max(1, len(text) // 4)
+
+_MATCH_SYSTEM_PROMPT = (
+    "You are an equity research assistant deciding, for a THEMATIC portfolio "
+    "audit, whether each reported BUSINESS SEGMENT of a company is part of a "
+    "given investment THEME.\n\n"
+    "You are given the theme, a list of its SUB-THEMES (each a sub-industry "
+    "with example activities), and a list of companies with their reported "
+    "segment names. For EVERY segment decide:\n"
+    "- Does this segment's business genuinely belong to the theme? Judge by "
+    "ECONOMIC MEANING, not word overlap. A chip foundry IS core to "
+    "'semiconductors'; a bank's 'Insurance' segment is NOT part of 'electric "
+    "vehicles' just because of a shared word; 'Power Supply' (electronics) is "
+    "NOT 'water supply'.\n"
+    "- If yes, assign the SINGLE best-fitting sub-theme by its exact name.\n"
+    "- Generic/eliminations/unallocated/'others'/corporate segments are NOT a "
+    "match.\n\n"
+    "Return ONLY a JSON object, no prose, no markdown fences, shaped as:\n"
+    '{\"companies\": [{\"company\": <exact company string given>, '
+    '\"segments\": [{\"name\": <exact segment name given>, '
+    '\"match\": true|false, \"sub_theme\": <exact sub-theme name or null>, '
+    '\"reason\": <short phrase>}]}]}\n'
+    "Rules: use the EXACT company and segment strings provided; sub_theme MUST "
+    "be one of the given sub-theme names or null; NEVER output any number, "
+    "percentage, weight, or score. Decide match purely on business relevance."
+)
+
+
+def _match_cache_key(theme: str, taxonomy: dict, companies: list) -> str:
+    """Stable hash over theme + sub-theme names/activities + company/segment
+    names. Any change to those invalidates the cached match decision."""
+    import hashlib
+    subs = [
+        {"s": s.get("sub_industry", ""), "a": list(s.get("activities", []) or [])}
+        for s in (taxonomy.get("layer1", []) if isinstance(taxonomy, dict) else [])
+    ]
+    payload = {
+        "v": _MATCH_CACHE_VERSION,
+        "theme": theme.strip().lower(),
+        "subs": subs,
+        "companies": [
+            {"c": c["company"], "segs": list(c["segments"])} for c in companies
+        ],
+    }
+    blob = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:24]
+
+
+def _match_cache_path(key: str) -> str:
+    return _osp.join(_MATCH_CACHE_DIR, f"{key}.json")
+
+
+def _load_cached_match(key: str):
+    if key in _match_mem_cache:
+        return _match_mem_cache[key]
+    path = _match_cache_path(key)
+    if _osp.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+            if isinstance(payload, dict) and payload.get("_v") == _MATCH_CACHE_VERSION:
+                mp = payload.get("match_map")
+                if isinstance(mp, dict):
+                    _match_mem_cache[key] = mp
+                    return mp
+        except Exception:
+            return None
+    return None
+
+
+def _store_cached_match(key: str, match_map: dict) -> None:
+    _match_mem_cache[key] = match_map
+    try:
+        os.makedirs(_MATCH_CACHE_DIR, exist_ok=True)
+        with open(_match_cache_path(key), "w", encoding="utf-8") as f:
+            json.dump({"_v": _MATCH_CACHE_VERSION, "match_map": match_map}, f, indent=2)
+    except Exception:
+        pass
+
+
+def _parse_match_response(raw: str, valid_subs: set) -> dict | None:
+    """Parse the LLM match JSON into {company: {segment: {sub_theme, reason}}}.
+
+    Only segments the model marked matched AND whose sub_theme is a known
+    sub-industry are kept. Returns None on unparseable output.
+    """
+    try:
+        obj = json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        extracted = _extract_json_object(raw)
+        if extracted is None:
+            return None
+        try:
+            obj = json.loads(extracted)
+        except Exception:
+            return None
+    companies = obj.get("companies") if isinstance(obj, dict) else None
+    if not isinstance(companies, list):
+        return None
+    out: dict[str, dict] = {}
+    for c in companies:
+        if not isinstance(c, dict):
+            continue
+        cname = c.get("company")
+        segs = c.get("segments")
+        if not isinstance(cname, str) or not isinstance(segs, list):
+            continue
+        seg_map: dict[str, dict] = {}
+        for s in segs:
+            if not isinstance(s, dict):
+                continue
+            sname = s.get("name")
+            if not isinstance(sname, str):
+                continue
+            if not s.get("match"):
+                continue
+            sub = s.get("sub_theme")
+            if not isinstance(sub, str) or sub not in valid_subs:
+                continue
+            reason = s.get("reason")
+            seg_map[sname.strip()] = {
+                "sub_theme": sub,
+                "reason": (reason.strip() if isinstance(reason, str) else "")[:200],
+            }
+        out[cname.strip()] = seg_map
+    return out
+
+
+def match_segments_llm(taxonomy: dict, company_rows: list,
+                       force_refresh: bool = False) -> dict:
+    """Classify every company segment to a sub-theme via one cached Groq call.
+
+    company_rows: the build_company_rows output (only those with segment data
+    are sent). Returns {ok, match_map, cached} where match_map is
+    {company: {segment_name: {"sub_theme", "reason"}}} containing only matched
+    segments. On any failure returns a handled error (the caller falls back to
+    the offline embedding path).
+    """
+    layer1 = taxonomy.get("layer1", []) if isinstance(taxonomy, dict) else []
+    theme = (taxonomy.get("theme", "") if isinstance(taxonomy, dict) else "").strip()
+    valid_subs = {s.get("sub_industry", "") for s in layer1 if s.get("sub_industry")}
+
+    # Build the compact company->segments payload (only companies with data).
+    companies = []
+    for row in company_rows:
+        if not row.get("has_segment_data"):
+            continue
+        seg_names = [(w.get("name") or "").strip()
+                     for w in (row.get("segments") or [])
+                     if (w.get("name") or "").strip()]
+        if seg_names:
+            companies.append({"company": row["company"], "segments": seg_names})
+
+    if not companies or not valid_subs:
+        return ok(match_map={}, cached=False)
+
+    key = _match_cache_key(theme, taxonomy, companies)
+    if not force_refresh:
+        cached = _load_cached_match(key)
+        if cached is not None:
+            return ok(match_map=cached, cached=True)
+
+    api_key = get_secret("GROQ_API_KEY")
+    if not api_key:
+        return err(MISSING_API_KEY, "Groq API key is missing.")
+
+    try:
+        from groq import Groq
+    except Exception as exc:  # pragma: no cover
+        return err(LLM_UNREACHABLE, "Groq client library is unavailable.", detail=str(exc))
+
+    # Sub-theme block is sent with every chunk (small, shared context).
+    sub_lines = []
+    for s in layer1:
+        acts = ", ".join(s.get("activities", []) or [])
+        sub_lines.append(f"- {s['sub_industry']} (e.g. {acts})")
+    sub_block = "SUB-THEMES:\n" + "\n".join(sub_lines)
+
+    # Chunk companies so each request stays under the Groq TPM per-request cap
+    # (free tier ~8000 TPM). We budget by estimated tokens; a batched call per
+    # chunk is still far cheaper than one call per company, and the whole merged
+    # result is cached, so re-runs of the same theme/portfolio cost nothing.
+    base_tokens = _estimate_tokens(_MATCH_SYSTEM_PROMPT + sub_block) + 400
+    merged: dict[str, dict] = {}
+    chunk: list[dict] = []
+    chunk_tokens = base_tokens
+
+    def _call_batch(batch: list[dict]) -> dict:
+        """One Groq call for a batch. Returns {"__err__": ...} on failure, or
+        the parsed {company: {seg: {...}}} map (only for companies present)."""
+        comp_lines = [f"- {c['company']}: {'; '.join(c['segments'])}" for c in batch]
+        user = (f"THEME: {theme}\n\n{sub_block}\n\n"
+                f"COMPANIES AND THEIR SEGMENTS:\n" + "\n".join(comp_lines))
+        messages = [
+            {"role": "system", "content": _MATCH_SYSTEM_PROMPT},
+            {"role": "user", "content": user},
+        ]
+        # _groq_chat fails over across all configured keys on a rate limit. Only
+        # when EVERY key is throttled do we wait out the per-minute window and
+        # retry (free TPM tiers reset each minute).
+        resp = None
+        for attempt in range(_MATCH_MAX_RETRIES):
+            try:
+                resp = _groq_chat(messages, _MATCH_MAX_TOKENS)
+                break
+            except Exception as exc:
+                if _is_rate_limit(exc) and attempt < _MATCH_MAX_RETRIES - 1:
+                    time.sleep(_MATCH_RETRY_WAIT_S)
+                    continue
+                # A JSON-validation 400 means the model's output for this batch
+                # was malformed/too long for json mode. Signal the caller to
+                # split the batch (smaller output) rather than failing outright.
+                if _is_json_validation_error(exc):
+                    return {"__split__": True}
+                return {"__err__": _map_groq_exception(exc)}
+        raw = resp.choices[0].message.content or ""
+        parsed = _parse_match_response(raw, valid_subs)
+        if parsed is None:
+            # Unparseable (often truncated) output -> split and retry smaller.
+            return {"__split__": True}
+        return parsed
+
+    def _flush(batch: list[dict]) -> dict:
+        """Classify a batch, guaranteeing EVERY company is accounted for.
+
+        A batch where the model dropped/truncated companies is a silent data
+        loss (those companies would wrongly score 0). So we verify completeness:
+        if any company is missing, split the batch in half and retry each half
+        (down to a single company). A single company that still cannot be
+        classified is recorded as an empty map (genuine no-match) rather than
+        lost. Returns {"__err__": ...} only on a real API/JSON failure.
+        """
+        res = _call_batch(batch)
+        if "__err__" in res:
+            return res
+        needs_split = "__split__" in res
+        if not needs_split:
+            sent = {c["company"] for c in batch}
+            missing = sent - set(res.keys())
+            if not missing:
+                return res
+            needs_split = True  # some companies dropped -> split and retry
+
+        if len(batch) == 1:
+            # A single company that still won't classify cleanly: record it as a
+            # genuine no-match (empty map) rather than losing or erroring on it.
+            return {batch[0]["company"]: {}}
+
+        # Split and retry the two halves: smaller output avoids json-mode
+        # truncation, and smaller input dodges the per-request TPM cap.
+        mid = len(batch) // 2
+        out: dict = {}
+        for half in (batch[:mid], batch[mid:]):
+            r = _flush(half)
+            if "__err__" in r:
+                return r
+            out.update(r)
+        return out
+
+    for c in companies:
+        c_tokens = _estimate_tokens(f"- {c['company']}: {'; '.join(c['segments'])}")
+        # Keep each request's INPUT budget well under the TPM cap, leaving room
+        # for the model's JSON output which also counts toward TPM.
+        if chunk and (chunk_tokens + c_tokens) > _MATCH_CHUNK_TOKEN_BUDGET:
+            res = _flush(chunk)
+            if "__err__" in res:
+                return res["__err__"]
+            merged.update(res)
+            chunk, chunk_tokens = [], base_tokens
+        chunk.append(c)
+        chunk_tokens += c_tokens
+
+    if chunk:
+        res = _flush(chunk)
+        if "__err__" in res:
+            return res["__err__"]
+        merged.update(res)
+
+    _store_cached_match(key, merged)
+    return ok(match_map=merged, cached=False)
+
+
 # ---------------------------------------------------------------------------
 # Orchestration helper used by the UI (wires the engine together).
 # ---------------------------------------------------------------------------
@@ -1288,10 +1757,27 @@ def analyze_portfolio(portfolio_df: "pd.DataFrame", segments: dict, taxonomy: di
     matches = match_res["matches"]
     rows = build_company_rows(portfolio_df, segments, matches)
 
+    # Primary scoring path: one cached, batched LLM call classifies every
+    # company segment to a sub-theme (binary). If Groq is unavailable or the
+    # call fails, match_map stays None and score_company falls back to the
+    # offline embedding path so the app still produces a result.
+    llm_res = match_segments_llm(taxonomy, rows)
+    llm_match_map = llm_res.get("match_map") if llm_res.get("ok") else None
+    scoring_mode = "llm" if llm_match_map is not None else "embedding_fallback"
+    scoring_cached = bool(llm_res.get("cached")) if llm_res.get("ok") else False
+
     scores: dict[str, dict] = {}
     score_records = []
     for row in rows:
-        sr = score_company(row, taxonomy)
+        # When the LLM path is active, a company absent from the map simply had
+        # NO matching segment (exposure 0) - we pass an empty map, NOT None, so
+        # it does not silently fall back to embeddings. None (full fallback) is
+        # used only when the whole LLM call failed.
+        if llm_match_map is not None:
+            company_mm = llm_match_map.get(row["company"], {})
+        else:
+            company_mm = None
+        sr = score_company(row, taxonomy, match_map=company_mm)
         # Carry match provenance into the result for source traceability.
         mr = matches.get(row["company"], {})
         sr["match_method"] = mr.get("match_method", "none")
@@ -1320,10 +1806,11 @@ def analyze_portfolio(portfolio_df: "pd.DataFrame", segments: dict, taxonomy: di
                                      sorted(sub_theme_exposure.items(),
                                             key=lambda kv: kv[1], reverse=True)}
 
-    # Attach confidence + flags to each contribution row for the UI.
+    # Attach flags to each contribution row for the UI. Numeric confidence is
+    # retired (None); a qualitative level will replace it later.
     for c in metrics["contributions"]:
         sr = scores.get(c["company"], {})
-        c["confidence"] = sr.get("confidence", 0.0)
+        c["confidence"] = sr.get("confidence")
         c["insufficient_data"] = sr.get("insufficient_data", True)
 
     # --- Data-coverage diagnostics for transparency (Schroders brief part C) ---
@@ -1344,6 +1831,9 @@ def analyze_portfolio(portfolio_df: "pd.DataFrame", segments: dict, taxonomy: di
         "no_segment_companies": sorted(no_segment),
         "insufficient_companies": sorted(insufficient),
     }
+
+    metrics["scoring_mode"] = scoring_mode
+    metrics["scoring_cached"] = scoring_cached
 
     return ok(metrics=metrics, scores=scores, matches=matches,
               metadata=analysis_metadata())
