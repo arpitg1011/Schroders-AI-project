@@ -1,7 +1,9 @@
-"""Tests for the news-driven exposure overlay (Req 16, R3, rubric-based).
+"""Tests for the qualitative news signal (Req 16, R4).
 
-The LLM call is mocked and headlines are injected, so these are deterministic
-and need no network or API key.
+News produces a Tailwind/Headwind x Low/Med/High signal and a deterministic
+exposure-weighted rollup. It NEVER adds a number to exposure. The LLM call is
+mocked and headlines are injected, so these are deterministic and need no
+network or API key.
 """
 
 from __future__ import annotations
@@ -34,23 +36,45 @@ def _client(content):
     return type("Cl", (), {"chat": type("Ch", (), {"completions": _Comp()})})()
 
 
-def test_rubric_point_mapping():
-    # The deterministic rubric: strength -> magnitude, direction -> sign.
-    assert news._points_for("Tailwind", "High") == 4.0
-    assert news._points_for("Headwind", "High") == -4.0
-    assert news._points_for("Tailwind", "Medium") == 2.0
-    assert news._points_for("Headwind", "Low") == -1.0
-    assert news._points_for("Neutral", "High") == 0.0
-    assert news._points_for("Tailwind", "None") == 0.0
+# ---- Rollup: deterministic, exposure-weighted, qualitative-only ----
+
+def test_rollup_empty_is_neutral():
+    assert news.rollup_signal([], {})["direction"] == "Neutral"
+    assert news.rollup_signal([], {})["strength"] == "None"
 
 
-def test_no_headlines_zero_adjustment(monkeypatch):
+def test_rollup_exposure_weighted():
+    # Foundry is a tailwind, Memory a headwind. Foundry carries far more of the
+    # exposure, so the overall signal must come out Tailwind.
+    per = [
+        {"sub_industry": "Foundry", "direction": "Tailwind", "strength": "High"},
+        {"sub_industry": "Memory", "direction": "Headwind", "strength": "High"},
+    ]
+    exp = {"Foundry": 90.0, "Memory": 10.0}
+    out = news.rollup_signal(per, exp)
+    assert out["direction"] == "Tailwind"
+    assert out["score"] > 0
+
+
+def test_rollup_is_deterministic():
+    per = [
+        {"sub_industry": "Foundry", "direction": "Tailwind", "strength": "Medium"},
+        {"sub_industry": "Memory", "direction": "Headwind", "strength": "Low"},
+    ]
+    exp = {"Foundry": 60.0, "Memory": 40.0}
+    a = news.rollup_signal(per, exp)
+    b = news.rollup_signal(per, exp)
+    assert a == b  # identical inputs -> identical output
+
+
+def test_no_headlines_neutral(monkeypatch):
     monkeypatch.setattr(news, "get_secret", lambda k, d=None: "key")
-    res = news.compute_news_adjustment("semiconductors", TAX, [], COMPANIES)
-    assert res["ok"] and res["total_adjustment"] == 0.0 and res["per_sub_theme"] == []
+    res = news.compute_news_signal("semiconductors", TAX, [], COMPANIES, {})
+    assert res["ok"] and res["overall"]["direction"] == "Neutral"
+    assert res["per_sub_theme"] == []
 
 
-def test_direction_strength_mapped_and_attributed(monkeypatch):
+def test_signal_parsed_no_numbers(monkeypatch):
     monkeypatch.setattr(news, "get_secret", lambda k, d=None: "key")
     payload = json.dumps({"assessments": [
         {"sub_industry": "Foundry", "direction": "Tailwind", "strength": "Medium",
@@ -60,44 +84,28 @@ def test_direction_strength_mapped_and_attributed(monkeypatch):
          "rationale": "demand softness", "cited_headlines": [0],
          "affected_companies": ["SK HYNIX"]},
     ]})
-    res = news.compute_news_adjustment("semiconductors", TAX, HEADS, COMPANIES,
-                                       _client=_client(payload))
+    res = news.compute_news_signal("semiconductors", TAX, HEADS, COMPANIES,
+                                   {"Foundry": 70.0, "Memory": 30.0},
+                                   _client=_client(payload))
     assert res["ok"]
-    assert abs(res["total_adjustment"] - 1.0) < 1e-6  # +2 (med) - 1 (low)
-    subs = {p["sub_industry"]: p for p in res["per_sub_theme"]}
-    assert subs["Foundry"]["adjustment"] == 2.0 and subs["Foundry"]["direction"] == "Tailwind"
-    assert subs["Memory"]["adjustment"] == -1.0 and subs["Memory"]["strength"] == "Low"
-    assert subs["Foundry"]["affected_companies"] == ["TAIWAN SEMICONDUCTOR MFG"]
+    # Qualitative only: items carry direction/strength, NOT a numeric adjustment.
+    for p in res["per_sub_theme"]:
+        assert "adjustment" not in p
+        assert p["direction"] in news.DIRECTIONS
+        assert p["strength"] in news.STRENGTHS
+    assert res["overall"]["direction"] == "Tailwind"  # Foundry dominates exposure
 
 
-def test_none_strength_omitted(monkeypatch):
+def test_none_or_neutral_omitted(monkeypatch):
     monkeypatch.setattr(news, "get_secret", lambda k, d=None: "key")
     payload = json.dumps({"assessments": [
         {"sub_industry": "Foundry", "direction": "Neutral", "strength": "None",
          "rationale": "", "cited_headlines": [], "affected_companies": []},
     ]})
-    res = news.compute_news_adjustment("semiconductors", TAX, HEADS, COMPANIES,
-                                       _client=_client(payload))
-    assert res["ok"] and res["per_sub_theme"] == [] and res["total_adjustment"] == 0.0
-
-
-def test_total_adjustment_is_capped(monkeypatch):
-    monkeypatch.setattr(news, "get_secret", lambda k, d=None: "key")
-    # Both sub-themes High tailwind -> +4 each = +8; still under the 10 cap.
-    # Add a third conceptually is not possible (only 2 subs), so test per-sub cap
-    # cannot be exceeded and total respects the cap.
-    payload = json.dumps({"assessments": [
-        {"sub_industry": "Foundry", "direction": "Tailwind", "strength": "High",
-         "rationale": "x", "cited_headlines": [], "affected_companies": []},
-        {"sub_industry": "Memory", "direction": "Tailwind", "strength": "High",
-         "rationale": "y", "cited_headlines": [], "affected_companies": []},
-    ]})
-    res = news.compute_news_adjustment("semiconductors", TAX, HEADS, COMPANIES,
-                                       _client=_client(payload))
-    assert res["ok"]
-    assert abs(res["total_adjustment"]) <= news.NEWS_ADJUSTMENT_CAP + 1e-6
-    for p in res["per_sub_theme"]:
-        assert abs(p["adjustment"]) <= news._PER_SUB_CAP + 1e-6
+    res = news.compute_news_signal("semiconductors", TAX, HEADS, COMPANIES, {},
+                                   _client=_client(payload))
+    assert res["ok"] and res["per_sub_theme"] == []
+    assert res["overall"]["direction"] == "Neutral"
 
 
 def test_unknown_subtheme_ignored(monkeypatch):
@@ -106,21 +114,19 @@ def test_unknown_subtheme_ignored(monkeypatch):
         {"sub_industry": "Not A Real Sub", "direction": "Tailwind", "strength": "High",
          "rationale": "x", "cited_headlines": [], "affected_companies": []},
     ]})
-    res = news.compute_news_adjustment("semiconductors", TAX, HEADS, COMPANIES,
-                                       _client=_client(payload))
-    assert res["ok"] and res["per_sub_theme"] == [] and res["total_adjustment"] == 0.0
+    res = news.compute_news_signal("semiconductors", TAX, HEADS, COMPANIES, {},
+                                   _client=_client(payload))
+    assert res["ok"] and res["per_sub_theme"] == []
 
 
 def test_dedupe_collapses_same_story():
-    # The same event from multiple outlets should collapse to one headline,
-    # so a single event is not double-counted (consistency).
     heads = [
         {"title": "TSMC expands 2nm capacity in Arizona", "domain": "ft", "date": "2026-10-15", "url": ""},
         {"title": "TSMC Expands 2nm Capacity In Arizona!", "domain": "reuters", "date": "2026-10-15", "url": ""},
         {"title": "Rare earth export curbs tighten globally", "domain": "wsj", "date": "2026-10-15", "url": ""},
     ]
     out = news._dedupe_headlines(heads)
-    assert len(out) == 2  # the two TSMC variants collapse to one
+    assert len(out) == 2
 
 
 def test_window_filter():

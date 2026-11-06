@@ -152,3 +152,17 @@ section[data-testid="stSidebar"] * {{ color:{TEXT}; }}
 def band_badge(band: str) -> str:
     color = BAND_COLORS.get(band, MUTED)
     return f'<span class="badge" style="background:{color}">{band}</span>'
+
+
+# News signal badge: Tailwind (green) / Headwind (red) / Neutral (grey),
+# with Low/Med/High shown as intensity. Purely qualitative - no numbers.
+def signal_badge(direction: str, strength: str) -> str:
+    if direction == "Tailwind":
+        color, arrow = GOOD, "&#9650;"      # up triangle
+    elif direction == "Headwind":
+        color, arrow = BAD, "&#9660;"       # down triangle
+    else:
+        color, arrow = MUTED, "&#9644;"     # neutral bar
+    label = f"{arrow} {strength} {direction}" if direction != "Neutral" else "No signal"
+    return (f'<span class="badge" style="background:{color};color:#0A1A2F;'
+            f'font-size:12px;padding:4px 12px;">{label}</span>')

@@ -233,21 +233,23 @@ The platform is built in two phases. Phase 1 delivers the core thematic analysis
 3. THE Portfolio_Calculator SHALL aggregate Sub_Theme_Attribution to the portfolio level so that Portfolio_Thematic_Exposure can be broken down by Sub_Industry.
 4. WHERE a company's Segment data is insufficient to classify it, THE System SHALL flag the company as low confidence or insufficient data rather than reporting a misleadingly precise exposure.
 
-### Requirement 16: News-Driven Exposure Overlay
+### Requirement 16: News Signal (Qualitative, Non-Numeric)
 
-**User Story:** As a Schroders analyst, I want recent news events to produce a transparent, bounded adjustment on top of the filings-based exposure, so that after a major event I can judge whether the portfolio is suddenly more or less exposed to a theme than the quarterly snapshot implies.
+**User Story:** As a Schroders analyst, I want recent news expressed as a qualitative tailwind/headwind signal that never changes the exposure number, so that I can see which way a theme is being pushed right now while the exposure figure stays purely revenue-based and auditable.
 
 #### Acceptance Criteria
 
-1. THE System SHALL compute a Baseline_Exposure from S&P segment revenue exactly as specified in Requirements 4, 6, and 7, and SHALL NOT alter it based on news.
-2. THE System SHALL fetch recent news headlines relevant to the Theme from a configurable news source, and SHALL treat the news source as pluggable so it can be changed without altering the adjustment logic.
-3. THE News_Overlay SHALL use the LLM to judge, for each Sub_Industry, whether the recent events increase or decrease exposure to that sub-theme and SHALL return a signed adjustment in percentage points with a plain-language rationale that cites specific dated headlines.
-4. THE News_Overlay SHALL name the portfolio companies most affected by each event via the theme's value chain (for example an oil-price event affecting energy-derived companies).
-5. THE System SHALL constrain the total news adjustment to a bounded range (default plus or minus 10 percentage points) so that news informs but never dominates the structural Baseline_Exposure.
-6. THE System SHALL present Baseline_Exposure, the News_Adjustment, and the News_Adjusted_Exposure as three distinct values so that the contribution of news is always decomposable and auditable.
-7. IF no relevant news is found, THEN THE News_Adjustment SHALL be 0 and the News_Adjusted_Exposure SHALL equal the Baseline_Exposure.
-8. THE System SHALL label the News_Overlay as a point-in-time, non-reproducible signal distinct from the deterministic Baseline_Exposure, and SHALL cache news results by Theme and date so they are stable within a day.
-9. IF the news source is unreachable or the LLM news call fails, THEN THE System SHALL present the Baseline_Exposure normally and SHALL show a handled message that the news overlay is unavailable, without crashing.
+1. THE System SHALL compute Portfolio_Thematic_Exposure solely from S&P segment revenue as specified in Requirements 4, 6, and 7, and the News_Signal SHALL NOT add, subtract, or otherwise change any exposure percentage.
+2. THE System SHALL fetch recent news headlines relevant to the Theme from a configurable, pluggable news source so the source can change without altering the signal logic.
+3. THE News_Signal SHALL use the LLM to classify, for each Sub_Industry, only a direction (Tailwind, Headwind, or Neutral) and a strength (High, Medium, Low, or None), with a plain-language rationale that cites specific dated headlines, and SHALL NOT ask the LLM for any numeric value.
+4. THE News_Signal SHALL name the portfolio companies most affected by each event via the theme's value chain (for example an oil-price event affecting energy-derived companies).
+5. THE System SHALL compute an overall portfolio News_Signal as a deterministic rollup of the per-Sub_Industry signals, weighting each sub-theme's signed intensity by that sub-theme's share of the revenue-based exposure, and SHALL map the weighted result to an overall direction and strength by fixed thresholds.
+6. THE System SHALL present the overall News_Signal and the per-Sub_Industry signals as qualitative labels (direction plus Low/Medium/High), never as numbers added to exposure, and SHALL show the exposure figure alongside, clearly marked as unchanged by news.
+7. IF no relevant news is found, THEN the overall News_Signal SHALL be Neutral and no sub-theme signal SHALL be shown.
+8. GIVEN the same sub-theme signals and the same exposure weights, THE deterministic rollup SHALL always produce the identical overall News_Signal; THE System SHALL cache the news result by Theme, lookback window, and date so that re-running on the same day returns the identical signal without a new LLM call.
+9. THE System SHALL provide a methodology control (an information button) that explains how the direction, strength, and overall rollup are derived.
+10. IF the news source is unreachable or the LLM news call fails, THEN THE System SHALL present the exposure figure normally and SHALL show a handled message that the news signal is unavailable, without crashing.
+11. THE News_Signal SHALL only run when the user explicitly requests it (a button), not automatically on tab open or when the lookback window changes.
 
 ### Requirement 15: Taxonomy and Sub-Theme Visualization
 

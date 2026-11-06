@@ -26,9 +26,6 @@ from engine import TAXONOMY_MODEL, err, get_secret, ok
 NEWS_UNAVAILABLE = "NEWS_UNAVAILABLE"
 NEWS_LLM_FAILED = "NEWS_LLM_FAILED"
 
-# News informs but never dominates the structural baseline (Req 16.5).
-NEWS_ADJUSTMENT_CAP = 10.0  # max absolute total adjustment in percentage points
-_PER_SUB_CAP = 6.0          # max absolute adjustment any single sub-theme can carry
 _HTTP_TIMEOUT = 25
 _MAX_HEADLINES = 12
 
@@ -233,23 +230,28 @@ def _dedupe_headlines(heads: list) -> list:
 
 
 # ---------------------------------------------------------------------------
-# LLM adjustment (takes headlines as input -> injectable & testable)
+# Qualitative news signal (NO numbers added to exposure).
+#
+# News is a QUALITATIVE read only: per sub-theme, is it a Tailwind or Headwind,
+# at Low / Medium / High intensity. These signals NEVER change the revenue-based
+# exposure number. The overall portfolio read is a DETERMINISTIC weighted rollup
+# of the sub-theme signals (weighted by each sub-theme's share of the
+# revenue-based exposure), so it reflects where the money actually is and is
+# reproducible for the same inputs.
 # ---------------------------------------------------------------------------
-# --- Rubric: the LLM judges direction + strength; WE map to points. ---
-# This is the auditable core: the magnitude is NOT the model's guess, it comes
-# from this fixed, published table. The analyst can see this rubric in the UI.
 DIRECTIONS = ("Tailwind", "Headwind", "Neutral")
 STRENGTHS = ("High", "Medium", "Low", "None")
 
-# strength -> magnitude in percentage points (direction sets the sign)
-_STRENGTH_POINTS = {"High": 4.0, "Medium": 2.0, "Low": 1.0, "None": 0.0}
+# Strength -> a small intensity weight used ONLY for the qualitative rollup
+# (never added to exposure). Direction sets the sign of the signal.
+_STRENGTH_WEIGHT = {"High": 3.0, "Medium": 2.0, "Low": 1.0, "None": 0.0}
 
 RUBRIC = {
     "what_llm_judges": (
         "For each sub-theme, the model classifies recent news on two axes only: "
-        "DIRECTION (Tailwind = increases exposure, Headwind = decreases, Neutral) "
-        "and STRENGTH (how material and direct the event is to that sub-theme's "
-        "revenue drivers)."
+        "DIRECTION (Tailwind = the theme is under upward/supportive pressure, "
+        "Headwind = under downward pressure, Neutral) and STRENGTH (how material "
+        "and direct the event is to that sub-theme's revenue drivers)."
     ),
     "strength_definitions": {
         "High": "A confirmed, material event that directly affects a core revenue "
@@ -261,31 +263,35 @@ RUBRIC = {
                "small-scale).",
         "None": "No materially relevant news for this sub-theme.",
     },
-    "point_mapping": {
-        "High": "+/- 4 pts", "Medium": "+/- 2 pts", "Low": "+/- 1 pt", "None": "0 pts",
-    },
-    "caps": {
-        "per_sub_theme": f"+/- {int(_PER_SUB_CAP)} pts",
-        "total": f"+/- {int(NEWS_ADJUSTMENT_CAP)} pts (adjustments scaled down "
-                 "proportionally if the sum exceeds this)",
-    },
+    "rollup": (
+        "The overall portfolio signal is a DETERMINISTIC rollup of the per-sub-theme "
+        "signals. Each sub-theme's signal (Tailwind +, Headwind -, scaled by "
+        "High=3 / Medium=2 / Low=1) is weighted by that sub-theme's share of the "
+        "revenue-based thematic exposure, so a signal on the sub-theme you are most "
+        "exposed to counts most. The weighted net is mapped to an overall direction "
+        "(Tailwind / Headwind / Neutral) and intensity (Low / Medium / High) by "
+        "fixed thresholds. Identical signals and exposure weights always yield the "
+        "identical overall read."
+    ),
     "note": (
-        "The point magnitude is assigned deterministically by this rubric, not by "
-        "the model. The model only supplies direction, strength, a cited rationale, "
-        "and the affected holdings. The overlay is a point-in-time signal and is "
-        "shown separately from the deterministic filings-based baseline."
+        "This is a QUALITATIVE signal only - it never adds or subtracts any "
+        "percentage from the exposure. Exposure always comes solely from reported "
+        "segment revenue. News tells you which way the theme is being pushed right "
+        "now and where, with cited headlines; it is a point-in-time read that "
+        "changes as the news changes."
     ),
 }
 
 _NEWS_SYSTEM_PROMPT = (
-    "You are an equity strategist assessing how RECENT NEWS changes a "
-    "portfolio's exposure to an investment theme, relative to a slow-moving "
-    "filings-based baseline. Reason about the VALUE CHAIN, not sentiment: an "
-    "event propagates to the kinds of businesses it affects (e.g. an oil-price "
-    "shock is a tailwind for energy-derived names; rare-earth export curbs are a "
-    "headwind for chip supply chains).\n\n"
+    "You are an equity strategist assessing how RECENT NEWS is pushing a "
+    "portfolio's exposure to an investment theme - UP (tailwind) or DOWN "
+    "(headwind). Reason about the VALUE CHAIN, not sentiment: an event "
+    "propagates to the businesses it affects (e.g. an oil-price shock is a "
+    "tailwind for energy-derived names; rare-earth export curbs are a headwind "
+    "for chip supply chains).\n\n"
     "For each sub-industry, classify the recent news on TWO axes only:\n"
-    "- direction: one of Tailwind (raises exposure), Headwind (lowers exposure), Neutral.\n"
+    "- direction: one of Tailwind (supportive/upward pressure), Headwind "
+    "(downward pressure), Neutral.\n"
     "- strength: one of High, Medium, Low, None, defined as:\n"
     "  High = confirmed, material event directly affecting a core revenue driver "
     "of named holdings;\n"
@@ -303,18 +309,8 @@ _NEWS_SYSTEM_PROMPT = (
 )
 
 
-def _points_for(direction: str, strength: str) -> float:
-    """Deterministic rubric mapping: (direction, strength) -> signed points."""
-    mag = _STRENGTH_POINTS.get(strength, 0.0)
-    if direction == "Tailwind":
-        return mag
-    if direction == "Headwind":
-        return -mag
-    return 0.0  # Neutral
-
-
 def _validate_assessments(obj, taxonomy: dict, headlines: list) -> list:
-    """Validate LLM direction/strength output and apply the rubric mapping."""
+    """Validate LLM direction/strength output (no numbers; purely qualitative)."""
     if not isinstance(obj, dict):
         return []
     valid_subs = {s.get("sub_industry") for s in taxonomy.get("layer1", [])}
@@ -330,9 +326,8 @@ def _validate_assessments(obj, taxonomy: dict, headlines: list) -> list:
             continue
         direction = it.get("direction") if it.get("direction") in DIRECTIONS else "Neutral"
         strength = it.get("strength") if it.get("strength") in STRENGTHS else "None"
-        adj = max(-_PER_SUB_CAP, min(_PER_SUB_CAP, _points_for(direction, strength)))
-        if adj == 0 and strength == "None":
-            continue  # omit no-news sub-themes from the impact list
+        if strength == "None" or direction == "Neutral":
+            continue  # omit sub-themes with no material signal
         cites = [i for i in it.get("cited_headlines", [])
                  if isinstance(i, int) and 0 <= i < len(headlines)]
         companies = [c for c in it.get("affected_companies", []) if isinstance(c, str)]
@@ -342,7 +337,6 @@ def _validate_assessments(obj, taxonomy: dict, headlines: list) -> list:
             "sub_industry": sub,
             "direction": direction,
             "strength": strength,
-            "adjustment": adj,
             "rationale": rationale,
             "cited_headlines": cites,
             "affected_companies": companies[:8],
@@ -350,23 +344,68 @@ def _validate_assessments(obj, taxonomy: dict, headlines: list) -> list:
     return out
 
 
-def compute_news_adjustment(theme: str, taxonomy: dict, headlines: list,
-                            portfolio_companies: list,
-                            _client=None) -> dict:
-    """Given headlines, ask the LLM for a bounded per-sub-theme adjustment.
+def _signed_weight(direction: str, strength: str) -> float:
+    """Signal value for the rollup: +/- intensity weight (never added to exposure)."""
+    mag = _STRENGTH_WEIGHT.get(strength, 0.0)
+    return mag if direction == "Tailwind" else (-mag if direction == "Headwind" else 0.0)
 
-    headlines is injected (not fetched here) so this is fully testable. Returns
-    a NewsAdjustment dict (always ok=True unless the LLM call itself fails).
+
+def rollup_signal(per_sub: list, sub_theme_exposure: dict) -> dict:
+    """Deterministic overall signal from per-sub-theme signals (option b).
+
+    Each sub-theme's signed intensity is weighted by its SHARE of the
+    revenue-based thematic exposure, then mapped to a Tailwind/Headwind +
+    Low/Med/High label by fixed thresholds. Purely qualitative, reproducible.
+    """
+    if not per_sub:
+        return {"direction": "Neutral", "strength": "None", "score": 0.0}
+
+    exp = {k: max(0.0, float(v)) for k, v in (sub_theme_exposure or {}).items()}
+    total_exp = sum(exp.values())
+
+    net = 0.0
+    for p in per_sub:
+        sw = _signed_weight(p["direction"], p["strength"])
+        if total_exp > 0:
+            weight = exp.get(p["sub_industry"], 0.0) / total_exp
+        else:
+            # No exposure weights -> equal-weight the signalled sub-themes.
+            weight = 1.0 / len(per_sub)
+        net += sw * weight
+
+    # net is in roughly [-3, +3] (signed intensity, exposure-weighted).
+    direction = "Tailwind" if net > 0 else ("Headwind" if net < 0 else "Neutral")
+    mag = abs(net)
+    if mag >= 2.0:
+        strength = "High"
+    elif mag >= 1.0:
+        strength = "Medium"
+    elif mag > 0:
+        strength = "Low"
+    else:
+        strength = "None"
+    return {"direction": direction, "strength": strength, "score": round(net, 3)}
+
+
+def compute_news_signal(theme: str, taxonomy: dict, headlines: list,
+                        portfolio_companies: list, sub_theme_exposure: dict = None,
+                        _client=None) -> dict:
+    """Given headlines, produce a QUALITATIVE per-sub-theme news signal plus a
+    deterministic overall rollup. NO numbers are added to exposure.
+
+    headlines is injected (not fetched here) so this is fully testable.
+    Returns {ok, per_sub_theme, overall, headlines, as_of}.
     """
     as_of = _dt.date.today().isoformat()
     if not headlines:
-        return ok(total_adjustment=0.0, per_sub_theme=[], headlines=[], as_of=as_of)
+        return ok(per_sub_theme=[],
+                  overall={"direction": "Neutral", "strength": "None", "score": 0.0},
+                  headlines=[], as_of=as_of)
 
     api_key = get_secret("GROQ_API_KEY")
     if not api_key:
-        return err(NEWS_LLM_FAILED, "News overlay needs the Groq API key.")
+        return err(NEWS_LLM_FAILED, "News signal needs the Groq API key.")
 
-    # Build a compact, indexed headline list for the prompt.
     hlines = "\n".join(
         f"[{i}] ({h.get('date','')}) {h.get('title','')} - {h.get('domain','')}"
         for i, h in enumerate(headlines)
@@ -391,20 +430,11 @@ def compute_news_adjustment(theme: str, taxonomy: dict, headlines: list,
         raw = resp.choices[0].message.content or ""
         obj = json.loads(raw)
     except Exception as exc:
-        return err(NEWS_LLM_FAILED, "Could not compute the news overlay.", detail=str(exc))
+        return err(NEWS_LLM_FAILED, "Could not compute the news signal.", detail=str(exc))
 
     per_sub = _validate_assessments(obj, taxonomy, headlines)
-
-    # Enforce the overall cap: if the summed magnitude exceeds the total cap,
-    # scale all adjustments down proportionally (Req 16.5).
-    total = sum(p["adjustment"] for p in per_sub)
-    if abs(total) > NEWS_ADJUSTMENT_CAP and total != 0:
-        scale = NEWS_ADJUSTMENT_CAP / abs(total)
-        for p in per_sub:
-            p["adjustment"] = round(p["adjustment"] * scale, 2)
-        total = sum(p["adjustment"] for p in per_sub)
-
-    return ok(total_adjustment=round(total, 2), per_sub_theme=per_sub,
+    overall = rollup_signal(per_sub, sub_theme_exposure or {})
+    return ok(per_sub_theme=per_sub, overall=overall,
               headlines=headlines, as_of=as_of)
 
 
@@ -415,11 +445,12 @@ _overlay_cache: dict[str, dict] = {}
 
 
 def news_overlay(theme: str, taxonomy: dict, portfolio_companies: list,
-                 lookback_days: int = 7, force_refresh: bool = False) -> dict:
-    """Fetch headlines (within lookback window) + compute the bounded overlay.
+                 sub_theme_exposure: dict = None, lookback_days: int = 7,
+                 force_refresh: bool = False) -> dict:
+    """Fetch headlines (within lookback window) + compute the QUALITATIVE signal.
 
-    Cached by (theme, lookback, today) so the point-in-time overlay is stable
-    within a day. Returns a NewsAdjustment dict, or a handled error.
+    Cached by (theme, lookback, today) so the signal is stable/reproducible for
+    the same day. Returns the news-signal dict, or a handled error.
     """
     cache_key = (f"{theme.strip().lower()}|{lookback_days}|"
                  f"{_dt.date.today().isoformat()}")
@@ -430,8 +461,8 @@ def news_overlay(theme: str, taxonomy: dict, portfolio_companies: list,
     if not fetched["ok"]:
         return fetched  # NEWS_UNAVAILABLE - UI falls back to baseline (Req 16.9)
 
-    result = compute_news_adjustment(theme, taxonomy, fetched["headlines"],
-                                     portfolio_companies)
+    result = compute_news_signal(theme, taxonomy, fetched["headlines"],
+                                 portfolio_companies, sub_theme_exposure)
     if result["ok"]:
         result["source"] = fetched.get("source")
         result["lookback_days"] = lookback_days

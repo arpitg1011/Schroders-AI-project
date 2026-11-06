@@ -531,68 +531,80 @@ _LOOKBACK_OPTIONS = {"Today": 1, "Last 3 days": 3, "Last week": 7, "Last month":
 
 
 def section_news(analysis: dict):
-    """News & Events: baseline vs news-adjusted exposure (Req 16, rubric-based)."""
+    """News & Events: a QUALITATIVE Tailwind/Headwind signal (Req 16, R4).
+
+    News never changes the revenue-based exposure number. It is a point-in-time
+    read of which way the theme is being pushed, with a deterministic overall
+    rollup weighted by each sub-theme's share of the real exposure.
+    """
     m = analysis["metrics"]
     taxonomy = analysis["taxonomy"]
     theme = taxonomy.get("theme", "")
     baseline = m["portfolio_thematic_exposure"]
 
-    st.markdown('<div class="panel-title">News-Driven Exposure Overlay</div>'
-                '<div class="panel-sub">Recent events applied as a bounded, '
-                'rubric-based adjustment on top of the filings-based baseline. '
-                'Point-in-time signal, shown separately from the deterministic '
-                'baseline.</div>', unsafe_allow_html=True)
+    top = st.columns([6, 1])
+    top[0].markdown('<div class="panel-title">News Signal</div>'
+                    '<div class="panel-sub">A qualitative read of whether recent '
+                    'events are a tailwind or headwind for this theme. This never '
+                    'changes the exposure figure - exposure always comes from '
+                    'reported revenue.</div>', unsafe_allow_html=True)
+    with top[1]:
+        with st.popover("ⓘ Methodology"):
+            _render_methodology_popover()
 
     c1, c2 = st.columns([1.4, 1])
     window_label = c1.select_slider("News lookback window",
                                     options=list(_LOOKBACK_OPTIONS.keys()),
                                     value="Last week")
     lookback = _LOOKBACK_OPTIONS[window_label]
-    refresh = c2.button("Fetch news & compute overlay", type="primary", use_container_width=True)
+    refresh = c2.button("Fetch news & assess signal", type="primary", use_container_width=True)
 
     st.caption("Note: the free news API returns only the most recent articles, so "
-               "longer windows (e.g. Last month) are shown for completeness but in "
-               "practice return mostly recent items. With full API access the window "
-               "would scan the entire selected period.")
+               "longer windows are shown for completeness but in practice return "
+               "mostly recent items. With full API access the window would scan the "
+               "entire selected period.")
 
-    # Only run when the user explicitly clicks the button (never auto-run, so
-    # changing the slider does not fire an API call until they confirm).
+    # Only run on explicit button click (changing the slider does not fire a call).
     cache = analysis.get("news")
     if refresh:
-        with st.spinner("Fetching headlines and assessing impact against the rubric..."):
+        with st.spinner("Fetching headlines and assessing the news signal..."):
             companies = [c["company"] for c in m["contributions"]]
+            sub_exp = m.get("sub_theme_exposure", {})
             res = news_mod.news_overlay(theme, taxonomy, companies,
+                                        sub_theme_exposure=sub_exp,
                                         lookback_days=lookback, force_refresh=True)
         analysis["news"] = res
         analysis["news_window"] = lookback
         st.session_state["analysis"] = analysis
         cache = res
 
-    # Before any fetch, prompt the user to pick a window and click the button.
     if cache is None:
-        st.info("Select a lookback window above and click **Fetch news & compute "
-                "overlay** to assess recent events against the baseline. "
+        st.info("Pick a lookback window and click **Fetch news & assess signal**. "
                 "No news is fetched until you do.")
-        _render_rubric()
         return
 
     if not cache or not cache.get("ok"):
-        msg = (cache or {}).get("message", "News overlay is unavailable right now.")
-        st.info(f"{msg}  Baseline exposure stands at {baseline:.0f}%.")
-        _render_rubric()
+        msg = (cache or {}).get("message", "News signal is unavailable right now.")
+        st.info(f"{msg}  Exposure stands at {baseline:.0f}% (from filings, unchanged).")
         return
 
-    total = cache.get("total_adjustment", 0.0)
-    adjusted = max(0.0, min(100.0, baseline + total))
+    overall = cache.get("overall", {"direction": "Neutral", "strength": "None"})
+    per = cache.get("per_sub_theme", [])
+    heads = cache.get("headlines", [])
 
-    k1, k2, k3 = st.columns(3)
-    _kpi_card(k1, "Baseline Exposure", f"{baseline:.0f}%", "from S&P filings", "kpi-accent")
-    sign = "+" if total >= 0 else ""
-    tone = "pos" if total > 0 else ("neg" if total < 0 else "")
-    _kpi_card(k2, "News Adjustment", f"<span class='{tone}'>{sign}{total:.1f}%</span>",
-              f"bounded to +/-{int(news_mod.NEWS_ADJUSTMENT_CAP)} pts (rubric)")
-    _kpi_card(k3, "News-Adjusted Exposure", f"{adjusted:.0f}%",
-              f"as of {cache.get('as_of','today')} &middot; {cache.get('source','')}", "kpi-gold")
+    # Overall signal, shown next to the (unchanged) exposure for context.
+    oc1, oc2 = st.columns([1, 1])
+    _kpi_card(oc1, "Thematic Exposure (unchanged)", f"{baseline:.0f}%",
+              "always from reported revenue - news does not change this", "kpi-accent")
+    oc2.markdown(
+        f"""<div class="kpi kpi-gold">
+              <div class="kpi-label">Overall News Signal</div>
+              <div style="margin:8px 0;">{T.signal_badge(overall['direction'], overall['strength'])}</div>
+              <div class="kpi-sub">as of {cache.get('as_of','today')} &middot; {cache.get('source','')}
+                &middot; exposure-weighted rollup of the sub-theme signals</div>
+            </div>""",
+        unsafe_allow_html=True,
+    )
 
     wc = cache.get("window_count")
     fc = cache.get("fetched_count")
@@ -600,22 +612,16 @@ def section_news(analysis: dict):
         st.caption(f"{wc} headline(s) within '{window_label}' "
                    f"(of {fc} most-recent fetched) via {cache.get('source','')}.")
 
-    per = cache.get("per_sub_theme", [])
-    heads = cache.get("headlines", [])
     if not per:
-        st.success("No recent events materially change exposure to this theme. "
-                   "News-adjusted exposure equals the baseline.")
+        st.success("No recent events are materially pushing this theme either way. "
+                   "The exposure figure stands on its own.")
     else:
         st.write("")
-        st.markdown('<div class="panel-title">Per Sub-Theme Impact</div>'
-                    '<div class="panel-sub">Direction &amp; strength are judged by the '
-                    'model; the point value comes from the rubric below.</div>',
+        st.markdown('<div class="panel-title">Per Sub-Theme Signal</div>'
+                    '<div class="panel-sub">Which way recent news is pushing each '
+                    'sub-theme, with the headlines behind it.</div>',
                     unsafe_allow_html=True)
         for p in per:
-            adj = p["adjustment"]
-            tone = "pos" if adj > 0 else ("neg" if adj < 0 else "")
-            direction = p.get("direction", "Neutral")
-            strength = p.get("strength", "None")
             cited = "".join(
                 f'<div class="chip">{heads[i]["date"]} &middot; {heads[i]["domain"]}</div>'
                 for i in p.get("cited_headlines", []) if i < len(heads)
@@ -625,10 +631,10 @@ def section_news(analysis: dict):
                 f"""<div class="sub-row">
                       <div style="display:flex;justify-content:space-between;align-items:center;">
                         <span class="sub-name">{p['sub_industry']}</span>
-                        <span class="sub-exp {tone}">{direction} &middot; {strength} &rarr; {'+' if adj>=0 else ''}{adj:.0f} pts</span>
+                        {T.signal_badge(p['direction'], p['strength'])}
                       </div>
-                      <div style="color:{T.MUTED};font-size:13px;margin:6px 0;">{p['rationale']}</div>
-                      <div style="font-size:12px;color:{T.MUTED};"><b>Affected:</b> {affected}</div>
+                      <div style="color:{T.MUTED};font-size:13px;margin:8px 0 6px;">{p['rationale']}</div>
+                      <div style="font-size:12px;color:{T.MUTED};"><b>Affected holdings:</b> {affected}</div>
                       <div style="margin-top:6px;">{cited}</div>
                     </div>""",
                 unsafe_allow_html=True,
@@ -642,23 +648,20 @@ def section_news(analysis: dict):
                 link = f"[{title}]({url})" if url else title
                 st.markdown(f"{i}. {h.get('date','')} &middot; *{h.get('domain','')}* - {link}")
 
-    _render_rubric()
 
-
-def _render_rubric():
-    """Show the scoring rubric so the analyst can audit where numbers come from."""
+def _render_methodology_popover():
+    """(i) methodology: how the qualitative signal is derived (deterministic)."""
     r = news_mod.RUBRIC
-    with st.expander("Scoring rubric - how the adjustment is calculated"):
-        st.markdown(f"**What the model judges:** {r['what_llm_judges']}")
-        st.markdown("**Strength definitions:**")
-        for k, v in r["strength_definitions"].items():
-            st.markdown(f"- **{k}** ({r['point_mapping'][k]}): {v}")
-        st.markdown(
-            f"**Direction** sets the sign: Tailwind = positive (more exposed), "
-            f"Headwind = negative, Neutral = 0.  \n"
-            f"**Caps:** per sub-theme {r['caps']['per_sub_theme']}; total "
-            f"{r['caps']['total']}.")
-        st.info(r["note"])
+    st.markdown("#### How the news signal is estimated")
+    st.markdown(f"**What the model judges:** {r['what_llm_judges']}")
+    st.markdown("**Strength definitions:**")
+    for k, v in r["strength_definitions"].items():
+        if k == "None":
+            continue
+        st.markdown(f"- **{k}:** {v}")
+    st.markdown("**Overall rollup (deterministic):**")
+    st.markdown(r["rollup"])
+    st.info(r["note"])
 
 
 # ---------------------------------------------------------------------------
