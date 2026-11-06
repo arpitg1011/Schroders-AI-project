@@ -65,3 +65,44 @@ def test_match_companies_unmatched_retained():
     assert m["ALPHA CORP"]["matched"] is True
     assert m["ZZZ UNKNOWN"]["matched"] is False
     assert m["ZZZ UNKNOWN"]["match_method"] == "none"
+
+
+# --- Robust name normalization: abbreviations, share classes, aliases ---
+
+def test_abbreviation_and_shareclass_normalization():
+    n = engine._normalize_company_name
+    # Abbreviations expand, parentheticals + share-class letters drop, suffixes go.
+    assert n("ALIBABA GRP HLDG (HK)") == "ALIBABA"
+    assert n("SINGAPORE TELECOM") == "SINGAPORE TELECOMMUNICATIONS"
+    assert n("PING AN INSURANCE H") == "PING AN INSURANCE"
+    assert n("GDS HOLDINGS A (HK)") == "GDS"
+    # Acronym alias.
+    assert n("OCBC BANK") == "OVERSEA CHINESE BANKING"
+    # A lone share-class-looking token is NOT stripped (would empty the name).
+    assert n("H") == "H"
+
+
+def test_subset_name_match_bridges_longer_official_name():
+    segs = {
+        "PING AN INSURANCE OF CHINA": {
+            "entity_name": "Ping An Insurance (Group) Company of China, Ltd.",
+            "company_name": "Ping An Insurance (Group) Company of China, Ltd.",
+            "ticker": "2318", "exchange": "SEHK", "business_description": "x",
+            "segments": [], "sector": "Financials", "entity_id": None,
+            "classification": {},
+        },
+    }
+    pf = pd.DataFrame({
+        "Company": ["PING AN INSURANCE H"],
+        "Bloomberg ticker": ["2318 HK Equity"],
+        "Country": ["CN"], "Sector": ["Financials"], "SEDOL": ["1"],
+        "Portfolio wt": [1.0], "Reference wt": [1.0], "Active wt": [0.0],
+    })
+    m = engine.match_companies(pf, segs)["matches"]
+    assert m["PING AN INSURANCE H"]["matched"] is True
+    assert m["PING AN INSURANCE H"]["entity_key"] == "PING AN INSURANCE OF CHINA"
+
+
+def test_subset_match_abstains_without_shared_prefix():
+    # Two unrelated names that merely share a generic token must NOT match.
+    assert engine._subset_name_match("ACME BANK", ["GLOBAL BANK CORP"]) is None

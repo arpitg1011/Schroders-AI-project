@@ -361,21 +361,90 @@ _CORP_SUFFIXES = {
     "LTD", "LIMITED", "INC", "INCORPORATED", "CO", "CORP", "CORPORATION",
     "PLC", "HOLDINGS", "HOLDING", "GROUP", "COMPANY", "AG", "SA", "NV", "SE",
 }
+
+# Abbreviation expansion applied per-token BEFORE suffix-stripping, so that
+# portfolio short-forms line up with the fuller S&P entity names
+# (e.g. "GRP HLDG" -> "GROUP HOLDING", "TELECOM" -> "TELECOMMUNICATIONS").
+# Keys and values are upper-case. Multi-word expansions are allowed.
+_ABBREVIATIONS = {
+    "GRP": "GROUP",
+    "HLDG": "HOLDING",
+    "HLDGS": "HOLDING",
+    "HLDGNS": "HOLDING",
+    "TELECOM": "TELECOMMUNICATIONS",
+    "TELECOMS": "TELECOMMUNICATIONS",
+    "INTL": "INTERNATIONAL",
+    "INT": "INTERNATIONAL",
+    "TECH": "TECHNOLOGY",
+    "MFG": "MANUFACTURING",
+    "IND": "INDUSTRIES",
+    "INDS": "INDUSTRIES",
+    "FIN": "FINANCIAL",
+    "NATL": "NATIONAL",
+    "BK": "BANK",
+    "COMMS": "COMMUNICATIONS",
+    "SVCS": "SERVICES",
+    "SEMICON": "SEMICONDUCTOR",
+    "ELEC": "ELECTRONICS",
+}
+
+# Explicit aliases for names that NO general algorithm can bridge: acronyms
+# and trade names that share no tokens with the official entity name. Keys are
+# normalized portfolio names; values are normalized target names. Kept small
+# and specific on purpose (an over-broad alias map causes silent mis-matches).
+_NAME_ALIASES = {
+    "OCBC BANK": "OVERSEA CHINESE BANKING",
+    "OCBC": "OVERSEA CHINESE BANKING",
+}
+
+# Single-letter share-class tokens (A/B/H shares) and 2-letter listing codes
+# that trail a portfolio name (e.g. "PING AN INSURANCE H", "... A") and should
+# not block a match. Only stripped when they appear as the LAST token.
+_SHARE_CLASS_TOKENS = {"A", "B", "H", "N", "R", "S"}
 _PAREN_RE = re.compile(r"\([^)]*\)")
 _PUNCT_RE = re.compile(r"[.,&/'\-]")
 _WS_RE = re.compile(r"\s+")
 
 
 def _normalize_company_name(name: str | None) -> str:
-    """Normalize a company name for matching (Req 3.2). Idempotent."""
+    """Normalize a company name for matching (Req 3.2). Idempotent.
+
+    Steps: upper-case, drop parentheticals and punctuation, expand common
+    abbreviations, strip a trailing share-class letter, then drop corporate
+    suffix words. Idempotent because every step is stable when re-applied to
+    its own output (expansions map to already-expanded forms; suffix words are
+    removed, so re-running finds none).
+    """
     if not name:
         return ""
     s = str(name).upper().strip()
-    s = _PAREN_RE.sub(" ", s)        # remove parentheticals
+    s = _PAREN_RE.sub(" ", s)        # remove parentheticals, e.g. "(HK)"
     s = _PUNCT_RE.sub(" ", s)        # remove punctuation
     s = _WS_RE.sub(" ", s).strip()
-    tokens = [t for t in s.split(" ") if t and t not in _CORP_SUFFIXES]
-    return " ".join(tokens)
+
+    tokens = [t for t in s.split(" ") if t]
+
+    # Expand abbreviations token-by-token (may introduce multi-word forms).
+    expanded: list[str] = []
+    for t in tokens:
+        rep = _ABBREVIATIONS.get(t)
+        if rep:
+            expanded.extend(rep.split(" "))
+        else:
+            expanded.append(t)
+    tokens = expanded
+
+    # Strip a single trailing share-class letter (keep if it is the only token).
+    if len(tokens) > 1 and tokens[-1] in _SHARE_CLASS_TOKENS:
+        tokens = tokens[:-1]
+
+    # Drop corporate suffix words.
+    tokens = [t for t in tokens if t not in _CORP_SUFFIXES]
+    result = " ".join(tokens)
+
+    # Resolve explicit acronym/trade-name aliases (idempotent: alias targets are
+    # themselves already-normalized and not alias keys).
+    return _NAME_ALIASES.get(result, result)
 
 
 def _portfolio_ticker_symbol(bloomberg_ticker: str | None) -> str | None:
@@ -384,6 +453,35 @@ def _portfolio_ticker_symbol(bloomberg_ticker: str | None) -> str | None:
         return None
     parts = str(bloomberg_ticker).strip().split()
     return parts[0].upper() if parts else None
+
+
+def _subset_name_match(norm: str, seg_keys: list) -> str | None:
+    """Return the one segment key whose tokens form a superset/subset of the
+    portfolio name's tokens, sharing a distinctive multi-token prefix.
+
+    Used only as a last resort after exact/ticker/fuzzy have failed. To avoid
+    false matches it requires: at least two shared leading tokens, every token
+    of the shorter name present in the longer, and a UNIQUE winner (if two
+    segment keys both qualify, we abstain).
+    """
+    p = [t for t in norm.split(" ") if t]
+    if len(p) < 2:
+        return None
+    pset = set(p)
+    candidates = []
+    for key in seg_keys:
+        k = [t for t in key.split(" ") if t]
+        if len(k) < 2:
+            continue
+        kset = set(k)
+        shorter, longer = (pset, kset) if len(pset) <= len(kset) else (kset, pset)
+        # Every token of the shorter name must appear in the longer name.
+        if not shorter.issubset(longer):
+            continue
+        # Require the first two tokens to agree (a distinctive shared prefix).
+        if p[0] == k[0] and p[1] == k[1]:
+            candidates.append(key)
+    return candidates[0] if len(candidates) == 1 else None
 
 
 def match_companies(portfolio_df: "pd.DataFrame", segments: dict) -> dict:
@@ -429,9 +527,14 @@ def match_companies(portfolio_df: "pd.DataFrame", segments: dict) -> dict:
             continue
 
         # 3. Fuzzy fallback over normalized names (Req 3.3).
+        # Combine token_sort_ratio with token_set_ratio: the latter is robust
+        # when one name is a subset of the other (e.g. "PING AN INSURANCE" vs
+        # "PING AN INSURANCE OF CHINA", or "SINGAPORE TELECOMMUNICATIONS" vs a
+        # longer official form) which plain sort-ratio penalises for length.
         best_key, best_score = None, 0.0
         for key in seg_keys:
-            score = fuzz.token_sort_ratio(norm, key)
+            score = max(fuzz.token_sort_ratio(norm, key),
+                        fuzz.token_set_ratio(norm, key))
             if score > best_score:
                 best_key, best_score = key, score
         if best_key is not None and best_score >= FUZZY_THRESHOLD:
@@ -439,6 +542,17 @@ def match_companies(portfolio_df: "pd.DataFrame", segments: dict) -> dict:
                 matched=True, entity_key=best_key, match_method="fuzzy",
                 match_score=round(float(best_score), 2),
             )
+        else:
+            # Subset bridge: accept when the portfolio name's tokens are fully
+            # contained in a single segment key's tokens (or vice versa) and
+            # share a distinctive multi-token prefix. This catches abbreviated
+            # portfolio names without loosening the global fuzzy threshold.
+            sub_key = _subset_name_match(norm, seg_keys)
+            if sub_key is not None:
+                result.update(
+                    matched=True, entity_key=sub_key, match_method="subset",
+                    match_score=None,
+                )
         matches[company] = result
 
     return ok(matches=matches)

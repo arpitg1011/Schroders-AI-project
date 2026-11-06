@@ -50,8 +50,8 @@ def test_load_segments_real_fixture():
     res = engine.load_segments("data/spglobal_segments.xlsx")
     assert res["ok"], res
     segs = res["segments"]
-    # ~20 companies carry data in the current prototype export.
-    assert 15 <= len(segs) <= 40
+    # The export now covers the full 80-company universe.
+    assert 70 <= len(segs) <= 90
     # Every company has at most 5 positional segments.
     for rec in segs.values():
         assert len(rec["segments"]) <= 5
