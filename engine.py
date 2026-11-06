@@ -1221,16 +1221,8 @@ def generate_taxonomy(theme: str, n: int = _DEFAULT_SUBS, force_refresh: bool = 
     except Exception as exc:  # pragma: no cover
         return err(LLM_UNREACHABLE, "Groq client library is unavailable.", detail=str(exc))
 
-    client = Groq(api_key=api_key)
-
     def _call(messages):
-        return client.chat.completions.create(
-            model=TAXONOMY_MODEL,
-            messages=messages,
-            response_format={"type": "json_object"},
-            temperature=0,
-            max_tokens=_TAXONOMY_MAX_TOKENS,
-        )
+        return _groq_chat(messages, _TAXONOMY_MAX_TOKENS)
 
     system = _TAXONOMY_SYSTEM_PROMPT.format(n=n)
     user = theme
@@ -1340,6 +1332,83 @@ def _map_groq_exception(exc) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Groq client with multi-key failover.
+# A primary key (GROQ_API_KEY) is used for every call; if it is rate-limited
+# (429 TPM) or a request is too large for its tier (413), we transparently fail
+# over to one or more backup keys (GROQ_API_KEY_2, _3, ...). This roughly
+# multiplies the free-tier TPM budget by the number of keys. Keys live only in
+# .env / st.secrets - never in source.
+# ---------------------------------------------------------------------------
+_GROQ_KEY_NAMES = ("GROQ_API_KEY", "GROQ_API_KEY_2", "GROQ_API_KEY_3")
+_groq_clients: dict[str, object] = {}
+
+
+def _groq_keys() -> list[str]:
+    """Ordered list of configured Groq keys (primary first). Deduplicated."""
+    keys: list[str] = []
+    for name in _GROQ_KEY_NAMES:
+        val = get_secret(name)
+        if val and val not in keys:
+            keys.append(val)
+    return keys
+
+
+def _groq_client_for(api_key: str):
+    """Cached Groq client per key."""
+    client = _groq_clients.get(api_key)
+    if client is None:
+        from groq import Groq  # lazy import
+        client = Groq(api_key=api_key)
+        _groq_clients[api_key] = client
+    return client
+
+
+def _is_rate_limit(exc) -> bool:
+    """True for a throttle / too-large-for-tier error worth failing over on."""
+    status = getattr(exc, "status_code", None)
+    if status in (429, 413):
+        return True
+    msg = str(exc).lower()
+    return "rate_limit" in msg or "rate limit" in msg or "too large" in msg
+
+
+def _is_json_validation_error(exc) -> bool:
+    """True for a 400 where the model's JSON-mode output failed validation
+    (usually truncation on a large batch). The caller splits the batch."""
+    status = getattr(exc, "status_code", None)
+    if status != 400:
+        return False
+    msg = str(exc).lower()
+    return "json" in msg and ("validate" in msg or "failed_generation" in msg)
+
+
+def _groq_chat(messages: list, max_tokens: int):
+    """Run a chat completion, failing over across configured keys on a rate
+    limit. Returns the SDK response. Raises the last exception if every key is
+    exhausted (the caller maps it to a handled error).
+    """
+    keys = _groq_keys()
+    if not keys:
+        raise RuntimeError("No Groq API key configured.")
+    last_exc = None
+    for api_key in keys:
+        client = _groq_client_for(api_key)
+        try:
+            return client.chat.completions.create(
+                model=TAXONOMY_MODEL, messages=messages,
+                response_format={"type": "json_object"},
+                temperature=0, max_tokens=max_tokens,
+            )
+        except Exception as exc:
+            last_exc = exc
+            if _is_rate_limit(exc):
+                continue  # try the next key
+            raise  # non-rate-limit error: surface immediately
+    # Every key was rate-limited.
+    raise last_exc
+
+
+# ---------------------------------------------------------------------------
 # LLM segment matcher (primary scoring path).
 # One batched, cached Groq call per (theme, taxonomy, segment-set) classifies
 # each company segment to a sub-theme (or none). It returns ONLY a binary
@@ -1359,7 +1428,7 @@ _MATCH_MAX_TOKENS = 3000  # output cap per chunk (JSON for a chunk of companies)
 # TPM per-request cap. We budget the INPUT side to this many tokens so the
 # model's reasoning + JSON output still fits; chunks of companies are sent
 # across multiple calls and merged.
-_MATCH_CHUNK_TOKEN_BUDGET = 2500
+_MATCH_CHUNK_TOKEN_BUDGET = 1200   # smaller chunks -> smaller JSON output, fewer truncations
 _MATCH_MAX_RETRIES = 4
 _MATCH_RETRY_WAIT_S = 20   # TPM windows are per-minute; wait out the throttle
 _MATCH_CACHE_DIR = ".match_cache"
@@ -1547,8 +1616,6 @@ def match_segments_llm(taxonomy: dict, company_rows: list,
         sub_lines.append(f"- {s['sub_industry']} (e.g. {acts})")
     sub_block = "SUB-THEMES:\n" + "\n".join(sub_lines)
 
-    client = Groq(api_key=api_key)
-
     # Chunk companies so each request stays under the Groq TPM per-request cap
     # (free tier ~8000 TPM). We budget by estimated tokens; a batched call per
     # chunk is still far cheaper than one call per company, and the whole merged
@@ -1558,7 +1625,9 @@ def match_segments_llm(taxonomy: dict, company_rows: list,
     chunk: list[dict] = []
     chunk_tokens = base_tokens
 
-    def _flush(batch: list[dict]) -> dict | None:
+    def _call_batch(batch: list[dict]) -> dict:
+        """One Groq call for a batch. Returns {"__err__": ...} on failure, or
+        the parsed {company: {seg: {...}}} map (only for companies present)."""
         comp_lines = [f"- {c['company']}: {'; '.join(c['segments'])}" for c in batch]
         user = (f"THEME: {theme}\n\n{sub_block}\n\n"
                 f"COMPANIES AND THEIR SEGMENTS:\n" + "\n".join(comp_lines))
@@ -1566,31 +1635,67 @@ def match_segments_llm(taxonomy: dict, company_rows: list,
             {"role": "system", "content": _MATCH_SYSTEM_PROMPT},
             {"role": "user", "content": user},
         ]
-        # Retry on transient rate-limit (429) with a short backoff, since the
-        # free TPM tier can throttle back-to-back chunk calls.
+        # _groq_chat fails over across all configured keys on a rate limit. Only
+        # when EVERY key is throttled do we wait out the per-minute window and
+        # retry (free TPM tiers reset each minute).
         resp = None
         for attempt in range(_MATCH_MAX_RETRIES):
             try:
-                resp = client.chat.completions.create(
-                    model=_MATCH_MODEL, messages=messages,
-                    response_format={"type": "json_object"},
-                    temperature=0, max_tokens=_MATCH_MAX_TOKENS,
-                )
+                resp = _groq_chat(messages, _MATCH_MAX_TOKENS)
                 break
             except Exception as exc:
-                status = getattr(exc, "status_code", None)
-                retriable = status == 429 or "rate_limit" in str(exc).lower()
-                if retriable and attempt < _MATCH_MAX_RETRIES - 1:
+                if _is_rate_limit(exc) and attempt < _MATCH_MAX_RETRIES - 1:
                     time.sleep(_MATCH_RETRY_WAIT_S)
                     continue
+                # A JSON-validation 400 means the model's output for this batch
+                # was malformed/too long for json mode. Signal the caller to
+                # split the batch (smaller output) rather than failing outright.
+                if _is_json_validation_error(exc):
+                    return {"__split__": True}
                 return {"__err__": _map_groq_exception(exc)}
         raw = resp.choices[0].message.content or ""
         parsed = _parse_match_response(raw, valid_subs)
         if parsed is None:
-            return {"__err__": err(LLM_BAD_JSON,
-                                   "The model did not return a valid match map.",
-                                   detail=raw[:300])}
+            # Unparseable (often truncated) output -> split and retry smaller.
+            return {"__split__": True}
         return parsed
+
+    def _flush(batch: list[dict]) -> dict:
+        """Classify a batch, guaranteeing EVERY company is accounted for.
+
+        A batch where the model dropped/truncated companies is a silent data
+        loss (those companies would wrongly score 0). So we verify completeness:
+        if any company is missing, split the batch in half and retry each half
+        (down to a single company). A single company that still cannot be
+        classified is recorded as an empty map (genuine no-match) rather than
+        lost. Returns {"__err__": ...} only on a real API/JSON failure.
+        """
+        res = _call_batch(batch)
+        if "__err__" in res:
+            return res
+        needs_split = "__split__" in res
+        if not needs_split:
+            sent = {c["company"] for c in batch}
+            missing = sent - set(res.keys())
+            if not missing:
+                return res
+            needs_split = True  # some companies dropped -> split and retry
+
+        if len(batch) == 1:
+            # A single company that still won't classify cleanly: record it as a
+            # genuine no-match (empty map) rather than losing or erroring on it.
+            return {batch[0]["company"]: {}}
+
+        # Split and retry the two halves: smaller output avoids json-mode
+        # truncation, and smaller input dodges the per-request TPM cap.
+        mid = len(batch) // 2
+        out: dict = {}
+        for half in (batch[:mid], batch[mid:]):
+            r = _flush(half)
+            if "__err__" in r:
+                return r
+            out.update(r)
+        return out
 
     for c in companies:
         c_tokens = _estimate_tokens(f"- {c['company']}: {'; '.join(c['segments'])}")
@@ -1598,18 +1703,18 @@ def match_segments_llm(taxonomy: dict, company_rows: list,
         # for the model's JSON output which also counts toward TPM.
         if chunk and (chunk_tokens + c_tokens) > _MATCH_CHUNK_TOKEN_BUDGET:
             res = _flush(chunk)
-            if res and "__err__" in res:
+            if "__err__" in res:
                 return res["__err__"]
-            merged.update(res or {})
+            merged.update(res)
             chunk, chunk_tokens = [], base_tokens
         chunk.append(c)
         chunk_tokens += c_tokens
 
     if chunk:
         res = _flush(chunk)
-        if res and "__err__" in res:
+        if "__err__" in res:
             return res["__err__"]
-        merged.update(res or {})
+        merged.update(res)
 
     _store_cached_match(key, merged)
     return ok(match_map=merged, cached=False)
