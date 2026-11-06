@@ -600,17 +600,29 @@ def section_news(analysis: dict):
         f"""<div class="kpi kpi-gold">
               <div class="kpi-label">Overall News Signal</div>
               <div style="margin:8px 0;">{T.signal_badge(overall['direction'], overall['strength'])}</div>
-              <div class="kpi-sub">as of {cache.get('as_of','today')} &middot; {cache.get('source','')}
-                &middot; exposure-weighted rollup of the sub-theme signals</div>
+              <div class="kpi-sub">as of {cache.get('as_of','today')} &middot; {cache.get('source','')}</div>
             </div>""",
         unsafe_allow_html=True,
+    )
+
+    # Explain how the overall rolls up from the sub-theme signals, so a strong
+    # signal on a small sub-theme sensibly nets to a milder overall read.
+    n_signalled = len(per)
+    st.caption(
+        f"The overall signal is an **exposure-weighted rollup** of the "
+        f"{n_signalled} sub-theme{'s' if n_signalled != 1 else ''} with material "
+        "news (below): each sub-theme's tailwind/headwind is weighted by its share "
+        "of your revenue-based exposure. A strong signal on a sub-theme that is only "
+        "a small part of your exposure therefore softens at the portfolio level. "
+        "Exposure itself is never changed by news."
     )
 
     wc = cache.get("window_count")
     fc = cache.get("fetched_count")
     if wc is not None:
-        st.caption(f"{wc} headline(s) within '{window_label}' "
-                   f"(of {fc} most-recent fetched) via {cache.get('source','')}.")
+        st.caption(f"News read: {wc} recent headline(s) within '{window_label}' "
+                   f"(of {fc} fetched) via {cache.get('source','')}. The model scanned "
+                   "all of them; only sub-themes with material news appear below.")
 
     if not per:
         st.success("No recent events are materially pushing this theme either way. "
@@ -618,8 +630,9 @@ def section_news(analysis: dict):
     else:
         st.write("")
         st.markdown('<div class="panel-title">Per Sub-Theme Signal</div>'
-                    '<div class="panel-sub">Which way recent news is pushing each '
-                    'sub-theme, with the headlines behind it.</div>',
+                    '<div class="panel-sub">Sub-themes where recent news is material. '
+                    'The chips on each row are the specific headlines behind that '
+                    'signal (a subset of all headlines scanned).</div>',
                     unsafe_allow_html=True)
         for p in per:
             cited = "".join(
@@ -641,7 +654,10 @@ def section_news(analysis: dict):
             )
 
     if heads:
-        with st.expander(f"All {len(heads)} headlines used"):
+        with st.expander(f"All {len(heads)} headlines scanned (the full pool read by the model)"):
+            st.caption("Every headline below was read when forming the signal. Only "
+                       "those relevant to a sub-theme are cited on the rows above; "
+                       "the rest were scanned but found immaterial.")
             for i, h in enumerate(heads):
                 title = h.get("title", "")
                 url = h.get("url", "")
