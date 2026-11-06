@@ -548,17 +548,14 @@ def _companies_by_sub_theme(analysis: dict) -> dict:
     return out
 
 
-def _render_curation(analysis: dict, sub_exposure: dict):
-    """Let the user pick which sub-themes to keep and save only those.
+def _render_curation_savebar(analysis: dict, keep: list):
+    """Render the Save/Apply bar below the sub-theme accordions.
 
-    Logged-in users: the kept set REPLACES their saved taxonomy for this
-    profile + theme, so future runs reuse only the curated sub-themes.
-    Anonymous users: curation trims the current session's analysis only.
+    `keep` is the list of sub-theme names whose Keep checkbox is ticked.
+    Logged-in users: saving REPLACES their saved taxonomy for this profile +
+    theme with only the kept sub-themes. Anonymous users: session-only apply.
     """
     layer1 = analysis.get("taxonomy", {}).get("layer1", [])
-    if len(layer1) <= 1:
-        return  # nothing to curate
-
     theme = st.session_state.get("theme", "").strip()
     portfolio_df = st.session_state.get("portfolio_df")
     seg_res = _load_segments()
@@ -566,51 +563,44 @@ def _render_curation(analysis: dict, sub_exposure: dict):
         return
     segments = seg_res["segments"]
 
-    saved_hint = ("Unticking a sub-theme and saving permanently removes it from "
-                  "the set stored on your profile for this theme."
-                  if _is_logged_in() else
-                  "Curation trims this session's view. Log in to save a curated "
-                  "set to your profile.")
+    dropped = len(layer1) - len(keep)
+    hint = ("Saving removes the unticked sub-themes from the set stored on your "
+            "profile for this theme (Regenerate restores a full set)."
+            if _is_logged_in() else
+            "Applying trims this session's view only. Log in to save a curated "
+            "set to your profile.")
 
-    with st.expander("Curate sub-themes (choose which to keep)", expanded=False):
-        st.markdown(f'<div style="color:{T.MUTED};font-size:12px;margin-bottom:8px;">'
-                    f'{saved_hint}</div>', unsafe_allow_html=True)
-
-        # Order the checkboxes by exposure so the weakest (likely-drop) ones sit
-        # at the bottom.
-        ordered = sorted(layer1,
-                         key=lambda s: sub_exposure.get(s["sub_industry"], 0.0),
-                         reverse=True)
-        keep: list[str] = []
-        for i, sub in enumerate(ordered):
-            nm = sub["sub_industry"]
-            exp = sub_exposure.get(nm, 0.0)
-            checked = st.checkbox(f"{nm}  ·  {exp:.1f}% exposure",
-                                  value=True, key=f"curate_{i}_{nm}")
-            if checked:
-                keep.append(nm)
-
-        c1, c2 = st.columns([1.2, 4])
-        with c1:
-            save_label = ("Save curated set" if _is_logged_in()
-                          else "Apply to this session")
-            if st.button(save_label, type="primary", use_container_width=True,
-                         key="curate_save"):
-                if len(keep) == len(layer1):
-                    st.info("No change — every sub-theme is kept.")
+    st.write("")
+    st.markdown(f'<div style="color:{T.MUTED};font-size:12px;margin-bottom:6px;">'
+                f'{hint}</div>', unsafe_allow_html=True)
+    c1, c2 = st.columns([1.5, 4])
+    with c1:
+        label = ("Save curated set" if _is_logged_in() else "Apply to session")
+        if dropped > 0:
+            label += f" ({len(keep)}/{len(layer1)})"
+        if st.button(label, type="primary", use_container_width=True,
+                     key="curate_save", disabled=(len(keep) == 0)):
+            if len(keep) == 0:
+                st.warning("Keep at least one sub-theme.")
+            elif dropped == 0:
+                st.info("No change — every sub-theme is kept.")
+            else:
+                res = _apply_curation(theme, keep, portfolio_df, segments)
+                if not res["ok"]:
+                    st.warning(res["message"])
                 else:
-                    res = _apply_curation(theme, keep, portfolio_df, segments)
-                    if not res["ok"]:
-                        st.warning(res["message"])
-                    else:
-                        st.session_state["analysis"] = res["analysis"]
-                        st.success(
-                            f"Kept {len(keep)} of {len(layer1)} sub-themes."
-                            + (" Saved to your profile." if _is_logged_in() else ""))
-                        st.rerun()
-        with c2:
-            st.caption("Tick 'Regenerate' on the theme bar above and re-run "
-                       "Analyze to restore a full freshly generated set.")
+                    st.session_state["analysis"] = res["analysis"]
+                    st.success(
+                        f"Kept {len(keep)} of {len(layer1)} sub-themes."
+                        + (" Saved to your profile." if _is_logged_in() else ""))
+                    st.rerun()
+    with c2:
+        if len(keep) == 0:
+            st.caption("Tick at least one sub-theme to keep.")
+        elif dropped > 0:
+            st.caption(f"Will drop {dropped} unticked sub-theme(s) and re-score.")
+        else:
+            st.caption("All sub-themes kept — untick any to curate.")
 
 
 def section_taxonomy(analysis: dict):
@@ -623,60 +613,86 @@ def section_taxonomy(analysis: dict):
 
     st.markdown(f'<div class="panel-title">{taxonomy.get("theme","Theme")}</div>'
                 '<div class="panel-sub">Theme &rarr; sub-themes &rarr; activities. '
-                'Expand a sub-theme to see the holdings driving it. '
+                'Expand a sub-theme to see the holdings driving it. Use the '
+                '<b>Keep</b> checkbox on the right of each sub-theme, then '
+                '<b>Save</b> below to curate your set. '
                 '(Tip: use the drill buttons on the Overview tab to jump straight '
                 'to a sub-theme.)</div>',
                 unsafe_allow_html=True)
-
-    _render_curation(analysis, sub_exposure)
 
     # Ordered by exposure (inverted-pyramid feel: biggest driver on top).
     subs = sorted(taxonomy.get("layer1", []),
                   key=lambda s: sub_exposure.get(s["sub_industry"], 0.0), reverse=True)
 
-    for sub in subs:
+    # Curation is available whenever there is more than one sub-theme to choose
+    # between; each accordion carries its own Keep checkbox on the right.
+    curating = len(subs) > 1
+    keep: list[str] = []
+
+    for idx, sub in enumerate(subs):
         name = sub["sub_industry"]
         exp = sub_exposure.get(name, 0.0)
         share = min(1.0, exp / total)
         companies = by_sub.get(name, [])
         header = f"{name}   ·   {exp:.1f}% exposure   ·   {len(companies)} holding(s)"
-        # Auto-open the sub-theme the user drilled into from the Overview tab.
-        with st.expander(header, expanded=(focus == name)):
-            # Branded share bar with the gold exposure figure.
-            st.markdown(
-                f'<div style="display:flex;justify-content:space-between;'
-                f'align-items:center;margin-bottom:4px;">'
-                f'<span style="color:{T.MUTED};font-size:12px;">Share of total thematic exposure</span>'
-                f'<span class="sub-exp">{exp:.1f}%</span></div>'
-                f'<div style="height:8px;background:{T.NAVY_BG};border-radius:5px;margin-bottom:14px;">'
-                f'<div style="height:8px;width:{share*100:.0f}%;background:'
-                f'linear-gradient(90deg,{T.BLUE},{T.BLUE_LIGHT});border-radius:5px;"></div>'
-                f'</div>', unsafe_allow_html=True)
 
-            # Activities as branded chips.
-            chips = "".join(f'<span class="chip">{a}</span>' for a in sub.get("activities", []))
-            st.markdown(
-                f'<div style="color:{T.MUTED};font-size:12px;margin-bottom:4px;">Activities / keywords</div>'
-                f'<div style="margin-bottom:14px;">{chips}</div>', unsafe_allow_html=True)
+        # Accordion on the left; a right-aligned Keep checkbox lined up with the
+        # accordion header.
+        if curating:
+            left, right = st.columns([10, 1.4])
+        else:
+            left, right = st.container(), None
 
-            # Holdings driving this sub-theme.
-            if companies:
+        with left:
+            # Auto-open the sub-theme the user drilled into from the Overview tab.
+            with st.expander(header, expanded=(focus == name)):
+                # Branded share bar with the gold exposure figure.
                 st.markdown(
-                    f'<div style="color:{T.MUTED};font-size:12px;margin-bottom:6px;">'
-                    'Holdings contributing (contribution = sub-theme exposure &times; '
-                    'portfolio weight)</div>', unsafe_allow_html=True)
-                df = pd.DataFrame([{
-                    "Company": r["company"],
-                    "Sub-Theme Exposure %": r["sub_exposure"],
-                    "Portfolio Wt %": round(r["portfolio_wt"] * 100, 2),
-                    "Contribution %": r["contribution"],
-                } for r in companies])
-                st.dataframe(df, use_container_width=True, hide_index=True)
-            else:
+                    f'<div style="display:flex;justify-content:space-between;'
+                    f'align-items:center;margin-bottom:4px;">'
+                    f'<span style="color:{T.MUTED};font-size:12px;">Share of total thematic exposure</span>'
+                    f'<span class="sub-exp">{exp:.1f}%</span></div>'
+                    f'<div style="height:8px;background:{T.NAVY_BG};border-radius:5px;margin-bottom:14px;">'
+                    f'<div style="height:8px;width:{share*100:.0f}%;background:'
+                    f'linear-gradient(90deg,{T.BLUE},{T.BLUE_LIGHT});border-radius:5px;"></div>'
+                    f'</div>', unsafe_allow_html=True)
+
+                # Activities as branded chips.
+                chips = "".join(f'<span class="chip">{a}</span>' for a in sub.get("activities", []))
                 st.markdown(
-                    f'<div style="color:{T.MUTED};font-size:13px;">No holdings currently '
-                    'contribute to this sub-theme (no matched segment revenue).</div>',
-                    unsafe_allow_html=True)
+                    f'<div style="color:{T.MUTED};font-size:12px;margin-bottom:4px;">Activities / keywords</div>'
+                    f'<div style="margin-bottom:14px;">{chips}</div>', unsafe_allow_html=True)
+
+                # Holdings driving this sub-theme.
+                if companies:
+                    st.markdown(
+                        f'<div style="color:{T.MUTED};font-size:12px;margin-bottom:6px;">'
+                        'Holdings contributing (contribution = sub-theme exposure &times; '
+                        'portfolio weight)</div>', unsafe_allow_html=True)
+                    df = pd.DataFrame([{
+                        "Company": r["company"],
+                        "Sub-Theme Exposure %": r["sub_exposure"],
+                        "Portfolio Wt %": round(r["portfolio_wt"] * 100, 2),
+                        "Contribution %": r["contribution"],
+                    } for r in companies])
+                    st.dataframe(df, use_container_width=True, hide_index=True)
+                else:
+                    st.markdown(
+                        f'<div style="color:{T.MUTED};font-size:13px;">No holdings currently '
+                        'contribute to this sub-theme (no matched segment revenue).</div>',
+                        unsafe_allow_html=True)
+
+        if curating:
+            with right:
+                # Nudge the checkbox down so it sits on the accordion header line.
+                st.markdown('<div style="height:6px;"></div>', unsafe_allow_html=True)
+                if st.checkbox("Keep", value=True, key=f"curate_keep_{idx}_{name}"):
+                    keep.append(name)
+        else:
+            keep.append(name)
+
+    if curating:
+        _render_curation_savebar(analysis, keep)
 
 
 def section_contributors(analysis: dict):
