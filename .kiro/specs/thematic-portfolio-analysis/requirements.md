@@ -216,11 +216,28 @@ The platform is built in two phases. Phase 1 delivers the core thematic analysis
 
 #### Acceptance Criteria
 
-1. WHEN a Theme is submitted that was generated before, THE Taxonomy_Generator SHALL reuse the previously generated and cached Taxonomy rather than calling the LLM again.
-2. THE System SHALL key the Taxonomy cache by the exact Theme string.
-3. GIVEN the same cached Taxonomy and the same portfolio and Segment data, THE System SHALL produce identical exposure results on every run.
-4. THE System SHALL allow the user to force regeneration of a Taxonomy, bypassing the cache.
-5. THE System SHALL treat caching as the mechanism that delivers run-to-run reproducibility for a given Theme, because a temperature of 0 does not by itself guarantee identical LLM output.
+1. WHEN a logged-in user submits a Theme they have generated before, THE System SHALL reuse that user's permanently saved Taxonomy for the Theme rather than calling the LLM again, so the same profile plus the same Theme always yields the same Sub_Industries.
+2. THE System SHALL persist a logged-in user's Taxonomy in Supabase, keyed by User_Profile and a normalised Theme key (the lower-cased, trimmed Theme string), with no expiry, so the saved set survives across sessions and devices.
+3. THE System SHALL scope saved Taxonomies per User_Profile via row-level security, so one user's saved sub-themes are never visible to or reused by another user.
+4. WHERE a user is anonymous (Supabase not configured or not logged in), THE System SHALL fall back to an in-memory and on-disk Taxonomy cache keyed by the Theme string, preserving run-to-run reproducibility without a profile.
+5. GIVEN the same saved or cached Taxonomy and the same portfolio and Segment data, THE System SHALL produce identical exposure results on every run.
+6. THE System SHALL allow the user to force regeneration of a Taxonomy, bypassing the saved or cached set; for a logged-in user THE System SHALL overwrite the saved Taxonomy with the freshly generated set.
+7. THE System SHALL treat saving and caching as the mechanism that delivers run-to-run reproducibility for a given Theme, because a temperature of 0 does not by itself guarantee identical LLM output.
+
+### Requirement 17: Selectable Sub-Theme Count
+
+**User Story:** As a Schroders analyst, I want to choose how many sub-themes a theme is broken into, so that I can run a coarse or a fine-grained audit while keeping my saved taxonomy consistent across runs.
+
+#### Acceptance Criteria
+
+1. THE UI SHALL present a Sub_Theme_Count control next to the Analyze action allowing the user to select an integer from 3 to 10 inclusive, defaulting to 4.
+2. THE System SHALL support producing, scoring, and displaying any Sub_Theme_Count in the 3 to 10 range throughout the application (exposure donut, taxonomy accordions, contributors, and news rollup), without assuming a fixed count.
+3. WHEN a logged-in user has no saved Taxonomy for the Theme, THE System SHALL generate the selected count of Sub_Industries and save them.
+4. WHEN a logged-in user has a saved Taxonomy of M Sub_Industries and requests a count N greater than M, THE System SHALL keep all M saved Sub_Industries, generate (N - M) additional Sub_Industries that are not duplicates of the saved ones, merge them, and save the enlarged set.
+5. WHEN a logged-in user has a saved Taxonomy of M Sub_Industries and requests a count N less than M, THE System SHALL rank the saved Sub_Industries by their portfolio exposure and return the top N, and SHALL leave the full saved set of M stored unchanged.
+6. WHEN a logged-in user has a saved Taxonomy of M Sub_Industries and requests a count N equal to M, THE System SHALL reuse the saved set unchanged.
+7. WHEN topping up a saved Taxonomy, THE System SHALL skip near-duplicate Sub_Industries (compared by a normalised name) and, IF fewer unique new Sub_Industries are produced than requested, SHALL inform the user how many were added.
+8. THE saved Taxonomy SHALL take precedence over the selected count unless the user forces regeneration, so changing the count never silently discards a user's saved Sub_Industries.
 
 ### Requirement 14: Confidence Scores and Sub-Theme Attribution
 

@@ -151,3 +151,69 @@ def test_validator_rejects_bad_shapes():
     assert engine._validate_taxonomy({"layer1": [{"sub_industry": "S", "activities": "x"}]}, "t") is None
     good = engine._validate_taxonomy(json.loads(GOOD), "t")
     assert good is not None and good["theme"] == "t"
+
+
+# --- Sub-theme count + top-up merge (per-profile permanent cache support) ---
+
+def _sub(name, acts=("a", "b")):
+    return {"sub_industry": name, "activities": list(acts)}
+
+
+def test_merge_sub_themes_appends_new_keeps_existing_first():
+    existing = [_sub("Grid Equipment"), _sub("Energy Storage")]
+    new = [_sub("Grid Automation"), _sub("Demand Response")]
+    merged = engine.merge_sub_themes(existing, new)
+    names = [s["sub_industry"] for s in merged]
+    assert names == ["Grid Equipment", "Energy Storage",
+                     "Grid Automation", "Demand Response"]
+
+
+def test_merge_sub_themes_skips_near_duplicates():
+    existing = [_sub("Solar PV")]
+    # "solar-pv" and "Solar  PV" normalize to the same key -> skipped.
+    new = [_sub("solar-pv"), _sub("Solar  PV"), _sub("Wind Power")]
+    merged = engine.merge_sub_themes(existing, new)
+    names = [s["sub_industry"] for s in merged]
+    assert names == ["Solar PV", "Wind Power"]
+
+
+def test_merge_sub_themes_respects_limit():
+    existing = [_sub(f"S{i}") for i in range(8)]
+    new = [_sub("New A"), _sub("New B"), _sub("New C")]
+    merged = engine.merge_sub_themes(existing, new, limit=10)
+    assert len(merged) == 10
+    assert merged[:8] == existing  # existing preserved in order
+
+
+def test_generate_taxonomy_count_is_clamped(monkeypatch):
+    # n outside 3..10 is clamped; prompt is built with the clamped value.
+    monkeypatch.setattr(engine, "get_secret", lambda k, d=None: "key")
+    captured = {}
+
+    class _Completions:
+        def create(self, **kwargs):
+            captured["system"] = kwargs["messages"][0]["content"]
+            return _Resp(GOOD)
+
+    class _Chat:
+        completions = _Completions()
+
+    class _Client:
+        chat = _Chat()
+
+    with mock.patch("groq.Groq", return_value=_Client()):
+        engine.generate_taxonomy("Power Grid", n=99)
+    assert f"EXACTLY {engine._MAX_SUBS} objects" in captured["system"]
+
+
+def test_topup_call_is_not_cached(monkeypatch):
+    # A top-up (existing provided) must not read or write the anonymous cache.
+    monkeypatch.setattr(engine, "get_secret", lambda k, d=None: "key")
+    with mock.patch("groq.Groq", return_value=_fake_client([GOOD])):
+        res = engine.generate_taxonomy("Power Grid", n=3,
+                                       existing=["Existing Sub"])
+    assert res["ok"] and res.get("cached") is False
+    # Nothing was cached, so a follow-up default call still reaches the model.
+    with mock.patch("groq.Groq", return_value=_fake_client([GOOD])):
+        follow = engine.generate_taxonomy("Power Grid")
+    assert follow["ok"] and follow.get("cached") is False

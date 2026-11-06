@@ -173,3 +173,55 @@ def load_latest_portfolio(session: dict):
         return _ok(portfolio=df, name=row.get("name"))
     except Exception as exc:
         return _err("LOAD_FAILED", "Could not load your saved portfolio.", detail=str(exc))
+
+
+# ---------------------------------------------------------------------------
+# Saved taxonomies (per-profile, permanent) - Req 13 (revised)
+# A user's sub-theme set for a given theme is saved forever and reused on
+# re-login, so the same profile + theme always yields the same sub-themes.
+# ---------------------------------------------------------------------------
+def load_taxonomy(session: dict, theme: str):
+    """Return the saved sub-theme list for (this user, theme), or None.
+
+    Returns {ok: True, layer1: [...]} with layer1 possibly None if not saved.
+    """
+    client = _get_client()
+    if client is None:
+        return _err("SUPABASE_UNCONFIGURED", "Saved taxonomies are not configured.")
+    if not _restore_session(session.get("access_token", ""), session.get("refresh_token", "")):
+        return _err("NO_SESSION", "Your session expired. Please log in again.")
+    try:
+        key = theme.strip().lower()
+        res = (client.table("saved_taxonomies")
+               .select("sub_themes")
+               .eq("theme_key", key)
+               .limit(1).execute())
+        data = res.data or []
+        if not data:
+            return _ok(layer1=None)
+        return _ok(layer1=data[0]["sub_themes"])
+    except Exception as exc:
+        return _err("LOAD_FAILED", "Could not load the saved taxonomy.", detail=str(exc))
+
+
+def save_taxonomy(session: dict, theme: str, layer1: list) -> dict:
+    """Upsert the user's sub-theme set for a theme (keyed by user + theme)."""
+    client = _get_client()
+    if client is None:
+        return _err("SUPABASE_UNCONFIGURED", "Saving is not configured.")
+    if not _restore_session(session.get("access_token", ""), session.get("refresh_token", "")):
+        return _err("NO_SESSION", "Your session expired. Please log in again.")
+    try:
+        user = client.auth.get_user()
+        uid = user.user.id
+        payload = {
+            "user_id": uid,
+            "theme_key": theme.strip().lower(),
+            "theme": theme.strip(),
+            "sub_themes": layer1,
+        }
+        client.table("saved_taxonomies").upsert(
+            payload, on_conflict="user_id,theme_key").execute()
+        return _ok()
+    except Exception as exc:
+        return _err("SAVE_FAILED", "Could not save the taxonomy.", detail=str(exc))

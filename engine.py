@@ -822,8 +822,9 @@ def calculate_portfolio_metrics(df_scores: "pd.DataFrame",
 import json  # noqa: E402
 
 TAXONOMY_MODEL = "openai/gpt-oss-120b"
-_TAXONOMY_MAX_TOKENS = 2000  # generous: gpt-oss emits reasoning before JSON
-_MIN_SUBS, _MAX_SUBS = 3, 4
+_TAXONOMY_MAX_TOKENS = 3000  # generous: gpt-oss emits reasoning before JSON; up to 10 subs
+_MIN_SUBS, _MAX_SUBS = 3, 10   # user-selectable count range (slider 3-10, default 4)
+_DEFAULT_SUBS = 4
 _MIN_ACTS, _MAX_ACTS = 2, 3
 
 _TAXONOMY_SYSTEM_PROMPT = (
@@ -850,10 +851,19 @@ _TAXONOMY_SYSTEM_PROMPT = (
     "Output ONLY a single JSON object, no prose and no markdown fences, with: "
     "\"valid_theme\" (boolean), \"reason\" (short string explaining the "
     "decision), and - ONLY when valid_theme is true - \"layer1\": an array of "
-    "3 to 4 objects, each with \"sub_industry\" (short string naming an affected "
-    "industry) and \"activities\" (array of 2 to 3 short, concrete business- "
-    "activity keyword phrases; multi-word phrases beat single generic words). "
+    "EXACTLY {n} objects, each with \"sub_industry\" (short string naming an "
+    "affected industry, each DISTINCT from the others) and \"activities\" "
+    "(array of 2 to 3 short, concrete business-activity keyword phrases; "
+    "multi-word phrases beat single generic words). "
     "When valid_theme is false, omit layer1 or set it to an empty array."
+)
+
+# Prompt fragment appended when topping up an existing saved taxonomy with
+# additional, non-duplicate sub-themes.
+_TAXONOMY_TOPUP_TEMPLATE = (
+    "The following sub-industries ALREADY exist for this theme and MUST NOT be "
+    "repeated or duplicated (choose genuinely different ones):\n{existing}\n"
+    "Generate EXACTLY {n} NEW, distinct sub-industries not in that list."
 )
 
 
@@ -914,7 +924,7 @@ def _validate_taxonomy(obj, theme: str) -> dict | None:
         clean_subs.append({"sub_industry": name.strip(), "activities": str_acts[:_MAX_ACTS]})
     if not clean_subs:
         return None
-    clean_subs = clean_subs[:_MAX_SUBS]  # clamp upper bound
+    clean_subs = clean_subs[:_MAX_SUBS]  # hard safety cap at 10
     return {"theme": theme, "layer1": clean_subs}
 
 
@@ -977,14 +987,26 @@ def _store_cached_taxonomy(theme: str, taxonomy: dict) -> None:
         pass  # cache write failure is non-fatal
 
 
-def generate_taxonomy(theme: str, force_refresh: bool = False) -> dict:
-    """Expand a theme into a two-layer taxonomy via a single Groq call.
+def generate_taxonomy(theme: str, n: int = _DEFAULT_SUBS, force_refresh: bool = False,
+                      existing: list | None = None) -> dict:
+    """Expand a theme into a taxonomy of n sub-themes via a single Groq call.
 
-    Reuses a cached Taxonomy for a previously seen theme unless force_refresh
-    is set (Req 13). Returns {"ok": True, "taxonomy": Taxonomy, "cached": bool}
-    or a handled error dict. Requirements: 5.1 - 5.7, 10.1 - 10.2, 13.1 - 13.5.
+    n: how many sub-themes to produce (clamped to 3..10).
+    existing: when provided, generate n NEW sub-themes distinct from these
+              (used to "top up" a saved taxonomy) and the result contains ONLY
+              the new ones (the caller merges).
+    force_refresh: bypass the anonymous file/mem cache.
+
+    Returns {"ok": True, "taxonomy": Taxonomy, "cached": bool} or a handled error.
+    Note: per-profile permanent caching lives in supabase_client; the file/mem
+    cache here is only the anonymous fallback and is used only for the default
+    count with no top-up.
     """
-    if not force_refresh:
+    n = max(_MIN_SUBS, min(_MAX_SUBS, int(n)))
+    topping_up = bool(existing)
+
+    # Anonymous fallback cache: only for a plain (default-count, no top-up) call.
+    if not force_refresh and not topping_up and n == _DEFAULT_SUBS:
         cached = _load_cached_taxonomy(theme)
         if cached is not None:
             return ok(taxonomy=cached, cached=True)
@@ -1009,9 +1031,15 @@ def generate_taxonomy(theme: str, force_refresh: bool = False) -> dict:
             max_tokens=_TAXONOMY_MAX_TOKENS,
         )
 
+    system = _TAXONOMY_SYSTEM_PROMPT.format(n=n)
+    user = theme
+    if topping_up:
+        existing_names = "\n".join(f"- {name}" for name in existing)
+        user = theme + "\n\n" + _TAXONOMY_TOPUP_TEMPLATE.format(
+            existing=existing_names, n=n)
     messages = [
-        {"role": "system", "content": _TAXONOMY_SYSTEM_PROMPT},
-        {"role": "user", "content": theme},
+        {"role": "system", "content": system},
+        {"role": "user", "content": user},
     ]
 
     # --- First (successful-path) call (Req 5.1) ---
@@ -1027,7 +1055,9 @@ def generate_taxonomy(theme: str, force_refresh: bool = False) -> dict:
         return err(INVALID_THEME,
                    f"'{theme}' is not a recognised investment theme. {reason}")
     if taxonomy is not None:
-        _store_cached_taxonomy(theme, taxonomy)
+        # Only the anonymous default-count, non-top-up call writes the file cache.
+        if not topping_up and n == _DEFAULT_SUBS:
+            _store_cached_taxonomy(theme, taxonomy)
         return ok(taxonomy=taxonomy, cached=False)
 
     # --- One repair attempt (Req 5.7) ---
@@ -1047,10 +1077,42 @@ def generate_taxonomy(theme: str, force_refresh: bool = False) -> dict:
         return err(INVALID_THEME,
                    f"'{theme}' is not a recognised investment theme. {reason}")
     if taxonomy is not None:
-        _store_cached_taxonomy(theme, taxonomy)
+        if not topping_up and n == _DEFAULT_SUBS:
+            _store_cached_taxonomy(theme, taxonomy)
         return ok(taxonomy=taxonomy, cached=False)
 
     return err(LLM_BAD_JSON, "The model did not return a valid taxonomy.", detail=raw2[:300])
+
+
+def _sub_theme_key(name: str) -> str:
+    """Normalized key for comparing sub-theme names (dedupe on top-up).
+
+    Lowercase, collapse whitespace, drop punctuation so "Solar PV" and
+    "solar-pv" are treated as the same sub-theme.
+    """
+    s = (name or "").lower()
+    s = re.sub(r"[^a-z0-9]+", " ", s)
+    return " ".join(s.split())
+
+
+def merge_sub_themes(existing: list, new: list, limit: int = _MAX_SUBS) -> list:
+    """Append `new` sub-themes to `existing`, skipping near-duplicate names.
+
+    Both arguments are lists of {"sub_industry", "activities"} dicts. Existing
+    entries are always kept (and come first). Returns the merged list capped at
+    `limit`. De-duplication is by normalized sub_industry name.
+    """
+    merged = list(existing or [])
+    seen = {_sub_theme_key(s.get("sub_industry", "")) for s in merged}
+    for sub in (new or []):
+        key = _sub_theme_key(sub.get("sub_industry", ""))
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        merged.append(sub)
+        if len(merged) >= limit:
+            break
+    return merged
 
 
 def _parse_and_validate(raw: str, theme: str):

@@ -41,6 +41,108 @@ def _confidence_label(conf: float) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Taxonomy resolution (per-profile permanent cache + count slider)
+# ---------------------------------------------------------------------------
+def _rank_subs_by_exposure(layer1: list, portfolio_df, segments, theme: str) -> list:
+    """Order a saved sub-theme list by the portfolio's exposure to each sub-theme
+    (descending). Used to trim a larger saved taxonomy down to the top N.
+
+    Falls back to the stored order if scoring is unavailable.
+    """
+    tax = {"theme": theme, "layer1": layer1}
+    try:
+        result = engine.analyze_portfolio(portfolio_df, segments, tax)
+        sub_exp = result["metrics"].get("sub_theme_exposure", {}) or {}
+    except Exception:
+        return list(layer1)
+    return sorted(layer1,
+                  key=lambda s: sub_exp.get(s.get("sub_industry", ""), 0.0),
+                  reverse=True)
+
+
+def _resolve_taxonomy(theme: str, n: int, portfolio_df, segments,
+                      force_refresh: bool) -> dict:
+    """Decide which sub-themes to analyze, honouring the per-profile saved set.
+
+    Rules:
+      * Anonymous users -> the engine's file/mem cache (original behaviour),
+        requesting exactly n sub-themes.
+      * Logged-in users -> a permanent per-profile taxonomy in Supabase:
+          - Regenerate ticked -> generate a fresh set of n and overwrite.
+          - No saved set      -> generate n and save.
+          - Saved M, want N==M-> reuse the saved set as-is.
+          - Saved M, want N<M -> rank saved subs by exposure, return top N
+                                  (the full saved set stays stored).
+          - Saved M, want N>M -> keep all M, generate (N-M) NEW non-duplicate
+                                  sub-themes, merge, and save the enlarged set.
+
+    Returns the engine's {ok, taxonomy, cached} shape, optionally plus a
+    "notice" string for the UI.
+    """
+    n = max(engine._MIN_SUBS, min(engine._MAX_SUBS, int(n)))
+
+    # --- Anonymous: original file-cache behaviour, now count-aware. ---
+    if not _is_logged_in():
+        return engine.generate_taxonomy(theme, n=n, force_refresh=force_refresh)
+
+    session = st.session_state["auth"]["session"]
+
+    # --- Regenerate: fresh set, overwrite the saved taxonomy. ---
+    if force_refresh:
+        gen = engine.generate_taxonomy(theme, n=n, force_refresh=True)
+        if not gen["ok"]:
+            return gen
+        sb.save_taxonomy(session, theme, gen["taxonomy"]["layer1"])
+        return gen
+
+    # --- Look up the saved per-profile taxonomy. ---
+    saved = sb.load_taxonomy(session, theme)
+    saved_layer1 = saved.get("layer1") if saved.get("ok") else None
+
+    # No saved set yet -> generate n and persist.
+    if not saved_layer1:
+        gen = engine.generate_taxonomy(theme, n=n, force_refresh=force_refresh)
+        if not gen["ok"]:
+            return gen
+        if saved.get("ok"):
+            sb.save_taxonomy(session, theme, gen["taxonomy"]["layer1"])
+        return gen
+
+    m = len(saved_layer1)
+
+    # Saved set already matches the requested count.
+    if n == m:
+        return {"ok": True, "cached": True,
+                "taxonomy": {"theme": theme, "layer1": saved_layer1}}
+
+    # Want fewer than saved -> rank by exposure, return the top N.
+    if n < m:
+        ranked = _rank_subs_by_exposure(saved_layer1, portfolio_df, segments, theme)
+        return {"ok": True, "cached": True,
+                "taxonomy": {"theme": theme, "layer1": ranked[:n]},
+                "notice": f"Showing the {n} highest-exposure sub-themes from your "
+                          f"saved set of {m}. The full set stays saved."}
+
+    # Want more than saved -> top up with (n - m) new non-duplicate sub-themes.
+    need = n - m
+    existing_names = [s.get("sub_industry", "") for s in saved_layer1]
+    gen = engine.generate_taxonomy(theme, n=need, force_refresh=True,
+                                   existing=existing_names)
+    if not gen["ok"]:
+        return gen
+    merged = engine.merge_sub_themes(saved_layer1, gen["taxonomy"]["layer1"],
+                                     limit=engine._MAX_SUBS)
+    sb.save_taxonomy(session, theme, merged)
+    notice = None
+    if len(merged) < n:
+        notice = (f"Added {len(merged) - m} new sub-theme(s); the model could not "
+                  f"produce {need} genuinely distinct ones, so your set now has "
+                  f"{len(merged)}.")
+    return {"ok": True, "cached": False,
+            "taxonomy": {"theme": theme, "layer1": merged}, "notice": notice}
+
+
+# ---------------------------------------------------------------------------
 # Authentication (Phase 2 - only active when Supabase is configured)
 # ---------------------------------------------------------------------------
 def _is_logged_in() -> bool:
@@ -791,15 +893,22 @@ def main():
     # Theme input row.
     if "theme" not in st.session_state:
         st.session_state["theme"] = ""
-    tc = st.columns([5, 1, 1.4])
+    tc = st.columns([4.2, 1.1, 1, 1.4])
     theme = tc[0].text_input(
         "Investment theme", value=st.session_state["theme"], label_visibility="collapsed",
         placeholder="Enter an investment theme, e.g. Critical Power Grid Modernization",
     )
     st.session_state["theme"] = theme
-    analyze = tc[1].button("Analyze", type="primary", use_container_width=True)
-    force_refresh = tc[2].checkbox("Regenerate", value=False,
-                                   help="Bypass the cache and ask the model for a fresh taxonomy.")
+    sub_count = tc[1].slider(
+        "Sub-themes", min_value=engine._MIN_SUBS, max_value=engine._MAX_SUBS,
+        value=engine._DEFAULT_SUBS, label_visibility="collapsed",
+        help="How many sub-themes to break the theme into (saved taxonomies are "
+             "reused unless you tick Regenerate).",
+    )
+    analyze = tc[2].button("Analyze", type="primary", use_container_width=True)
+    force_refresh = tc[3].checkbox("Regenerate", value=False,
+                                   help="Bypass the saved taxonomy and ask the model for a "
+                                        "fresh set of sub-themes.")
 
     portfolio_df = st.session_state.get("portfolio_df")
     if portfolio_df is None:
@@ -824,7 +933,8 @@ def main():
 
     if analyze and theme.strip():
         with st.spinner("Expanding theme and scoring portfolio..."):
-            tax_res = engine.generate_taxonomy(theme.strip(), force_refresh=force_refresh)
+            tax_res = _resolve_taxonomy(theme.strip(), sub_count, portfolio_df,
+                                        segments, force_refresh)
             if not tax_res["ok"]:
                 # Clear any stale result so a rejected theme does not keep
                 # showing an old analysis underneath the error.
@@ -842,6 +952,8 @@ def main():
             "metadata": result.get("metadata", {}),
             "cached": tax_res.get("cached", False),
         }
+        if tax_res.get("notice"):
+            st.info(tax_res["notice"])
 
     analysis = st.session_state.get("analysis")
     if not analysis:
