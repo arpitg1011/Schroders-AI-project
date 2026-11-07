@@ -1,0 +1,23 @@
+{
+  "_doc": "Per-theme 12-month Risk Signal trajectory on a -3..+3 scale (Headwind negative, Tailwind positive; magnitude = Low 1 / Medium 2 / High 3). Oldest month first, newest last. Keyed by theme_key = lower(trim(theme)). Illustrative monthly history of the news-driven risk signal.",
+  "semiconductors": [1, 2, 2, 3, 1, -1, -2, -1, 1, 2, 3, 2],
+  "el nino": [0, 1, 2, 3, 2, 1, 0, -1, 0, 1, 2, 1],
+  "us elections": [0, 0, 1, 1, 2, 2, 3, 2, 1, -1, -2, -1],
+  "us-china relations": [-1, -1, -2, -2, -1, -2, -3, -3, -2, -2, -3, -2],
+  "artificial intelligence": [1, 2, 2, 3, 3, 2, 3, 3, 2, 2, 3, 3],
+  "electric vehicles": [2, 2, 1, 0, -1, -2, -2, -1, -1, 0, 1, 0],
+  "digital payments": [1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2],
+  "cloud computing": [1, 2, 2, 2, 3, 2, 3, 2, 3, 3, 2, 3],
+  "data centers": [1, 2, 3, 3, 2, 3, 3, 2, 3, 3, 3, 2],
+  "cybersecurity": [1, 1, 2, 1, 2, 2, 3, 2, 1, 2, 2, 2],
+  "renewable energy": [2, 1, 1, 0, -1, -1, 0, 1, 1, 0, -1, 1],
+  "5g and wireless infrastructure": [1, 1, 0, 1, 0, -1, 0, 1, 1, 2, 1, 1],
+  "defense and military spending": [1, 2, 2, 3, 2, 3, 3, 2, 3, 3, 2, 3],
+  "taiwan strait tensions": [-1, -2, -1, -2, -3, -2, -1, -2, -3, -2, -2, -3],
+  "red sea shipping disruption": [0, -1, -3, -2, -2, -1, -1, -2, -1, 0, -1, -1],
+  "generative ai": [2, 3, 3, 2, 3, 3, 2, 3, 3, 3, 2, 3],
+  "aging population": [1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1],
+  "water scarcity": [0, 1, 1, 2, 3, 2, 1, 2, 3, 2, 1, 2],
+  "interest rate hikes": [-2, -3, -2, -2, -1, -1, 0, 1, 1, 2, 1, 1],
+  "gold and safe haven demand": [1, 1, 2, 2, 3, 2, 2, 3, 2, 2, 3, 3]
+}

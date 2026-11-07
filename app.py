@@ -482,6 +482,41 @@ def _gauge(value: float, title: str) -> dict:
     }
 
 
+def _risk_trend_chart(trend: dict) -> dict:
+    """ECharts line of the monthly risk signal on a -3..+3 scale. Positive
+    (Tailwind) reads green, negative (Headwind) red, split at the zero line."""
+    months = [p["month"] for p in trend["points"]]
+    values = [p["value"] for p in trend["points"]]
+    return {
+        "tooltip": {"trigger": "axis",
+                    "formatter": "{b}<br/>Signal: {c}"},
+        "grid": {"left": 44, "right": 16, "top": 24, "bottom": 46},
+        "xAxis": {"type": "category", "data": months, "boundaryGap": False,
+                  "axisLabel": {"color": T.MUTED, "fontSize": 10, "rotate": 40},
+                  "axisLine": {"lineStyle": {"color": T.BORDER}}},
+        "yAxis": {"type": "value", "min": -3, "max": 3, "interval": 1,
+                  "axisLabel": {"color": T.MUTED, "fontSize": 10},
+                  "splitLine": {"lineStyle": {"color": T.BORDER, "opacity": 0.4}}},
+        "visualMap": {
+            "show": False, "type": "piecewise", "dimension": 1,
+            "pieces": [
+                {"gt": 0, "color": T.GOOD},
+                {"lte": 0, "color": T.BAD},
+            ],
+        },
+        "series": [{
+            "type": "line", "data": values, "smooth": True, "symbol": "circle",
+            "symbolSize": 7, "lineStyle": {"width": 3},
+            "markLine": {
+                "silent": True, "symbol": "none",
+                "lineStyle": {"color": T.MUTED, "type": "dashed", "opacity": 0.6},
+                "data": [{"yAxis": 0}],
+            },
+            "areaStyle": {"opacity": 0.12},
+        }],
+    }
+
+
 def _donut(sub_exposure: dict) -> dict:
     items = [{"value": round(v, 2), "name": k} for k, v in sub_exposure.items() if v > 0]
     return {
@@ -1091,6 +1126,29 @@ def section_news(analysis: dict):
     with top[1]:
         with st.popover("ⓘ Methodology"):
             _render_methodology_popover()
+
+    # Monthly Risk Signal trend (news-driven, qualitative). Shown when available
+    # for the theme. This is NOT exposure - it tracks which way news has pushed
+    # the theme's risk over the trailing year, on a Headwind/Tailwind scale.
+    trend = engine.risk_trend(theme)
+    if trend:
+        lat = trend["latest"]
+        delta = trend["delta"]
+        arrow = ("rising" if delta > 0 else "falling" if delta < 0 else "flat")
+        st.markdown('<div class="panel-title" style="margin-top:6px;">'
+                    'Risk Signal — last 12 months</div>'
+                    '<div class="panel-sub">Monthly news-driven tailwind/headwind '
+                    'signal for this theme (−3 strong headwind … +3 strong tailwind). '
+                    'Separate from exposure, which is revenue-based and stable.</div>',
+                    unsafe_allow_html=True)
+        st_echarts(_risk_trend_chart(trend), height="240px")
+        st.markdown(
+            f'<div class="panel-sub">Latest reading: '
+            f'{T.signal_badge(lat["direction"], lat["strength"])} '
+            f'&nbsp;·&nbsp; 12-month trend: <b>{arrow}</b>.</div>',
+            unsafe_allow_html=True,
+        )
+        st.divider()
 
     c1, c2 = st.columns([1.4, 1])
     window_label = c1.select_slider("News lookback window",

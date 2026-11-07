@@ -250,3 +250,26 @@ def test_matcher_splits_when_company_dropped(monkeypatch):
     assert res["ok"]
     # All four companies present despite the model dropping the last each time.
     assert set(res["match_map"].keys()) == {"CO0", "CO1", "CO2", "CO3"}
+
+
+# ---- risk-signal trend (illustrative monthly news signal) ----
+
+def test_risk_trend_shape_and_scale():
+    import datetime
+    t = engine.risk_trend("semiconductors", end=datetime.date(2026, 11, 1))
+    assert t is not None
+    assert len(t["points"]) == 12
+    # Values stay on the -3..+3 scale and carry a direction/strength label.
+    for p in t["points"]:
+        assert -3 <= p["value"] <= 3
+        assert p["direction"] in {"Tailwind", "Headwind", "Neutral"}
+        assert p["strength"] in {"High", "Medium", "Low", "None"}
+    # Months are trailing, oldest first, newest == end month.
+    assert t["points"][-1]["month"] == "Nov 2026"
+    assert t["points"][0]["month"] == "Dec 2025"
+    # delta = newest - oldest.
+    assert t["delta"] == t["points"][-1]["value"] - t["points"][0]["value"]
+
+
+def test_risk_trend_unknown_theme_is_none():
+    assert engine.risk_trend("totally not a seeded theme") is None

@@ -1276,6 +1276,79 @@ def is_preset_theme(theme: str) -> bool:
     return (theme or "").strip().lower() in load_presets()
 
 
+# ---------------------------------------------------------------------------
+# Risk-signal trend (news-driven, monthly). Illustrative 12-month history of
+# the qualitative news signal on a -3..+3 scale (Headwind negative, Tailwind
+# positive; magnitude Low 1 / Medium 2 / High 3). Seeded per preset theme in
+# data/risk_trends.json. NOT exposure - exposure is revenue-based and stable.
+# In production the system would accumulate one real monthly reading per theme.
+# ---------------------------------------------------------------------------
+_RISK_TRENDS_PATH = "data/risk_trends.json"
+_risk_trends_cache: dict | None = None
+
+_INTENSITY_DIR = {3: ("Tailwind", "High"), 2: ("Tailwind", "Medium"),
+                  1: ("Tailwind", "Low"), 0: ("Neutral", "None"),
+                  -1: ("Headwind", "Low"), -2: ("Headwind", "Medium"),
+                  -3: ("Headwind", "High")}
+
+
+def _load_risk_trends() -> dict:
+    global _risk_trends_cache
+    if _risk_trends_cache is not None:
+        return _risk_trends_cache
+    data: dict = {}
+    try:
+        if _osp.exists(_RISK_TRENDS_PATH):
+            with open(_RISK_TRENDS_PATH, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+            for k, v in raw.items():
+                if isinstance(v, list) and v and all(isinstance(x, int) for x in v):
+                    data[k.strip().lower()] = [max(-3, min(3, int(x))) for x in v]
+    except Exception:
+        data = {}
+    _risk_trends_cache = data
+    return data
+
+
+def _trailing_months(n: int, end=None) -> list:
+    """Return n trailing month labels ('Mon YYYY'), oldest first, ending at the
+    current month (or `end` for deterministic tests)."""
+    import datetime as _dt
+    end = end or _dt.date.today()
+    labels = []
+    y, mo = end.year, end.month
+    for _ in range(n):
+        labels.append(_dt.date(y, mo, 1).strftime("%b %Y"))
+        mo -= 1
+        if mo == 0:
+            mo = 12
+            y -= 1
+    return list(reversed(labels))
+
+
+def risk_trend(theme: str, end=None) -> dict | None:
+    """Return the 12-month risk-signal trend for a theme, or None if not seeded.
+
+    {"theme", "points": [{"month","value","direction","strength"}...],
+     "latest": {direction,strength,value}, "delta": value change vs 12mo ago}.
+    Values are on the -3..+3 qualitative scale (never exposure).
+    """
+    series = _load_risk_trends().get((theme or "").strip().lower())
+    if not series:
+        return None
+    months = _trailing_months(len(series), end=end)
+    points = []
+    for mon, val in zip(months, series):
+        direction, strength = _INTENSITY_DIR.get(val, ("Neutral", "None"))
+        points.append({"month": mon, "value": val,
+                       "direction": direction, "strength": strength})
+    latest = points[-1]
+    return {"theme": theme, "points": points,
+            "latest": {"direction": latest["direction"],
+                       "strength": latest["strength"], "value": latest["value"]},
+            "delta": series[-1] - series[0]}
+
+
 def generate_taxonomy(theme: str, n: int = _DEFAULT_SUBS, force_refresh: bool = False,
                       existing: list | None = None) -> dict:
     """Expand a theme into a taxonomy of n sub-themes via a single Groq call.
