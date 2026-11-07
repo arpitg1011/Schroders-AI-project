@@ -151,6 +151,42 @@ def _resolve_taxonomy(theme: str, n: int, portfolio_df, segments,
             "taxonomy": {"theme": theme, "layer1": merged}, "notice": notice}
 
 
+def _compare_theme_summary(theme: str, portfolio_df, segments,
+                           default_n: int = engine._DEFAULT_SUBS) -> dict:
+    """Resolve + analyze a theme and return a compact summary for the
+    Comparison tab. Uses the same cache/preset path as the main flow, so preset
+    themes return instantly. Returns {ok, summary} or a handled error dict.
+
+    summary keys mirror metrics shown elsewhere (Overview KPIs + Contributors):
+      theme, portfolio_exposure, portfolio_band, benchmark_exposure,
+      benchmark_band, active_tilt, direction, top (list of {company, contribution}).
+    """
+    theme = (theme or "").strip()
+    if not theme:
+        return {"ok": False, "message": "Empty theme."}
+    tax_res = _resolve_taxonomy(theme, default_n, portfolio_df, segments,
+                                force_refresh=False)
+    if not tax_res["ok"]:
+        return {"ok": False, "message": tax_res.get("message", "Could not resolve theme."),
+                "error_code": tax_res.get("error_code")}
+    result = engine.analyze_portfolio(portfolio_df, segments, tax_res["taxonomy"])
+    m = result["metrics"]
+    tilt = m["active_tilt"]
+    direction = "Overweight" if tilt > 0 else ("Underweight" if tilt < 0 else "Neutral")
+    top = [{"company": c["company"], "contribution": round(c["contribution"], 2)}
+           for c in m["contributions"] if c["contribution"] > 0][:5]
+    return {"ok": True, "summary": {
+        "theme": tax_res["taxonomy"].get("theme", theme),
+        "portfolio_exposure": m["portfolio_thematic_exposure"],
+        "portfolio_band": m.get("portfolio_band", "-"),
+        "benchmark_exposure": m["benchmark_exposure"],
+        "benchmark_band": m.get("benchmark_band", "-"),
+        "active_tilt": tilt,
+        "direction": direction,
+        "top": top,
+    }}
+
+
 def _apply_curation(theme: str, kept_names: list, portfolio_df, segments) -> dict:
     """Trim the current analysis to the chosen sub-themes, re-score, persist.
 
@@ -892,14 +928,6 @@ def section_company(analysis: dict):
         if not seg_df.empty:
             st.dataframe(seg_df, use_container_width=True, hide_index=True)
 
-    if sr["evidence_snippet"]:
-        st.markdown('<div class="panel-title">Supporting Evidence</div>', unsafe_allow_html=True)
-        st.markdown(
-            f'<div class="panel" style="border-left:4px solid {T.GOLD};">'
-            f'<em>&ldquo;{sr["evidence_snippet"]}&rdquo;</em></div>',
-            unsafe_allow_html=True,
-        )
-
     # Source traceability: show where the data came from (Schroders brief).
     with st.expander("Source & traceability"):
         st.markdown(
@@ -911,6 +939,115 @@ def section_company(analysis: dict):
             "- Revenue weights come from reported segment revenue (negatives and "
             "elimination/write-off lines are cleaned to zero before weighting)."
         )
+
+
+def section_comparison(analysis: dict, portfolio_df, segments):
+    """Compare the summarized view of up to 3 themes side by side.
+
+    Slot 1 auto-fills with the currently-open theme. Slots 2 and 3 are chosen
+    from the user's favourites (dropdown) or typed free-text (which the backend
+    resolves + analyzes - instant for preset/cached themes). Metrics shown are
+    exactly those already on Overview (exposure / benchmark / tilt + bands) and
+    Contributors (top 5 by contribution) - nothing new is invented here.
+    """
+    st.markdown('<div class="panel-title">Theme Comparison</div>'
+                '<div class="panel-sub">Compare up to three themes side by side. '
+                'Slot 1 is the theme you have open; pick the others from your '
+                'favourites or type any theme.</div>', unsafe_allow_html=True)
+
+    current = (analysis.get("taxonomy", {}) or {}).get("theme", "").strip()
+    favourites = _get_favourites()
+    fav_options = ["(none)"] + favourites
+
+    # --- Slot pickers ---
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown(f'<div class="kpi-label">Theme 1 (current)</div>',
+                    unsafe_allow_html=True)
+        st.text_input("Theme 1", value=current, key="cmp_t1",
+                      label_visibility="collapsed",
+                      placeholder="Analyze a theme first")
+    with c2:
+        st.markdown('<div class="kpi-label">Theme 2</div>', unsafe_allow_html=True)
+        fav2 = st.selectbox("Favourite 2", fav_options, key="cmp_fav2",
+                            label_visibility="collapsed")
+        free2 = st.text_input("Theme 2 (or type)", key="cmp_t2",
+                              label_visibility="collapsed",
+                              placeholder="…or type a theme")
+    with c3:
+        st.markdown('<div class="kpi-label">Theme 3</div>', unsafe_allow_html=True)
+        fav3 = st.selectbox("Favourite 3", fav_options, key="cmp_fav3",
+                            label_visibility="collapsed")
+        free3 = st.text_input("Theme 3 (or type)", key="cmp_t3",
+                              label_visibility="collapsed",
+                              placeholder="…or type a theme")
+
+    # Free text wins over the dropdown when both are provided.
+    theme1 = st.session_state.get("cmp_t1", current).strip()
+    theme2 = (free2.strip() or (fav2 if fav2 != "(none)" else "")).strip()
+    theme3 = (free3.strip() or (fav3 if fav3 != "(none)" else "")).strip()
+
+    if not st.button("Compare", type="primary"):
+        st.caption("Choose themes and click Compare.")
+        return
+
+    # De-duplicate while preserving order; keep up to 3.
+    chosen, seen = [], set()
+    for t in (theme1, theme2, theme3):
+        k = t.lower()
+        if t and k not in seen:
+            seen.add(k)
+            chosen.append(t)
+    if not chosen:
+        st.warning("Enter at least one theme to compare.")
+        return
+
+    with st.spinner("Resolving and scoring the selected themes…"):
+        summaries = []
+        for t in chosen:
+            res = _compare_theme_summary(t, portfolio_df, segments)
+            summaries.append((t, res))
+
+    cols = st.columns(len(summaries))
+    for col, (theme_in, res) in zip(cols, summaries):
+        with col:
+            if not res["ok"]:
+                st.markdown(f'<div class="panel"><div class="panel-title" '
+                            f'style="font-size:15px;">{theme_in}</div>'
+                            f'<div class="panel-sub">Could not analyze: '
+                            f'{res.get("message","")}</div></div>',
+                            unsafe_allow_html=True)
+                continue
+            s = res["summary"]
+            tilt = s["active_tilt"]
+            tilt_cls = "pos" if tilt > 0 else ("neg" if tilt < 0 else "")
+            top_rows = "".join(
+                f'<tr><td style="padding:2px 0;color:{T.TEXT};">{r["company"][:22]}</td>'
+                f'<td style="padding:2px 0;text-align:right;color:{T.GOLD};'
+                f'font-weight:700;">{r["contribution"]:.2f}%</td></tr>'
+                for r in s["top"]) or \
+                f'<tr><td style="color:{T.MUTED};">No contributors</td><td></td></tr>'
+            st.markdown(
+                f'<div class="panel">'
+                f'<div class="panel-title" style="font-size:15px;">{s["theme"]}</div>'
+                f'<div style="margin:10px 0;">'
+                f'<div class="kpi-label">Portfolio Exposure</div>'
+                f'<div class="kpi-value">{s["portfolio_exposure"]:.0f}%</div>'
+                f'<div class="kpi-sub">{T.band_badge(s["portfolio_band"])} '
+                f'&nbsp; exact {s["portfolio_exposure"]:.2f}%</div></div>'
+                f'<div style="margin:10px 0;">'
+                f'<div class="kpi-label">Benchmark Exposure</div>'
+                f'<div class="kpi-value" style="font-size:20px;">{s["benchmark_exposure"]:.0f}%</div>'
+                f'<div class="kpi-sub">{T.band_badge(s["benchmark_band"])}</div></div>'
+                f'<div style="margin:10px 0;">'
+                f'<div class="kpi-label">Active Tilt</div>'
+                f'<div class="kpi-value" style="font-size:20px;">{tilt:+.0f}%</div>'
+                f'<div class="kpi-sub"><span class="{tilt_cls}">{s["direction"]}</span> '
+                f'vs benchmark</div></div>'
+                f'<div class="kpi-label" style="margin-top:12px;">Top contributors</div>'
+                f'<table style="width:100%;font-size:12px;border-collapse:collapse;">'
+                f'{top_rows}</table>'
+                f'</div>', unsafe_allow_html=True)
 
 
 _LOOKBACK_OPTIONS = {"Today": 1, "Last 3 days": 3, "Last week": 7, "Last month": 30}
@@ -1199,8 +1336,10 @@ def main():
     # clicks work normally afterwards.
     _manual = st.session_state.pop("_goto_tab_index", None)
     nav = option_menu(
-        None, ["Overview", "Taxonomy", "Contributors", "Company Detail", "News & Events"],
-        icons=["speedometer2", "diagram-3", "bar-chart-line", "building", "newspaper"],
+        None, ["Overview", "Taxonomy", "Contributors", "Company Detail",
+               "Comparison", "News & Events"],
+        icons=["speedometer2", "diagram-3", "bar-chart-line", "building",
+               "columns-gap", "newspaper"],
         orientation="horizontal",
         default_index=0,
         manual_select=_manual,
@@ -1224,6 +1363,8 @@ def main():
         section_contributors(analysis)
     elif nav == "Company Detail":
         section_company(analysis)
+    elif nav == "Comparison":
+        section_comparison(analysis, portfolio_df, segments)
     elif nav == "News & Events":
         section_news(analysis)
 
