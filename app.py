@@ -1259,8 +1259,11 @@ def main():
                 "My favourites", ["My favourites…"] + _favs,
                 index=0, key="fav_pick", label_visibility="collapsed",
             )
+            # Picking a favourite fills the box AND auto-runs at the current
+            # slider sub-theme count (no need to click Analyze).
             if pick != "My favourites…" and pick != st.session_state.get("theme", ""):
                 st.session_state["_pending_theme"] = pick
+                st.session_state["_run_analyze"] = True
                 st.rerun()
 
     tc = st.columns([4.2, 1.1, 1, 1.4])
@@ -1279,6 +1282,11 @@ def main():
     force_refresh = tc[3].checkbox("Regenerate", value=False,
                                    help="Bypass the saved taxonomy and ask the model for a "
                                         "fresh set of sub-themes.")
+
+    # A favourites-dropdown pick requests an immediate analysis (at the current
+    # slider sub-theme count), as if Analyze was clicked.
+    if st.session_state.pop("_run_analyze", False):
+        analyze = True
 
     portfolio_df = st.session_state.get("portfolio_df")
     if portfolio_df is None:
