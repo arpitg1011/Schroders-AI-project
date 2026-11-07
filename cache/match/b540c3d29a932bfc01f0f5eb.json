@@ -9,18 +9,14 @@
     "ALIBABA GRP HLDG (HK)": {},
     "BHP GROUP (AU)": {
       "Copper": {
-        "sub_theme": "Battery materials & mining",
+        "sub_theme": "Clean-Energy Critical Minerals",
         "reason": "sector relevance"
       }
     },
     "WISETECH GLOBAL": {},
     "DELTA ELECTRONICS": {
       "Power Supply and Spare Parts Business Group": {
-        "sub_theme": "Power electronics & drivetrain",
-        "reason": "sector relevance"
-      },
-      "Automation Business Group": {
-        "sub_theme": "Power electronics & drivetrain",
+        "sub_theme": "Solar & Power Inverters",
         "reason": "sector relevance"
       }
     },
@@ -35,44 +31,25 @@
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
     "RELIANCE INDUSTRIES": {},
-    "XIAOMI CORP B": {
-      "Smart EV, AI and Other New Initiatives": {
-        "sub_theme": "EV manufacturers",
-        "reason": "sector relevance"
-      }
-    },
+    "XIAOMI CORP B": {},
     "ICICI BANK": {},
     "OCBC BANK": {},
-    "HYUNDAI MOTOR CO": {
-      "Automotive": {
-        "sub_theme": "EV manufacturers",
-        "reason": "sector relevance"
-      },
-      "Finance": {
-        "sub_theme": "Auto finance",
-        "reason": "sector relevance"
-      }
-    },
+    "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
     "RIO TINTO LTD (AU)": {
-      "Aluminium & Lithium": {
-        "sub_theme": "Battery materials & mining",
+      "Copper": {
+        "sub_theme": "Clean-Energy Critical Minerals",
         "reason": "sector relevance"
       },
-      "Copper": {
-        "sub_theme": "Battery materials & mining",
+      "Aluminium & Lithium": {
+        "sub_theme": "Clean-Energy Critical Minerals",
         "reason": "sector relevance"
       }
     },
     "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {},
-    "KING YUAN ELECTRONICS CO": {
-      "Contract Electronics Manufacturing Services": {
-        "sub_theme": "Contract electronics manufacturing",
-        "reason": "sector relevance"
-      }
-    },
+    "KING YUAN ELECTRONICS CO": {},
     "SK SQUARE CO": {},
     "MEITUAN B": {},
     "BHARTI AIRTEL": {},
@@ -90,30 +67,21 @@
     "CSL": {},
     "WESFARMERS": {},
     "SINGAPORE TELECOM": {},
-    "LITE-ON TECHNOLOGY CORP": {
-      "Information and Consumer Electronics Sector": {
-        "sub_theme": "Power electronics & drivetrain",
-        "reason": "sector relevance"
-      }
-    },
+    "LITE-ON TECHNOLOGY CORP": {},
     "UNIMICRON TECHNOLOGY": {},
     "NETEASE": {},
     "GOODMAN GROUP": {},
-    "ASIA VITAL COMPONENTS": {
-      "Overseas Operating Department": {
-        "sub_theme": "Thermal management",
-        "reason": "sector relevance"
-      },
-      "Integrated Management Division": {
-        "sub_theme": "Thermal management",
-        "reason": "sector relevance"
-      }
-    },
+    "ASIA VITAL COMPONENTS": {},
     "QUANTA COMPUTER": {},
     "NAN YA PLASTIC": {},
     "HANMI SEMICONDUCTOR CO": {},
     "GLOBAL UNICHIP CORP": {},
-    "INFRATIL": {},
+    "INFRATIL": {
+      "ALL Other Segments & Corporate New Zealand": {
+        "sub_theme": "Renewable Infrastructure Investment",
+        "reason": "sector relevance"
+      }
+    },
     "ELITE MATERIAL CO": {},
     "MPI CORP": {},
     "HCL TECHNOLOGIES": {},
@@ -126,27 +94,14 @@
     "ZHONGJI INNO A(HK-C)": {},
     "WISTRON CORP": {},
     "ALCHIP TECHNOLOGIES": {},
-    "BIZLINK HOLDING": {
-      "Industrial Application Segment": {
-        "sub_theme": "Electronic components & connectors",
-        "reason": "sector relevance"
-      },
-      "Computer Transmission": {
-        "sub_theme": "Electronic components & connectors",
-        "reason": "sector relevance"
-      }
-    },
+    "BIZLINK HOLDING": {},
     "ZHEN DING TECHNOLOGY": {},
     "ASPEED TECHNOLOGY": {},
     "WIWYNN CORPORATION": {},
     "CAMBRICON TECH A (HK-C)": {},
     "DELTA ELECTRONICS THAI": {
       "Power Electronics": {
-        "sub_theme": "Power electronics & drivetrain",
-        "reason": "sector relevance"
-      },
-      "Mobility": {
-        "sub_theme": "EV manufacturers",
+        "sub_theme": "Solar & Power Inverters",
         "reason": "sector relevance"
       }
     },

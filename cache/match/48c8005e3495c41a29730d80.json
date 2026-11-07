@@ -1,0 +1,118 @@
+{
+  "_v": 1,
+  "match_map": {
+    "TAIWAN SEMICONDUCTOR MFG": {},
+    "SAMSUNG ELECTRONICS CO": {},
+    "SK HYNIX": {},
+    "COMMONWEALTH BANK OF AUS": {},
+    "TENCENT HOLDINGS LI (CN)": {},
+    "ALIBABA GRP HLDG (HK)": {},
+    "BHP GROUP (AU)": {
+      "Iron Ore": {
+        "sub_theme": "Export-Dependent Commodities",
+        "reason": "sector relevance"
+      }
+    },
+    "WISETECH GLOBAL": {
+      "Wtg Ex. E2open": {
+        "sub_theme": "Supply-Chain & Logistics Software",
+        "reason": "sector relevance"
+      },
+      "E2open": {
+        "sub_theme": "Supply-Chain & Logistics Software",
+        "reason": "sector relevance"
+      }
+    },
+    "DELTA ELECTRONICS": {},
+    "NATIONAL AUSTRALIA BANK": {},
+    "MEDIATEK INC": {},
+    "ICBC H": {},
+    "WESTPAC BANKING": {},
+    "HON HAI PRECISION IND CO": {},
+    "CHINA CONSTRUCTION BK H": {},
+    "DBS GROUP HOLDINGS": {},
+    "BANK OF CHINA H": {},
+    "SAMSUNG ELECTRO-MECH. CO": {},
+    "MACQUARIE GROUP": {},
+    "RELIANCE INDUSTRIES": {
+      "Oil to Chemicals (O2C)": {
+        "sub_theme": "Oil Refining & Petrochemicals",
+        "reason": "sector relevance"
+      },
+      "Oil and Gas": {
+        "sub_theme": "Crude Oil & Tanker Transport",
+        "reason": "sector relevance"
+      }
+    },
+    "XIAOMI CORP B": {},
+    "ICICI BANK": {},
+    "OCBC BANK": {},
+    "HYUNDAI MOTOR CO": {},
+    "CHROMA ATE": {},
+    "TATA CONSULTANCY": {},
+    "RIO TINTO LTD (AU)": {
+      "Iron Ore": {
+        "sub_theme": "Export-Dependent Commodities",
+        "reason": "sector relevance"
+      }
+    },
+    "UNITED MICROELECTRONICS": {},
+    "ANZ GROUP HOLDINGS": {},
+    "KING YUAN ELECTRONICS CO": {},
+    "SK SQUARE CO": {},
+    "MEITUAN B": {},
+    "BHARTI AIRTEL": {},
+    "HDFC BANK": {},
+    "AIA GROUP": {},
+    "BAIDU (HK)": {},
+    "INFOSYS": {},
+    "LENOVO GROUP": {},
+    "HONGKONG EXCH & CLEARING": {},
+    "GIGABYTE TECHNOLOGY CO": {},
+    "KB FINANCIAL GROUP": {},
+    "GOLD CIRCUIT ELECTRONICS": {},
+    "GDS HOLDINGS A (HK)": {},
+    "ASE TECHNOLOGY HOLDING": {},
+    "CSL": {},
+    "WESFARMERS": {},
+    "SINGAPORE TELECOM": {},
+    "LITE-ON TECHNOLOGY CORP": {},
+    "UNIMICRON TECHNOLOGY": {},
+    "NETEASE": {},
+    "GOODMAN GROUP": {},
+    "ASIA VITAL COMPONENTS": {},
+    "QUANTA COMPUTER": {},
+    "NAN YA PLASTIC": {},
+    "HANMI SEMICONDUCTOR CO": {},
+    "GLOBAL UNICHIP CORP": {},
+    "INFRATIL": {},
+    "ELITE MATERIAL CO": {},
+    "MPI CORP": {},
+    "HCL TECHNOLOGIES": {},
+    "SAMSUNG SDS CO": {},
+    "NAVER": {},
+    "KUAISHOU TECHNOLOGY B": {},
+    "KING SLIDE WORKS CO": {},
+    "PING AN INSURANCE H": {},
+    "ACCTON TECHNOLOGY CORP": {},
+    "ZHONGJI INNO A(HK-C)": {},
+    "WISTRON CORP": {},
+    "ALCHIP TECHNOLOGIES": {},
+    "BIZLINK HOLDING": {},
+    "ZHEN DING TECHNOLOGY": {},
+    "ASPEED TECHNOLOGY": {},
+    "WIWYNN CORPORATION": {},
+    "CAMBRICON TECH A (HK-C)": {},
+    "DELTA ELECTRONICS THAI": {},
+    "KEPPEL": {
+      "Connectivity": {
+        "sub_theme": "Ports & Terminal Operators",
+        "reason": "sector relevance"
+      }
+    },
+    "PERSISTENT SYSTEMS": {},
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
+    "XERO (AU)": {}
+  }
+}

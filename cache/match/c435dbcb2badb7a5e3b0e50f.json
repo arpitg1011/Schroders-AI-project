@@ -5,18 +5,8 @@
     "SAMSUNG ELECTRONICS CO": {},
     "SK HYNIX": {},
     "COMMONWEALTH BANK OF AUS": {},
-    "TENCENT HOLDINGS LI (CN)": {
-      "Fintech and Business Services": {
-        "sub_theme": "Mobile wallets & fintech",
-        "reason": "sector relevance"
-      }
-    },
-    "ALIBABA GRP HLDG (HK)": {
-      "Alibaba China E-commerce Group": {
-        "sub_theme": "E-commerce platforms",
-        "reason": "sector relevance"
-      }
-    },
+    "TENCENT HOLDINGS LI (CN)": {},
+    "ALIBABA GRP HLDG (HK)": {},
     "BHP GROUP (AU)": {},
     "WISETECH GLOBAL": {},
     "DELTA ELECTRONICS": {},
@@ -26,37 +16,13 @@
     "WESTPAC BANKING": {},
     "HON HAI PRECISION IND CO": {},
     "CHINA CONSTRUCTION BK H": {},
-    "DBS GROUP HOLDINGS": {
-      "Consumer Banking/Wealth Management": {
-        "sub_theme": "Digital banking",
-        "reason": "sector relevance"
-      }
-    },
+    "DBS GROUP HOLDINGS": {},
     "BANK OF CHINA H": {},
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
-    "RELIANCE INDUSTRIES": {
-      "Digital Services": {
-        "sub_theme": "Mobile wallets & fintech",
-        "reason": "sector relevance"
-      },
-      "Retail": {
-        "sub_theme": "E-commerce platforms",
-        "reason": "sector relevance"
-      }
-    },
-    "XIAOMI CORP B": {
-      "Internet Services": {
-        "sub_theme": "Mobile wallets & fintech",
-        "reason": "sector relevance"
-      }
-    },
-    "ICICI BANK": {
-      "Retail banking": {
-        "sub_theme": "Digital banking",
-        "reason": "sector relevance"
-      }
-    },
+    "RELIANCE INDUSTRIES": {},
+    "XIAOMI CORP B": {},
+    "ICICI BANK": {},
     "OCBC BANK": {},
     "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {},
@@ -66,31 +32,16 @@
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
     "SK SQUARE CO": {},
-    "MEITUAN B": {
-      "Core Local Commerce": {
-        "sub_theme": "E-commerce platforms",
-        "reason": "sector relevance"
-      }
-    },
+    "MEITUAN B": {},
     "BHARTI AIRTEL": {},
-    "HDFC BANK": {
-      "Retail Banking - Digital Banking": {
-        "sub_theme": "Digital banking",
-        "reason": "sector relevance"
-      }
-    },
+    "HDFC BANK": {},
     "AIA GROUP": {},
     "BAIDU (HK)": {},
     "INFOSYS": {},
     "LENOVO GROUP": {},
     "HONGKONG EXCH & CLEARING": {},
     "GIGABYTE TECHNOLOGY CO": {},
-    "KB FINANCIAL GROUP": {
-      "Credit Card": {
-        "sub_theme": "Card networks & issuing",
-        "reason": "sector relevance"
-      }
-    },
+    "KB FINANCIAL GROUP": {},
     "GOLD CIRCUIT ELECTRONICS": {},
     "GDS HOLDINGS A (HK)": {},
     "ASE TECHNOLOGY HOLDING": {},
@@ -109,18 +60,19 @@
     "INFRATIL": {},
     "ELITE MATERIAL CO": {},
     "MPI CORP": {},
-    "HCL TECHNOLOGIES": {},
-    "SAMSUNG SDS CO": {},
-    "NAVER": {
-      "Fintech": {
-        "sub_theme": "Mobile wallets & fintech",
-        "reason": "sector relevance"
-      },
-      "Commerce": {
-        "sub_theme": "E-commerce platforms",
+    "HCL TECHNOLOGIES": {
+      "HCL Software": {
+        "sub_theme": "Secure Software Products",
         "reason": "sector relevance"
       }
     },
+    "SAMSUNG SDS CO": {
+      "IT Service": {
+        "sub_theme": "Security IT Services",
+        "reason": "sector relevance"
+      }
+    },
+    "NAVER": {},
     "KUAISHOU TECHNOLOGY B": {},
     "KING SLIDE WORKS CO": {},
     "PING AN INSURANCE H": {},

@@ -25,13 +25,13 @@
     "ICICI BANK": {},
     "OCBC BANK": {},
     "HYUNDAI MOTOR CO": {},
-    "CHROMA ATE": {},
-    "TATA CONSULTANCY": {
-      "Banking, Financial Services and Insurance": {
-        "sub_theme": "IT security services",
+    "CHROMA ATE": {
+      "Measuring Instruments Business": {
+        "sub_theme": "Military Test & Measurement",
         "reason": "sector relevance"
       }
     },
+    "TATA CONSULTANCY": {},
     "RIO TINTO LTD (AU)": {},
     "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {},
@@ -42,12 +42,7 @@
     "HDFC BANK": {},
     "AIA GROUP": {},
     "BAIDU (HK)": {},
-    "INFOSYS": {
-      "Financial Services": {
-        "sub_theme": "IT security services",
-        "reason": "sector relevance"
-      }
-    },
+    "INFOSYS": {},
     "LENOVO GROUP": {},
     "HONGKONG EXCH & CLEARING": {},
     "GIGABYTE TECHNOLOGY CO": {},
@@ -70,28 +65,9 @@
     "INFRATIL": {},
     "ELITE MATERIAL CO": {},
     "MPI CORP": {},
-    "HCL TECHNOLOGIES": {
-      "HCL Software": {
-        "sub_theme": "Security software",
-        "reason": "sector relevance"
-      },
-      "IT and Business Services": {
-        "sub_theme": "IT security services",
-        "reason": "sector relevance"
-      }
-    },
-    "SAMSUNG SDS CO": {
-      "IT Service": {
-        "sub_theme": "IT security services",
-        "reason": "sector relevance"
-      }
-    },
-    "NAVER": {
-      "Enterprise": {
-        "sub_theme": "Cloud security",
-        "reason": "sector relevance"
-      }
-    },
+    "HCL TECHNOLOGIES": {},
+    "SAMSUNG SDS CO": {},
+    "NAVER": {},
     "KUAISHOU TECHNOLOGY B": {},
     "KING SLIDE WORKS CO": {},
     "PING AN INSURANCE H": {},
@@ -106,24 +82,9 @@
     "CAMBRICON TECH A (HK-C)": {},
     "DELTA ELECTRONICS THAI": {},
     "KEPPEL": {},
-    "PERSISTENT SYSTEMS": {
-      "Software, Hi-Tech and Emerging Industries": {
-        "sub_theme": "Security software",
-        "reason": "sector relevance"
-      }
-    },
-    "TECH MAHINDRA": {
-      "Information Technology (IT) Services": {
-        "sub_theme": "IT security services",
-        "reason": "sector relevance"
-      }
-    },
-    "WIPRO": {
-      "IT Services - Americas 1": {
-        "sub_theme": "IT security services",
-        "reason": "sector relevance"
-      }
-    },
+    "PERSISTENT SYSTEMS": {},
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
     "XERO (AU)": {}
   }
 }

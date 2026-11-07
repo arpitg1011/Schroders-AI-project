@@ -6,15 +6,11 @@
     "SK HYNIX": {},
     "COMMONWEALTH BANK OF AUS": {
       "Retail Banking Services (Incl. Bankwest)": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
       "Business Banking": {
-        "sub_theme": "Commercial & retail banks",
-        "reason": "sector relevance"
-      },
-      "Institutional Banking and Markets": {
-        "sub_theme": "Capital markets & trading",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
@@ -25,82 +21,74 @@
     "DELTA ELECTRONICS": {},
     "NATIONAL AUSTRALIA BANK": {
       "Business and Private Banking": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
       "Personal Banking": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
     "MEDIATEK INC": {},
     "ICBC H": {
       "Corporate Banking": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
       "Personal Banking": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
     "WESTPAC BANKING": {
       "Consumer": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
-      "Institutional": {
-        "sub_theme": "Capital markets & trading",
+      "Business & Wealth": {
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
     "HON HAI PRECISION IND CO": {},
     "CHINA CONSTRUCTION BK H": {
       "Corporate Banking": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
-      "Treasury Business": {
-        "sub_theme": "Treasury operations",
+      "Personal Banking": {
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
     "DBS GROUP HOLDINGS": {
-      "Institutional Banking": {
-        "sub_theme": "Commercial & retail banks",
+      "Consumer Banking/Wealth Management": {
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
-      "Markets Trading": {
-        "sub_theme": "Capital markets & trading",
+      "Institutional Banking": {
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
     "BANK OF CHINA H": {
       "Corporate Banking": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
-      "Treasury Operations": {
-        "sub_theme": "Treasury operations",
-        "reason": "sector relevance"
-      },
-      "Insurance": {
-        "sub_theme": "Insurance",
+      "Personal Banking": {
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {
       "Banking and Financial Services": {
-        "sub_theme": "Commercial & retail banks",
-        "reason": "sector relevance"
-      },
-      "Macquarie Asset Management": {
-        "sub_theme": "Asset & wealth management",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
       "Commodities and Global Markets": {
-        "sub_theme": "Capital markets & trading",
+        "sub_theme": "Capital Markets & Trading",
         "reason": "sector relevance"
       }
     },
@@ -108,35 +96,27 @@
     "XIAOMI CORP B": {},
     "ICICI BANK": {
       "Retail banking": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
-      "Treasury": {
-        "sub_theme": "Treasury operations",
-        "reason": "sector relevance"
-      },
-      "Life insurance": {
-        "sub_theme": "Insurance",
+      "Wholesale banking": {
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
     "OCBC BANK": {
       "Global Wholesale Banking": {
-        "sub_theme": "Commercial & retail banks",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
-      "Global Markets": {
-        "sub_theme": "Capital markets & trading",
-        "reason": "sector relevance"
-      },
-      "Insurance": {
-        "sub_theme": "Insurance",
+      "Global Consumer/Private Banking": {
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
     "HYUNDAI MOTOR CO": {
       "Finance": {
-        "sub_theme": "Consumer & auto finance",
+        "sub_theme": "Auto & Equipment Finance",
         "reason": "sector relevance"
       }
     },
@@ -146,11 +126,7 @@
     "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {
       "Australia Commercial": {
-        "sub_theme": "Commercial & retail banks",
-        "reason": "sector relevance"
-      },
-      "Institutional": {
-        "sub_theme": "Capital markets & trading",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
@@ -159,46 +135,33 @@
     "MEITUAN B": {},
     "BHARTI AIRTEL": {},
     "HDFC BANK": {
-      "Wholesale Banking": {
-        "sub_theme": "Commercial & retail banks",
+      "Retail Banking - Non Digital Banking": {
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
-      "Treasury": {
-        "sub_theme": "Treasury operations",
+      "Wholesale Banking": {
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       }
     },
-    "AIA GROUP": {
-      "Writes Life Insurance": {
-        "sub_theme": "Insurance",
-        "reason": "sector relevance"
-      }
-    },
+    "AIA GROUP": {},
     "BAIDU (HK)": {},
     "INFOSYS": {},
     "LENOVO GROUP": {},
     "HONGKONG EXCH & CLEARING": {
-      "Cash": {
-        "sub_theme": "Exchanges & market infrastructure",
-        "reason": "sector relevance"
-      },
       "Equity and Financial Derivatives": {
-        "sub_theme": "Exchanges & market infrastructure",
+        "sub_theme": "Exchanges & Clearing",
         "reason": "sector relevance"
       }
     },
     "GIGABYTE TECHNOLOGY CO": {},
     "KB FINANCIAL GROUP": {
       "Banking Business - Corporate Banking": {
-        "sub_theme": "Commercial & retail banks",
-        "reason": "sector relevance"
-      },
-      "Securities": {
-        "sub_theme": "Capital markets & trading",
+        "sub_theme": "Net-Interest-Margin Banks",
         "reason": "sector relevance"
       },
       "Credit Card": {
-        "sub_theme": "Credit cards",
+        "sub_theme": "Rate-Exposed Credit Cards",
         "reason": "sector relevance"
       }
     },
@@ -211,12 +174,7 @@
     "LITE-ON TECHNOLOGY CORP": {},
     "UNIMICRON TECHNOLOGY": {},
     "NETEASE": {},
-    "GOODMAN GROUP": {
-      "Property investment": {
-        "sub_theme": "Real estate & REITs",
-        "reason": "sector relevance"
-      }
-    },
+    "GOODMAN GROUP": {},
     "ASIA VITAL COMPONENTS": {},
     "QUANTA COMPUTER": {},
     "NAN YA PLASTIC": {},
@@ -230,20 +188,7 @@
     "NAVER": {},
     "KUAISHOU TECHNOLOGY B": {},
     "KING SLIDE WORKS CO": {},
-    "PING AN INSURANCE H": {
-      "Banking": {
-        "sub_theme": "Commercial & retail banks",
-        "reason": "sector relevance"
-      },
-      "Life and Health Insurance": {
-        "sub_theme": "Insurance",
-        "reason": "sector relevance"
-      },
-      "Asset Management Business": {
-        "sub_theme": "Asset & wealth management",
-        "reason": "sector relevance"
-      }
-    },
+    "PING AN INSURANCE H": {},
     "ACCTON TECHNOLOGY CORP": {},
     "ZHONGJI INNO A(HK-C)": {},
     "WISTRON CORP": {},

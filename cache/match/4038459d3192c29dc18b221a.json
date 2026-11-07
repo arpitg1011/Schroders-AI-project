@@ -1,29 +1,20 @@
 {
   "_v": 1,
   "match_map": {
-    "TAIWAN SEMICONDUCTOR MFG": {
-      "Foundry": {
-        "sub_theme": "Semiconductor water use",
-        "reason": "sector relevance"
-      }
-    },
+    "TAIWAN SEMICONDUCTOR MFG": {},
     "SAMSUNG ELECTRONICS CO": {},
     "SK HYNIX": {},
     "COMMONWEALTH BANK OF AUS": {},
     "TENCENT HOLDINGS LI (CN)": {},
     "ALIBABA GRP HLDG (HK)": {},
-    "BHP GROUP (AU)": {
-      "Copper": {
-        "sub_theme": "Mining & water-intensive extraction",
-        "reason": "sector relevance"
-      },
-      "Iron Ore": {
-        "sub_theme": "Mining & water-intensive extraction",
+    "BHP GROUP (AU)": {},
+    "WISETECH GLOBAL": {},
+    "DELTA ELECTRONICS": {
+      "Automation Business Group": {
+        "sub_theme": "EV Power Electronics & Drivetrain",
         "reason": "sector relevance"
       }
     },
-    "WISETECH GLOBAL": {},
-    "DELTA ELECTRONICS": {},
     "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {},
     "ICBC H": {},
@@ -34,34 +25,30 @@
     "BANK OF CHINA H": {},
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
-    "RELIANCE INDUSTRIES": {
-      "Oil to Chemicals (O2C)": {
-        "sub_theme": "Industrial water use",
+    "RELIANCE INDUSTRIES": {},
+    "XIAOMI CORP B": {
+      "Smart EV, AI and Other New Initiatives": {
+        "sub_theme": "EV Manufacturers",
         "reason": "sector relevance"
       }
     },
-    "XIAOMI CORP B": {},
     "ICICI BANK": {},
     "OCBC BANK": {},
-    "HYUNDAI MOTOR CO": {},
+    "HYUNDAI MOTOR CO": {
+      "Automotive": {
+        "sub_theme": "EV Manufacturers",
+        "reason": "sector relevance"
+      }
+    },
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
     "RIO TINTO LTD (AU)": {
-      "Copper": {
-        "sub_theme": "Mining & water-intensive extraction",
-        "reason": "sector relevance"
-      },
-      "Iron Ore": {
-        "sub_theme": "Mining & water-intensive extraction",
+      "Aluminium & Lithium": {
+        "sub_theme": "Battery Raw Materials",
         "reason": "sector relevance"
       }
     },
-    "UNITED MICROELECTRONICS": {
-      "Wafer Fabrication": {
-        "sub_theme": "Semiconductor water use",
-        "reason": "sector relevance"
-      }
-    },
+    "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
     "SK SQUARE CO": {},
@@ -79,37 +66,23 @@
     "GDS HOLDINGS A (HK)": {},
     "ASE TECHNOLOGY HOLDING": {},
     "CSL": {},
-    "WESFARMERS": {
-      "Wes CEF": {
-        "sub_theme": "Chemicals & materials",
-        "reason": "sector relevance"
-      }
-    },
+    "WESFARMERS": {},
     "SINGAPORE TELECOM": {},
     "LITE-ON TECHNOLOGY CORP": {},
     "UNIMICRON TECHNOLOGY": {},
     "NETEASE": {},
     "GOODMAN GROUP": {},
-    "ASIA VITAL COMPONENTS": {},
-    "QUANTA COMPUTER": {},
-    "NAN YA PLASTIC": {
-      "Raw Materials for Plastics": {
-        "sub_theme": "Chemicals & materials",
-        "reason": "sector relevance"
-      },
-      "Electronic Materials": {
-        "sub_theme": "Chemicals & materials",
+    "ASIA VITAL COMPONENTS": {
+      "Overseas Operating Department": {
+        "sub_theme": "EV Thermal Management",
         "reason": "sector relevance"
       }
     },
+    "QUANTA COMPUTER": {},
+    "NAN YA PLASTIC": {},
     "HANMI SEMICONDUCTOR CO": {},
     "GLOBAL UNICHIP CORP": {},
-    "INFRATIL": {
-      "ALL Other Segments & Corporate New Zealand": {
-        "sub_theme": "Power generation water use",
-        "reason": "sector relevance"
-      }
-    },
+    "INFRATIL": {},
     "ELITE MATERIAL CO": {},
     "MPI CORP": {},
     "HCL TECHNOLOGIES": {},
@@ -122,12 +95,26 @@
     "ZHONGJI INNO A(HK-C)": {},
     "WISTRON CORP": {},
     "ALCHIP TECHNOLOGIES": {},
-    "BIZLINK HOLDING": {},
+    "BIZLINK HOLDING": {
+      "Industrial Application Segment": {
+        "sub_theme": "EV Wiring & Connectors",
+        "reason": "sector relevance"
+      }
+    },
     "ZHEN DING TECHNOLOGY": {},
     "ASPEED TECHNOLOGY": {},
     "WIWYNN CORPORATION": {},
     "CAMBRICON TECH A (HK-C)": {},
-    "DELTA ELECTRONICS THAI": {},
+    "DELTA ELECTRONICS THAI": {
+      "Power Electronics": {
+        "sub_theme": "EV Power Electronics & Drivetrain",
+        "reason": "sector relevance"
+      },
+      "Mobility": {
+        "sub_theme": "EV Manufacturers",
+        "reason": "sector relevance"
+      }
+    },
     "KEPPEL": {},
     "PERSISTENT SYSTEMS": {},
     "TECH MAHINDRA": {},

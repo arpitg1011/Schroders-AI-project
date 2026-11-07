@@ -3,20 +3,20 @@
   "match_map": {
     "TAIWAN SEMICONDUCTOR MFG": {
       "Foundry": {
-        "sub_theme": "Foundry Services",
-        "reason": "core foundry business"
+        "sub_theme": "Semiconductor Foundries",
+        "reason": "sector relevance"
       }
     },
     "SAMSUNG ELECTRONICS CO": {
       "Device Solutions (DS)": {
-        "sub_theme": "Integrated Device Manufacturers",
-        "reason": "semiconductor device manufacturing"
+        "sub_theme": "Memory Chip Producers",
+        "reason": "sector relevance"
       }
     },
     "SK HYNIX": {
       "Manufacture and Sale of Semiconductor Products": {
         "sub_theme": "Memory Chip Producers",
-        "reason": "memory chip manufacturing"
+        "reason": "sector relevance"
       }
     },
     "COMMONWEALTH BANK OF AUS": {},
@@ -28,8 +28,8 @@
     "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {
       "Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": {
-        "sub_theme": "Logic Chip Makers",
-        "reason": "mobile SoC design"
+        "sub_theme": "Fabless Chip Designers",
+        "reason": "sector relevance"
       }
     },
     "ICBC H": {},
@@ -38,12 +38,7 @@
     "CHINA CONSTRUCTION BK H": {},
     "DBS GROUP HOLDINGS": {},
     "BANK OF CHINA H": {},
-    "SAMSUNG ELECTRO-MECH. CO": {
-      "Package Solution": {
-        "sub_theme": "Semiconductor Packaging & Testing",
-        "reason": "semiconductor packaging services"
-      }
-    },
+    "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
     "RELIANCE INDUSTRIES": {},
     "XIAOMI CORP B": {},
@@ -52,24 +47,25 @@
     "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {
       "Measuring Instruments Business": {
-        "sub_theme": "Semiconductor Equipment Suppliers",
-        "reason": "semiconductor test equipment"
-      },
-      "Automatic Equipment Department": {
-        "sub_theme": "Semiconductor Equipment Suppliers",
-        "reason": "semiconductor equipment supplier"
+        "sub_theme": "Semiconductor Packaging & Testing",
+        "reason": "sector relevance"
       }
     },
     "TATA CONSULTANCY": {},
     "RIO TINTO LTD (AU)": {},
     "UNITED MICROELECTRONICS": {
       "Wafer Fabrication": {
-        "sub_theme": "Integrated Device Manufacturers",
-        "reason": "wafer fab"
+        "sub_theme": "Semiconductor Foundries",
+        "reason": "sector relevance"
       }
     },
     "ANZ GROUP HOLDINGS": {},
-    "KING YUAN ELECTRONICS CO": {},
+    "KING YUAN ELECTRONICS CO": {
+      "Contract Electronics Manufacturing Services": {
+        "sub_theme": "Semiconductor Packaging & Testing",
+        "reason": "sector relevance"
+      }
+    },
     "SK SQUARE CO": {},
     "MEITUAN B": {},
     "BHARTI AIRTEL": {},
@@ -81,37 +77,66 @@
     "HONGKONG EXCH & CLEARING": {},
     "GIGABYTE TECHNOLOGY CO": {},
     "KB FINANCIAL GROUP": {},
-    "GOLD CIRCUIT ELECTRONICS": {},
+    "GOLD CIRCUIT ELECTRONICS": {
+      "Manufacturing and Sales of Printed Circuit Boards": {
+        "sub_theme": "Printed Circuit Boards & Substrates",
+        "reason": "sector relevance"
+      }
+    },
     "GDS HOLDINGS A (HK)": {},
-    "ASE TECHNOLOGY HOLDING": {},
+    "ASE TECHNOLOGY HOLDING": {
+      "Packaging": {
+        "sub_theme": "Semiconductor Packaging & Testing",
+        "reason": "sector relevance"
+      },
+      "Testing": {
+        "sub_theme": "Semiconductor Packaging & Testing",
+        "reason": "sector relevance"
+      }
+    },
     "CSL": {},
     "WESFARMERS": {},
     "SINGAPORE TELECOM": {},
     "LITE-ON TECHNOLOGY CORP": {},
-    "UNIMICRON TECHNOLOGY": {},
+    "UNIMICRON TECHNOLOGY": {
+      "Taiwan": {
+        "sub_theme": "Printed Circuit Boards & Substrates",
+        "reason": "sector relevance"
+      }
+    },
     "NETEASE": {},
     "GOODMAN GROUP": {},
     "ASIA VITAL COMPONENTS": {},
     "QUANTA COMPUTER": {},
-    "NAN YA PLASTIC": {},
+    "NAN YA PLASTIC": {
+      "Electronic Materials": {
+        "sub_theme": "Printed Circuit Boards & Substrates",
+        "reason": "sector relevance"
+      }
+    },
     "HANMI SEMICONDUCTOR CO": {
       "Semiconductors": {
-        "sub_theme": "Integrated Device Manufacturers",
-        "reason": "core semiconductor business"
+        "sub_theme": "Semiconductor Equipment Suppliers",
+        "reason": "sector relevance"
       }
     },
     "GLOBAL UNICHIP CORP": {
       "Semiconductor Equipment and Services": {
-        "sub_theme": "Semiconductor Equipment Suppliers",
-        "reason": "equipment supplier"
+        "sub_theme": "Chip Design IP & EDA",
+        "reason": "sector relevance"
       }
     },
     "INFRATIL": {},
-    "ELITE MATERIAL CO": {},
+    "ELITE MATERIAL CO": {
+      "Domestic Segment": {
+        "sub_theme": "Silicon & Electronic Materials",
+        "reason": "sector relevance"
+      }
+    },
     "MPI CORP": {
       "Semiconductor Equipment and Services": {
         "sub_theme": "Semiconductor Equipment Suppliers",
-        "reason": "equipment supplier"
+        "reason": "sector relevance"
       }
     },
     "HCL TECHNOLOGIES": {},
@@ -125,39 +150,39 @@
     "WISTRON CORP": {},
     "ALCHIP TECHNOLOGIES": {
       "Semiconductors": {
-        "sub_theme": "Integrated Device Manufacturers",
-        "reason": "generic semiconductor manufacturing"
+        "sub_theme": "Chip Design IP & EDA",
+        "reason": "sector relevance"
       }
     },
     "BIZLINK HOLDING": {},
-    "ZHEN DING TECHNOLOGY": {},
+    "ZHEN DING TECHNOLOGY": {
+      "The Manufacture of Various Types of Printed Circuit Boards": {
+        "sub_theme": "Printed Circuit Boards & Substrates",
+        "reason": "sector relevance"
+      }
+    },
     "ASPEED TECHNOLOGY": {
       "Semiconductors": {
-        "sub_theme": "Logic Chip Makers",
-        "reason": "designs logic ASICs"
+        "sub_theme": "Fabless Chip Designers",
+        "reason": "sector relevance"
       }
     },
     "WIWYNN CORPORATION": {},
     "CAMBRICON TECH A (HK-C)": {
       "Cloud Product Line": {
-        "sub_theme": "Logic Chip Makers",
-        "reason": "AI processor product"
+        "sub_theme": "Fabless Chip Designers",
+        "reason": "sector relevance"
       },
       "Edge Product Line": {
-        "sub_theme": "Logic Chip Makers",
-        "reason": "AI processor product"
+        "sub_theme": "Fabless Chip Designers",
+        "reason": "sector relevance"
       },
       "IP Licensing and Software": {
-        "sub_theme": "Logic Chip Makers",
-        "reason": "Chip IP licensing"
+        "sub_theme": "Chip Design IP & EDA",
+        "reason": "sector relevance"
       }
     },
-    "DELTA ELECTRONICS THAI": {
-      "Power Electronics": {
-        "sub_theme": "Power Semiconductor Companies",
-        "reason": "Power semiconductor products"
-      }
-    },
+    "DELTA ELECTRONICS THAI": {},
     "KEPPEL": {},
     "PERSISTENT SYSTEMS": {},
     "TECH MAHINDRA": {},

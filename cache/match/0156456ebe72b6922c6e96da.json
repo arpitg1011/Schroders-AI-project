@@ -7,62 +7,32 @@
     "COMMONWEALTH BANK OF AUS": {},
     "TENCENT HOLDINGS LI (CN)": {},
     "ALIBABA GRP HLDG (HK)": {},
-    "BHP GROUP (AU)": {
-      "Copper": {
-        "sub_theme": "Critical materials",
-        "reason": "sector relevance"
-      }
-    },
+    "BHP GROUP (AU)": {},
     "WISETECH GLOBAL": {},
-    "DELTA ELECTRONICS": {
-      "Power Supply and Spare Parts Business Group": {
-        "sub_theme": "Power systems",
-        "reason": "sector relevance"
-      }
-    },
+    "DELTA ELECTRONICS": {},
     "NATIONAL AUSTRALIA BANK": {},
-    "MEDIATEK INC": {
-      "Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": {
-        "sub_theme": "Communications equipment",
-        "reason": "sector relevance"
-      }
-    },
+    "MEDIATEK INC": {},
     "ICBC H": {},
     "WESTPAC BANKING": {},
-    "HON HAI PRECISION IND CO": {
-      "FII Subgroup": {
-        "sub_theme": "Contract manufacturing",
-        "reason": "sector relevance"
-      }
-    },
+    "HON HAI PRECISION IND CO": {},
     "CHINA CONSTRUCTION BK H": {},
     "DBS GROUP HOLDINGS": {},
     "BANK OF CHINA H": {},
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
-    "RELIANCE INDUSTRIES": {},
+    "RELIANCE INDUSTRIES": {
+      "Oil and Gas": {
+        "sub_theme": "US Fossil Fuel & Drilling Policy",
+        "reason": "sector relevance"
+      }
+    },
     "XIAOMI CORP B": {},
     "ICICI BANK": {},
     "OCBC BANK": {},
     "HYUNDAI MOTOR CO": {},
-    "CHROMA ATE": {
-      "Measuring Instruments Business": {
-        "sub_theme": "Surveillance & sensors",
-        "reason": "sector relevance"
-      }
-    },
-    "TATA CONSULTANCY": {
-      "Manufacturing": {
-        "sub_theme": "IT & systems integration",
-        "reason": "sector relevance"
-      }
-    },
-    "RIO TINTO LTD (AU)": {
-      "Copper": {
-        "sub_theme": "Critical materials",
-        "reason": "sector relevance"
-      }
-    },
+    "CHROMA ATE": {},
+    "TATA CONSULTANCY": {},
+    "RIO TINTO LTD (AU)": {},
     "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
@@ -96,12 +66,7 @@
     "ELITE MATERIAL CO": {},
     "MPI CORP": {},
     "HCL TECHNOLOGIES": {},
-    "SAMSUNG SDS CO": {
-      "IT Service": {
-        "sub_theme": "IT & systems integration",
-        "reason": "sector relevance"
-      }
-    },
+    "SAMSUNG SDS CO": {},
     "NAVER": {},
     "KUAISHOU TECHNOLOGY B": {},
     "KING SLIDE WORKS CO": {},

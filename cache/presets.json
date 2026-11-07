@@ -3,73 +3,73 @@
     "theme": "semiconductors",
     "layer1": [
       {
+        "sub_industry": "Semiconductor Foundries",
+        "activities": [
+          "wafer fabrication",
+          "contract chip manufacturing"
+        ]
+      },
+      {
         "sub_industry": "Integrated Device Manufacturers",
         "activities": [
-          "fabricating wafers",
-          "selling ASICs"
-        ]
-      },
-      {
-        "sub_industry": "Foundry Services",
-        "activities": [
-          "contract chip production",
-          "scaling node capacity"
-        ]
-      },
-      {
-        "sub_industry": "Semiconductor Equipment Suppliers",
-        "activities": [
-          "selling lithography tools",
-          "maintaining fabs"
-        ]
-      },
-      {
-        "sub_industry": "Electronic Design Automation Software",
-        "activities": [
-          "providing design tools",
-          "licensing simulation software"
+          "chip design and manufacture",
+          "own-fab production"
         ]
       },
       {
         "sub_industry": "Memory Chip Producers",
         "activities": [
-          "manufacturing DRAM",
-          "selling NAND flash"
+          "DRAM",
+          "NAND flash"
         ]
       },
       {
-        "sub_industry": "Logic Chip Makers",
+        "sub_industry": "Fabless Chip Designers",
         "activities": [
-          "producing CPUs",
-          "delivering GPUs"
+          "IC design",
+          "ASIC design"
         ]
       },
       {
-        "sub_industry": "Analog & Mixed-Signal ICs",
+        "sub_industry": "Semiconductor Equipment Suppliers",
         "activities": [
-          "designing power amplifiers",
-          "selling sensor interfaces"
-        ]
-      },
-      {
-        "sub_industry": "Power Semiconductor Companies",
-        "activities": [
-          "producing SiC devices",
-          "supplying IGBT modules"
+          "lithography tools",
+          "wafer inspection"
         ]
       },
       {
         "sub_industry": "Semiconductor Packaging & Testing",
         "activities": [
-          "assembling die packages",
-          "conducting reliability tests"
+          "chip packaging",
+          "wafer testing"
         ]
       },
       {
-        "sub_industry": "Silicon Wafer Suppliers",
+        "sub_industry": "Chip Design IP & EDA",
         "activities": [
-          "growing silicon crystals",
-          "cutting wafers"
+          "IP licensing",
+          "design automation"
+        ]
+      },
+      {
+        "sub_industry": "Analog & Power Semiconductors",
+        "activities": [
+          "power management ICs",
+          "analog chips"
+        ]
+      },
+      {
+        "sub_industry": "Printed Circuit Boards & Substrates",
+        "activities": [
+          "IC substrates",
+          "semiconductor PCBs"
+        ]
+      },
+      {
+        "sub_industry": "Silicon & Electronic Materials",
+        "activities": [
+          "silicon wafers",
+          "semiconductor materials"
         ]
       }
     ]
@@ -78,83 +78,73 @@
     "theme": "El Nino",
     "layer1": [
       {
-        "sub_industry": "Grain producers",
+        "sub_industry": "Grain & Crop Producers",
         "activities": [
-          "planting schedules",
-          "yield forecasts",
-          "price volatility"
+          "grain farming",
+          "crop production"
         ]
       },
       {
-        "sub_industry": "Fruit growers",
+        "sub_industry": "Agricultural Inputs & Fertilizers",
         "activities": [
-          "harvest timing",
-          "pest pressure",
-          "export volumes"
+          "fertilizer",
+          "agrochemicals"
         ]
       },
       {
-        "sub_industry": "Livestock producers",
+        "sub_industry": "Crop & Weather Insurance",
         "activities": [
-          "feed costs",
-          "mortality rates",
-          "milk production"
+          "crop insurance",
+          "weather-related underwriting"
         ]
       },
       {
-        "sub_industry": "Agricultural equipment manufacturers",
+        "sub_industry": "Hydropower & Water Utilities",
         "activities": [
-          "equipment demand",
-          "service contracts",
-          "spare parts sales"
+          "hydroelectric generation",
+          "water supply"
         ]
       },
       {
-        "sub_industry": "Fertilizer producers",
+        "sub_industry": "Agricultural Commodity Trading",
         "activities": [
-          "nitrogen demand",
-          "supply chain disruptions",
-          "price premiums"
+          "soft commodity trading",
+          "grain logistics"
         ]
       },
       {
-        "sub_industry": "Water utilities",
+        "sub_industry": "Food Processing & Producers",
         "activities": [
-          "consumption patterns",
-          "infrastructure stress",
-          "rate adjustments"
+          "food processing",
+          "packaged foods"
         ]
       },
       {
-        "sub_industry": "Property & casualty insurers",
+        "sub_industry": "Fisheries & Aquaculture",
         "activities": [
-          "storm claims",
-          "risk modeling",
-          "premium pricing"
+          "fishing",
+          "aquaculture"
         ]
       },
       {
-        "sub_industry": "Natural gas utilities",
+        "sub_industry": "Natural Gas & Power Generation",
         "activities": [
-          "heating demand",
-          "price spikes",
-          "capacity utilization"
+          "natural gas demand",
+          "peak power"
         ]
       },
       {
-        "sub_industry": "Shipping & logistics providers",
+        "sub_industry": "Property & Casualty Insurance",
         "activities": [
-          "port congestion",
-          "freight rates",
-          "route adjustments"
+          "catastrophe cover",
+          "P&C underwriting"
         ]
       },
       {
-        "sub_industry": "Retail grocery chains",
+        "sub_industry": "Irrigation & Water Infrastructure",
         "activities": [
-          "inventory levels",
-          "price promotions",
-          "supply chain resilience"
+          "irrigation equipment",
+          "water infrastructure"
         ]
       }
     ]
@@ -163,73 +153,73 @@
     "theme": "US elections",
     "layer1": [
       {
-        "sub_industry": "Defense Contractors",
+        "sub_industry": "US Defense Procurement",
         "activities": [
-          "military equipment sales",
-          "defense R&D contracts"
+          "US defense contracts",
+          "military procurement"
         ]
       },
       {
-        "sub_industry": "Healthcare Pharma",
+        "sub_industry": "US Healthcare & Drug Policy",
         "activities": [
-          "drug pricing negotiations",
-          "FDA approval timelines"
+          "US drug pricing",
+          "US healthcare reform"
         ]
       },
       {
-        "sub_industry": "Renewable Energy",
+        "sub_industry": "US Clean Energy Incentives",
         "activities": [
-          "solar project financing",
-          "wind turbine installations"
+          "US renewable subsidies",
+          "IRA tax credits"
         ]
       },
       {
-        "sub_industry": "Fossil Fuels",
+        "sub_industry": "US Fossil Fuel & Drilling Policy",
         "activities": [
-          "oil drilling permits",
-          "natural gas pipeline expansion"
+          "US oil & gas leasing",
+          "US drilling policy"
         ]
       },
       {
-        "sub_industry": "Financial Services",
+        "sub_industry": "US Bank & Financial Regulation",
         "activities": [
-          "bank lending rates",
-          "investment advisory fees"
+          "US capital rules",
+          "US financial deregulation"
         ]
       },
       {
-        "sub_industry": "Consumer Discretionary Retail",
+        "sub_industry": "US Big-Tech Antitrust & Regulation",
         "activities": [
-          "holiday sales promotions",
-          "store foot traffic"
+          "US antitrust",
+          "US platform regulation"
         ]
       },
       {
-        "sub_industry": "Technology Platforms",
+        "sub_industry": "US Infrastructure Spending",
         "activities": [
-          "data privacy compliance",
-          "online advertising revenue"
+          "US infrastructure bill",
+          "federal construction"
         ]
       },
       {
-        "sub_industry": "Infrastructure Construction",
+        "sub_industry": "US Trade & Tariff Policy",
         "activities": [
-          "public works contracts",
-          "bridge renovation projects"
+          "US tariffs",
+          "trade protectionism"
         ]
       },
       {
-        "sub_industry": "Agriculture",
+        "sub_industry": "US Agricultural Policy & Subsidies",
         "activities": [
-          "crop subsidy allocations",
-          "commodity price support"
+          "US farm subsidies",
+          "biofuel mandates"
         ]
       },
       {
-        "sub_industry": "Media & Advertising",
+        "sub_industry": "US Political Advertising",
         "activities": [
-          "campaign ad spend",
-          "political news viewership"
+          "campaign advertising",
+          "US ad spending"
         ]
       }
     ]
@@ -238,73 +228,73 @@
     "theme": "US-China relations",
     "layer1": [
       {
-        "sub_industry": "Semiconductor manufacturing",
+        "sub_industry": "US-China Semiconductor Export Controls",
         "activities": [
-          "chip fab investment",
-          "supply chain diversification"
+          "chip export bans",
+          "equipment restrictions"
         ]
       },
       {
-        "sub_industry": "Agricultural exports",
+        "sub_industry": "China Tech Decoupling Exposure",
         "activities": [
-          "soybean shipments",
-          "tariff negotiation"
+          "China tech supply chain",
+          "decoupling risk"
         ]
       },
       {
-        "sub_industry": "Consumer electronics",
+        "sub_industry": "Rare Earth & Critical Minerals",
         "activities": [
-          "smartphone sales",
-          "component sourcing"
+          "rare earth export curbs",
+          "critical minerals"
         ]
       },
       {
-        "sub_industry": "Automotive supply chain",
+        "sub_industry": "US-China Tariff-Exposed Manufacturing",
         "activities": [
-          "vehicle assembly",
-          "parts import restrictions"
+          "tariff-exposed exports",
+          "cross-border manufacturing"
         ]
       },
       {
-        "sub_industry": "Defense contractors",
+        "sub_industry": "Supply-Chain Reshoring Beneficiaries",
         "activities": [
-          "military procurement",
-          "export licensing"
+          "supply-chain relocation",
+          "friend-shoring"
         ]
       },
       {
-        "sub_industry": "Rare earth minerals",
+        "sub_industry": "Consumer Electronics Supply Chain",
         "activities": [
-          "mining output",
-          "export controls"
+          "electronics assembly",
+          "device supply chain"
         ]
       },
       {
-        "sub_industry": "Cloud computing services",
+        "sub_industry": "China Export-Dependent Commodities",
         "activities": [
-          "data center expansion",
-          "cross-border data flow"
+          "iron ore to China",
+          "commodity exports"
         ]
       },
       {
-        "sub_industry": "Financial services",
+        "sub_industry": "Defense & Strategic Technology",
         "activities": [
-          "trade financing",
-          "currency hedging"
+          "defense technology",
+          "strategic systems"
         ]
       },
       {
-        "sub_industry": "Shipping and logistics",
+        "sub_industry": "Cross-Strait / Taiwan Risk",
         "activities": [
-          "container routing",
-          "port congestion"
+          "Taiwan supply concentration",
+          "cross-strait risk"
         ]
       },
       {
-        "sub_industry": "Renewable energy equipment",
+        "sub_industry": "Cloud & Data Sovereignty",
         "activities": [
-          "solar panel imports",
-          "wind turbine supply"
+          "data localization",
+          "cloud restrictions"
         ]
       }
     ]
@@ -313,73 +303,73 @@
     "theme": "artificial intelligence",
     "layer1": [
       {
-        "sub_industry": "Cloud computing services",
+        "sub_industry": "AI Accelerator Chips",
         "activities": [
-          "AI model training",
-          "inference hosting"
+          "AI GPUs",
+          "AI accelerators"
         ]
       },
       {
-        "sub_industry": "Semiconductor manufacturing",
+        "sub_industry": "High-Bandwidth Memory for AI",
+        "activities": [
+          "HBM",
+          "AI memory"
+        ]
+      },
+      {
+        "sub_industry": "AI Server & Hardware",
+        "activities": [
+          "AI servers",
+          "accelerated computing hardware"
+        ]
+      },
+      {
+        "sub_industry": "Cloud AI Platforms",
+        "activities": [
+          "cloud AI services",
+          "model hosting"
+        ]
+      },
+      {
+        "sub_industry": "AI Chip Design & IP",
         "activities": [
           "AI chip design",
-          "GPU production"
+          "AI IP cores"
         ]
       },
       {
-        "sub_industry": "Enterprise software",
+        "sub_industry": "AI Networking & Interconnect",
         "activities": [
-          "predictive analytics",
-          "process automation"
+          "optical interconnect",
+          "AI networking"
         ]
       },
       {
-        "sub_industry": "Autonomous vehicles",
+        "sub_industry": "AI Data-Center Power & Cooling",
         "activities": [
-          "self-driving perception",
-          "fleet management AI"
+          "data-center power",
+          "liquid cooling"
         ]
       },
       {
-        "sub_industry": "Healthcare diagnostics",
+        "sub_industry": "AI Foundry Manufacturing",
         "activities": [
-          "medical imaging analysis",
-          "genomic data interpretation"
+          "advanced-node foundry",
+          "AI chip fabrication"
         ]
       },
       {
-        "sub_industry": "Financial services",
+        "sub_industry": "Enterprise AI Software",
         "activities": [
-          "algorithmic trading",
-          "risk scoring"
+          "enterprise AI applications",
+          "AI software"
         ]
       },
       {
-        "sub_industry": "Robotics",
+        "sub_industry": "Edge & On-Device AI",
         "activities": [
-          "intelligent motion control",
-          "human-robot collaboration"
-        ]
-      },
-      {
-        "sub_industry": "E-commerce platforms",
-        "activities": [
-          "personalized recommendation",
-          "dynamic pricing"
-        ]
-      },
-      {
-        "sub_industry": "Cybersecurity",
-        "activities": [
-          "threat detection AI",
-          "behavioral analytics"
-        ]
-      },
-      {
-        "sub_industry": "Agriculture technology",
-        "activities": [
-          "crop yield prediction",
-          "precision irrigation"
+          "on-device AI",
+          "edge inference"
         ]
       }
     ]
@@ -388,73 +378,73 @@
     "theme": "electric vehicles",
     "layer1": [
       {
-        "sub_industry": "EV manufacturers",
+        "sub_industry": "EV Manufacturers",
         "activities": [
           "electric vehicle assembly",
-          "EV model production"
+          "EV production"
         ]
       },
       {
-        "sub_industry": "Battery producers",
+        "sub_industry": "EV Battery Producers",
         "activities": [
           "lithium-ion cells",
           "battery packs"
         ]
       },
       {
-        "sub_industry": "Power electronics & drivetrain",
+        "sub_industry": "EV Power Electronics & Drivetrain",
         "activities": [
-          "inverters",
-          "EV power supplies"
+          "traction inverters",
+          "EV drivetrain"
         ]
       },
       {
-        "sub_industry": "Charging infrastructure",
+        "sub_industry": "EV Charging Infrastructure",
         "activities": [
           "charging stations",
           "charging networks"
         ]
       },
       {
-        "sub_industry": "Battery materials & mining",
+        "sub_industry": "Battery Raw Materials",
         "activities": [
           "lithium",
           "cathode materials"
         ]
       },
       {
-        "sub_industry": "Automotive semiconductors",
+        "sub_industry": "Automotive Power Semiconductors",
         "activities": [
-          "automotive chips",
-          "power semiconductors"
+          "automotive power chips",
+          "SiC devices"
         ]
       },
       {
-        "sub_industry": "Electronic components & connectors",
+        "sub_industry": "EV Thermal Management",
         "activities": [
-          "wiring harnesses",
-          "connectors"
+          "battery cooling",
+          "EV thermal systems"
         ]
       },
       {
-        "sub_industry": "Thermal management",
+        "sub_industry": "EV Wiring & Connectors",
         "activities": [
-          "cooling systems",
-          "heat dissipation"
+          "high-voltage connectors",
+          "EV wiring harnesses"
         ]
       },
       {
-        "sub_industry": "Auto finance",
-        "activities": [
-          "vehicle financing",
-          "auto loans"
-        ]
-      },
-      {
-        "sub_industry": "Contract electronics manufacturing",
+        "sub_industry": "EV Contract Manufacturing",
         "activities": [
           "EV electronics assembly",
-          "EMS"
+          "EV EMS"
+        ]
+      },
+      {
+        "sub_industry": "EV Auto Finance",
+        "activities": [
+          "EV financing",
+          "vehicle loans"
         ]
       }
     ]
@@ -463,73 +453,73 @@
     "theme": "digital payments",
     "layer1": [
       {
-        "sub_industry": "Payment processors",
+        "sub_industry": "Payment Processors & Acquirers",
         "activities": [
           "transaction processing",
           "merchant acquiring"
         ]
       },
       {
-        "sub_industry": "Mobile wallets & fintech",
+        "sub_industry": "Mobile Wallets & Payment Apps",
         "activities": [
           "mobile wallet",
-          "digital payments app"
+          "payment super-app"
         ]
       },
       {
-        "sub_industry": "Digital banking",
+        "sub_industry": "E-Commerce Checkout & Platforms",
         "activities": [
-          "online banking",
-          "digital retail banking"
+          "online checkout",
+          "marketplace payments"
         ]
       },
       {
-        "sub_industry": "Card networks & issuing",
+        "sub_industry": "Card Issuing & Networks",
         "activities": [
           "card issuance",
-          "card networks"
+          "card schemes"
         ]
       },
       {
-        "sub_industry": "E-commerce platforms",
-        "activities": [
-          "online marketplace checkout",
-          "e-commerce payments"
-        ]
-      },
-      {
-        "sub_industry": "POS hardware",
+        "sub_industry": "POS Payment Hardware",
         "activities": [
           "point-of-sale terminals",
-          "payment hardware"
+          "payment devices"
         ]
       },
       {
-        "sub_industry": "Payment security",
+        "sub_industry": "Digital-Only Banking",
+        "activities": [
+          "digital bank",
+          "neobank services"
+        ]
+      },
+      {
+        "sub_industry": "Payment Security & Fraud",
         "activities": [
           "fraud detection",
-          "transaction security"
+          "payment security"
         ]
       },
       {
-        "sub_industry": "Remittance & cross-border",
+        "sub_industry": "Cross-Border Remittance",
         "activities": [
-          "cross-border transfers",
-          "remittances"
+          "remittances",
+          "cross-border transfers"
         ]
       },
       {
-        "sub_industry": "Payment semiconductors",
+        "sub_industry": "Buy-Now-Pay-Later & Consumer Credit",
+        "activities": [
+          "BNPL",
+          "point-of-sale credit"
+        ]
+      },
+      {
+        "sub_industry": "Payment Semiconductors",
         "activities": [
           "secure element chips",
           "NFC chips"
-        ]
-      },
-      {
-        "sub_industry": "Merchant services",
-        "activities": [
-          "merchant onboarding",
-          "settlement services"
         ]
       }
     ]
@@ -538,10 +528,45 @@
     "theme": "cloud computing",
     "layer1": [
       {
-        "sub_industry": "Cloud infrastructure providers",
+        "sub_industry": "Cloud Infrastructure Providers",
         "activities": [
           "public cloud",
           "IaaS"
+        ]
+      },
+      {
+        "sub_industry": "Data-Center Operators",
+        "activities": [
+          "data-center hosting",
+          "colocation"
+        ]
+      },
+      {
+        "sub_industry": "Cloud Server Hardware",
+        "activities": [
+          "cloud servers",
+          "rack systems"
+        ]
+      },
+      {
+        "sub_industry": "Cloud Networking Equipment",
+        "activities": [
+          "data-center switches",
+          "cloud networking"
+        ]
+      },
+      {
+        "sub_industry": "Server Memory & Storage",
+        "activities": [
+          "server DRAM",
+          "enterprise storage"
+        ]
+      },
+      {
+        "sub_industry": "Cloud Semiconductors",
+        "activities": [
+          "server CPUs",
+          "cloud accelerators"
         ]
       },
       {
@@ -552,59 +577,24 @@
         ]
       },
       {
-        "sub_industry": "Data center operators",
-        "activities": [
-          "data center hosting",
-          "colocation"
-        ]
-      },
-      {
-        "sub_industry": "Server & hardware manufacturers",
-        "activities": [
-          "cloud servers",
-          "rack systems"
-        ]
-      },
-      {
-        "sub_industry": "Cloud semiconductors",
-        "activities": [
-          "server CPUs",
-          "AI accelerators"
-        ]
-      },
-      {
-        "sub_industry": "Networking equipment",
-        "activities": [
-          "switches",
-          "data center networking"
-        ]
-      },
-      {
-        "sub_industry": "Memory & storage",
-        "activities": [
-          "DRAM",
-          "enterprise storage"
-        ]
-      },
-      {
-        "sub_industry": "Cloud cybersecurity",
-        "activities": [
-          "cloud security",
-          "identity management"
-        ]
-      },
-      {
-        "sub_industry": "IT services & integration",
+        "sub_industry": "Cloud Migration & IT Services",
         "activities": [
           "cloud migration",
-          "managed cloud services"
+          "managed cloud"
         ]
       },
       {
-        "sub_industry": "Power & cooling solutions",
+        "sub_industry": "Data-Center Power & Cooling",
         "activities": [
-          "data center power",
+          "data-center power",
           "cooling systems"
+        ]
+      },
+      {
+        "sub_industry": "Optical Interconnect",
+        "activities": [
+          "optical transceivers",
+          "data-center optics"
         ]
       }
     ]
@@ -613,73 +603,73 @@
     "theme": "data centers",
     "layer1": [
       {
-        "sub_industry": "Data center operators & REITs",
+        "sub_industry": "Data-Center Operators & REITs",
         "activities": [
-          "data center hosting",
+          "data-center hosting",
           "colocation"
         ]
       },
       {
-        "sub_industry": "Cloud service providers",
+        "sub_industry": "Cloud Service Providers",
         "activities": [
-          "public cloud",
-          "hyperscale cloud"
+          "hyperscale cloud",
+          "public cloud"
         ]
       },
       {
-        "sub_industry": "Server hardware manufacturers",
+        "sub_industry": "Server Hardware",
         "activities": [
           "rack servers",
-          "cloud servers"
+          "data-center servers"
         ]
       },
       {
-        "sub_industry": "Networking & interconnect",
+        "sub_industry": "Data-Center Networking",
         "activities": [
           "switches",
-          "optical transceivers"
+          "data-center fabric"
         ]
       },
       {
-        "sub_industry": "Memory & storage",
+        "sub_industry": "Server Memory & Storage",
         "activities": [
-          "DRAM",
+          "server DRAM",
           "enterprise storage"
         ]
       },
       {
-        "sub_industry": "Data center semiconductors",
+        "sub_industry": "Data-Center Semiconductors",
         "activities": [
           "server CPUs",
-          "AI accelerators"
+          "accelerators"
         ]
       },
       {
-        "sub_industry": "Power & cooling solutions",
+        "sub_industry": "Data-Center Power & Cooling",
         "activities": [
-          "data center power",
+          "data-center power",
           "liquid cooling"
         ]
       },
       {
-        "sub_industry": "Printed circuit boards",
+        "sub_industry": "High-Speed PCBs & Substrates",
         "activities": [
           "high-speed PCBs",
           "server boards"
         ]
       },
       {
-        "sub_industry": "Electronic manufacturing services",
+        "sub_industry": "Optical Transceivers",
         "activities": [
-          "server assembly",
-          "EMS"
+          "optical modules",
+          "data-center optics"
         ]
       },
       {
-        "sub_industry": "Connectors & cabling",
+        "sub_industry": "Rack & Connector Hardware",
         "activities": [
-          "high-speed connectors",
-          "cabling"
+          "rack systems",
+          "high-speed connectors"
         ]
       }
     ]
@@ -688,73 +678,73 @@
     "theme": "cybersecurity",
     "layer1": [
       {
-        "sub_industry": "Security software",
+        "sub_industry": "Endpoint & Security Software",
         "activities": [
           "endpoint security",
           "security platforms"
         ]
       },
       {
-        "sub_industry": "Managed security services",
+        "sub_industry": "Managed Security Services",
         "activities": [
           "managed detection",
           "security operations"
         ]
       },
       {
-        "sub_industry": "Identity & access management",
+        "sub_industry": "Identity & Access Management",
         "activities": [
           "identity verification",
           "access control"
         ]
       },
       {
-        "sub_industry": "Network security hardware",
+        "sub_industry": "Network Security Hardware",
         "activities": [
           "firewalls",
           "network security appliances"
         ]
       },
       {
-        "sub_industry": "Cloud security",
+        "sub_industry": "Cloud Security",
         "activities": [
           "cloud workload protection",
           "cloud security posture"
         ]
       },
       {
-        "sub_industry": "Payment & transaction security",
-        "activities": [
-          "fraud prevention",
-          "secure payments"
-        ]
-      },
-      {
-        "sub_industry": "Security semiconductors",
-        "activities": [
-          "secure element chips",
-          "hardware security"
-        ]
-      },
-      {
-        "sub_industry": "IT security services",
+        "sub_industry": "Security IT Services",
         "activities": [
           "security consulting",
           "security integration"
         ]
       },
       {
-        "sub_industry": "Data protection & encryption",
+        "sub_industry": "Data Protection & Encryption",
         "activities": [
           "encryption",
           "data loss prevention"
         ]
       },
       {
-        "sub_industry": "Telecom network security",
+        "sub_industry": "Hardware Security & Secure Chips",
         "activities": [
-          "network protection",
-          "telecom security"
+          "secure element chips",
+          "hardware security modules"
+        ]
+      },
+      {
+        "sub_industry": "Threat Intelligence",
+        "activities": [
+          "threat intelligence",
+          "vulnerability research"
+        ]
+      },
+      {
+        "sub_industry": "Secure Software Products",
+        "activities": [
+          "security product software",
+          "secure platforms"
         ]
       }
     ]
@@ -763,73 +753,73 @@
     "theme": "renewable energy",
     "layer1": [
       {
-        "sub_industry": "Solar power",
+        "sub_industry": "Solar Power Equipment",
         "activities": [
           "solar panels",
           "photovoltaics"
         ]
       },
       {
-        "sub_industry": "Wind power",
+        "sub_industry": "Wind Power Equipment",
         "activities": [
           "wind turbines",
-          "wind farms"
+          "wind components"
         ]
       },
       {
-        "sub_industry": "Energy storage & batteries",
+        "sub_industry": "Grid-Scale Energy Storage",
         "activities": [
           "grid storage",
-          "battery systems"
+          "battery storage systems"
         ]
       },
       {
-        "sub_industry": "Power electronics & inverters",
+        "sub_industry": "Solar & Power Inverters",
         "activities": [
           "solar inverters",
           "power conversion"
         ]
       },
       {
-        "sub_industry": "Renewable utilities",
+        "sub_industry": "Renewable Power Generation",
         "activities": [
           "renewable generation",
-          "clean power utilities"
+          "clean power assets"
         ]
       },
       {
-        "sub_industry": "Critical minerals & materials",
+        "sub_industry": "Clean-Energy Critical Minerals",
         "activities": [
-          "copper",
+          "copper for electrification",
           "lithium"
         ]
       },
       {
-        "sub_industry": "Grid & transmission equipment",
+        "sub_industry": "Grid & Transmission Equipment",
         "activities": [
-          "grid infrastructure",
-          "transmission"
+          "grid equipment",
+          "transmission infrastructure"
         ]
       },
       {
-        "sub_industry": "EV & electrification",
-        "activities": [
-          "electric vehicles",
-          "electrification"
-        ]
-      },
-      {
-        "sub_industry": "Green hydrogen",
+        "sub_industry": "Green Hydrogen",
         "activities": [
           "hydrogen production",
           "electrolysis"
         ]
       },
       {
-        "sub_industry": "Renewable infrastructure investment",
+        "sub_industry": "Renewable Infrastructure Investment",
         "activities": [
           "renewable project finance",
-          "clean energy assets"
+          "clean-energy funds"
+        ]
+      },
+      {
+        "sub_industry": "EV Electrification Demand",
+        "activities": [
+          "EV charging demand",
+          "transport electrification"
         ]
       }
     ]
@@ -838,73 +828,73 @@
     "theme": "5G and wireless infrastructure",
     "layer1": [
       {
-        "sub_industry": "Mobile network operators",
+        "sub_industry": "Mobile Network Operators",
         "activities": [
           "mobile services",
           "wireless carriers"
         ]
       },
       {
-        "sub_industry": "Telecom tower & passive infrastructure",
+        "sub_industry": "Telecom Towers & Passive Infrastructure",
         "activities": [
           "cell towers",
           "passive infrastructure"
         ]
       },
       {
-        "sub_industry": "Wireless semiconductors",
+        "sub_industry": "RF & Wireless Semiconductors",
         "activities": [
           "RF chips",
           "baseband chips"
         ]
       },
       {
-        "sub_industry": "Networking & transmission equipment",
+        "sub_industry": "Base Stations & Network Equipment",
         "activities": [
           "base stations",
-          "network switches"
+          "radio access network"
         ]
       },
       {
-        "sub_industry": "Optical & fiber components",
+        "sub_industry": "Optical & Fiber Transport",
         "activities": [
           "optical transceivers",
-          "fiber"
+          "fiber transport"
         ]
       },
       {
-        "sub_industry": "Smartphones & devices",
+        "sub_industry": "5G Smartphones & Devices",
         "activities": [
           "5G smartphones",
-          "mobile devices"
+          "wireless devices"
         ]
       },
       {
-        "sub_industry": "Printed circuit boards",
+        "sub_industry": "RF PCBs & Antennas",
         "activities": [
           "RF PCBs",
-          "high-frequency boards"
+          "antennas"
         ]
       },
       {
-        "sub_industry": "Connectors & antennas",
+        "sub_industry": "Telecom Connectivity Services",
         "activities": [
-          "antennas",
-          "RF connectors"
+          "enterprise connectivity",
+          "network services"
         ]
       },
       {
-        "sub_industry": "Data & connectivity services",
-        "activities": [
-          "connectivity services",
-          "enterprise networks"
-        ]
-      },
-      {
-        "sub_industry": "Contract electronics manufacturing",
+        "sub_industry": "Telecom Contract Manufacturing",
         "activities": [
           "telecom equipment assembly",
-          "EMS"
+          "network EMS"
+        ]
+      },
+      {
+        "sub_industry": "Wireless Connectors & Cabling",
+        "activities": [
+          "RF connectors",
+          "network cabling"
         ]
       }
     ]
@@ -913,73 +903,73 @@
     "theme": "defense and military spending",
     "layer1": [
       {
-        "sub_industry": "Defense electronics",
+        "sub_industry": "Defense Electronics & Systems",
         "activities": [
           "military electronics",
           "defense systems"
         ]
       },
       {
-        "sub_industry": "Aerospace & platforms",
+        "sub_industry": "Military Aerospace & Platforms",
         "activities": [
           "military aircraft",
           "defense platforms"
         ]
       },
       {
-        "sub_industry": "Defense semiconductors",
+        "sub_industry": "Defense-Grade Semiconductors",
         "activities": [
           "rad-hard chips",
           "defense-grade semiconductors"
         ]
       },
       {
-        "sub_industry": "Cybersecurity & secure comms",
+        "sub_industry": "Military Communications",
         "activities": [
-          "secure communications",
-          "defense cyber"
+          "tactical communications",
+          "secure military networks"
         ]
       },
       {
-        "sub_industry": "Surveillance & sensors",
+        "sub_industry": "Radar, Surveillance & Sensors",
         "activities": [
           "radar",
-          "surveillance systems"
+          "surveillance sensors"
         ]
       },
       {
-        "sub_industry": "Critical materials",
+        "sub_industry": "Strategic Critical Materials",
         "activities": [
-          "rare earths",
+          "defense rare earths",
           "specialty metals"
         ]
       },
       {
-        "sub_industry": "Communications equipment",
-        "activities": [
-          "tactical communications",
-          "military networks"
-        ]
-      },
-      {
-        "sub_industry": "Power systems",
+        "sub_industry": "Ruggedized Power Systems",
         "activities": [
           "military power supplies",
-          "ruggedized power"
+          "ruggedized electronics"
         ]
       },
       {
-        "sub_industry": "IT & systems integration",
+        "sub_industry": "Defense IT & Systems Integration",
         "activities": [
           "defense IT",
-          "systems integration"
+          "mission systems integration"
         ]
       },
       {
-        "sub_industry": "Contract manufacturing",
+        "sub_industry": "Defense Contract Manufacturing",
         "activities": [
           "defense electronics assembly",
-          "EMS"
+          "defense EMS"
+        ]
+      },
+      {
+        "sub_industry": "Military Test & Measurement",
+        "activities": [
+          "defense test equipment",
+          "measurement systems"
         ]
       }
     ]
@@ -988,73 +978,73 @@
     "theme": "Taiwan Strait tensions",
     "layer1": [
       {
-        "sub_industry": "Semiconductor foundries",
+        "sub_industry": "Taiwan Semiconductor Foundries",
         "activities": [
-          "wafer fabrication",
-          "chip foundry"
+          "Taiwan wafer fabrication",
+          "foundry concentration"
         ]
       },
       {
-        "sub_industry": "Semiconductor supply chain",
+        "sub_industry": "Taiwan Chip Packaging & Testing",
         "activities": [
-          "chip packaging",
-          "chip testing"
+          "Taiwan chip packaging",
+          "assembly & test"
         ]
       },
       {
-        "sub_industry": "Electronics manufacturing",
+        "sub_industry": "Taiwan Electronics Manufacturing",
         "activities": [
-          "contract electronics",
-          "EMS"
+          "Taiwan contract electronics",
+          "Taiwan EMS"
         ]
       },
       {
-        "sub_industry": "Consumer electronics brands",
+        "sub_industry": "Taiwan PCB & Components",
         "activities": [
-          "smartphones",
-          "consumer devices"
+          "Taiwan PCBs",
+          "Taiwan components"
         ]
       },
       {
-        "sub_industry": "Shipping & logistics",
+        "sub_industry": "Taiwan Fabless Chip Design",
         "activities": [
-          "container shipping",
-          "logistics"
+          "Taiwan IC design",
+          "Taiwan fabless"
         ]
       },
       {
-        "sub_industry": "Defense & security",
+        "sub_industry": "Supply-Chain Relocation Beneficiaries",
         "activities": [
-          "defense electronics",
-          "security systems"
+          "supply-chain diversification",
+          "non-Taiwan capacity"
         ]
       },
       {
-        "sub_industry": "Critical minerals & materials",
+        "sub_industry": "Semiconductor Export Controls",
         "activities": [
-          "rare earths",
-          "copper"
+          "chip export restrictions",
+          "equipment controls"
         ]
       },
       {
-        "sub_industry": "Memory & components",
+        "sub_industry": "Shipping & Trade Route Risk",
         "activities": [
-          "memory chips",
-          "electronic components"
+          "Taiwan Strait shipping",
+          "trade route disruption"
         ]
       },
       {
-        "sub_industry": "Printed circuit boards",
+        "sub_industry": "Memory Supply Concentration",
         "activities": [
-          "PCBs",
-          "circuit boards"
+          "memory supply risk",
+          "DRAM concentration"
         ]
       },
       {
-        "sub_industry": "Financial & insurance exposure",
+        "sub_industry": "Defense & Strategic Technology",
         "activities": [
-          "regional banking",
-          "insurance"
+          "defense technology",
+          "strategic systems"
         ]
       }
     ]
@@ -1063,72 +1053,72 @@
     "theme": "Red Sea shipping disruption",
     "layer1": [
       {
-        "sub_industry": "Container shipping & logistics",
+        "sub_industry": "Container Shipping & Freight",
         "activities": [
           "container shipping",
-          "freight logistics"
+          "ocean freight"
         ]
       },
       {
-        "sub_industry": "Oil & gas",
+        "sub_industry": "Crude Oil & Tanker Transport",
         "activities": [
-          "crude oil",
-          "refined products"
+          "crude oil shipping",
+          "tanker transport"
         ]
       },
       {
-        "sub_industry": "Energy & fuel refining",
+        "sub_industry": "Oil Refining & Petrochemicals",
         "activities": [
-          "refining",
+          "refining margins",
           "petrochemicals"
         ]
       },
       {
-        "sub_industry": "Commodities & mining",
+        "sub_industry": "Export-Dependent Commodities",
         "activities": [
-          "iron ore",
-          "metals"
+          "seaborne commodity exports",
+          "bulk shipping"
         ]
       },
       {
-        "sub_industry": "Supply chain software",
+        "sub_industry": "Supply-Chain & Logistics Software",
         "activities": [
           "logistics software",
-          "supply chain tech"
+          "freight management"
         ]
       },
       {
-        "sub_industry": "Marine insurance",
+        "sub_industry": "Marine & Cargo Insurance",
         "activities": [
           "cargo insurance",
           "marine underwriting"
         ]
       },
       {
-        "sub_industry": "Consumer goods & retail",
+        "sub_industry": "Import-Reliant Retail",
         "activities": [
-          "retail imports",
-          "consumer goods"
+          "import-dependent retail",
+          "seaborne consumer goods"
         ]
       },
       {
-        "sub_industry": "Electronics supply chain",
+        "sub_industry": "Electronics Shipping Exposure",
         "activities": [
-          "component shipments",
-          "electronics logistics"
+          "electronics freight",
+          "component shipping"
         ]
       },
       {
-        "sub_industry": "Port & infrastructure",
+        "sub_industry": "Ports & Terminal Operators",
         "activities": [
           "port operations",
-          "terminals"
+          "container terminals"
         ]
       },
       {
-        "sub_industry": "Manufacturing inputs",
+        "sub_industry": "Industrial Raw-Material Imports",
         "activities": [
-          "raw materials",
+          "raw-material imports",
           "industrial inputs"
         ]
       }
@@ -1138,73 +1128,73 @@
     "theme": "generative AI",
     "layer1": [
       {
-        "sub_industry": "AI semiconductors & accelerators",
+        "sub_industry": "AI Accelerator Chips",
         "activities": [
-          "AI chips",
-          "GPUs"
+          "AI GPUs",
+          "inference accelerators"
         ]
       },
       {
-        "sub_industry": "Cloud AI platforms",
+        "sub_industry": "High-Bandwidth Memory for AI",
         "activities": [
-          "cloud AI services",
-          "model hosting"
+          "HBM",
+          "AI memory"
         ]
       },
       {
-        "sub_industry": "Memory for AI",
-        "activities": [
-          "high-bandwidth memory",
-          "DRAM"
-        ]
-      },
-      {
-        "sub_industry": "AI server hardware",
+        "sub_industry": "AI Server Hardware",
         "activities": [
           "AI servers",
           "accelerated computing"
         ]
       },
       {
-        "sub_industry": "Enterprise AI software",
+        "sub_industry": "AI Foundry Manufacturing",
         "activities": [
-          "AI applications",
-          "enterprise AI"
+          "advanced-node foundry",
+          "AI chip fabrication"
         ]
       },
       {
-        "sub_industry": "AI chip design & IP",
+        "sub_industry": "Cloud AI & Model Platforms",
         "activities": [
-          "chip design",
+          "cloud AI services",
+          "foundation-model hosting"
+        ]
+      },
+      {
+        "sub_industry": "AI Chip Design & IP",
+        "activities": [
+          "AI chip design",
           "AI IP cores"
         ]
       },
       {
-        "sub_industry": "Networking & interconnect",
+        "sub_industry": "AI Networking & Interconnect",
         "activities": [
           "optical interconnect",
           "AI networking"
         ]
       },
       {
-        "sub_industry": "Data center power & cooling",
+        "sub_industry": "AI Data-Center Power & Cooling",
         "activities": [
-          "AI data center power",
+          "data-center power",
           "liquid cooling"
         ]
       },
       {
-        "sub_industry": "AI services & integration",
+        "sub_industry": "Generative AI Software",
         "activities": [
-          "AI consulting",
-          "AI integration"
+          "generative AI applications",
+          "LLM software"
         ]
       },
       {
-        "sub_industry": "Consumer AI & devices",
+        "sub_industry": "On-Device Generative AI",
         "activities": [
           "on-device AI",
-          "AI assistants"
+          "edge generative AI"
         ]
       }
     ]
@@ -1213,73 +1203,73 @@
     "theme": "aging population",
     "layer1": [
       {
-        "sub_industry": "Life & health insurance",
+        "sub_industry": "Life & Health Insurance",
         "activities": [
           "life insurance",
           "health insurance"
         ]
       },
       {
-        "sub_industry": "Pharmaceuticals & biotech",
+        "sub_industry": "Pharmaceuticals & Biotech",
         "activities": [
           "pharmaceuticals",
           "biologics"
         ]
       },
       {
-        "sub_industry": "Healthcare services & diagnostics",
+        "sub_industry": "Healthcare Diagnostics & Imaging",
         "activities": [
           "diagnostics",
-          "medical services"
+          "medical imaging"
         ]
       },
       {
-        "sub_industry": "Wealth & asset management",
+        "sub_industry": "Retirement & Wealth Management",
         "activities": [
           "retirement savings",
-          "asset management"
+          "pension assets"
         ]
       },
       {
-        "sub_industry": "Medical devices",
+        "sub_industry": "Medical Devices",
         "activities": [
           "medical devices",
           "healthcare equipment"
         ]
       },
       {
-        "sub_industry": "Healthcare IT",
+        "sub_industry": "Healthcare IT Services",
         "activities": [
           "health IT",
-          "medical software"
+          "medical software services"
         ]
       },
       {
-        "sub_industry": "Consumer healthcare & retail pharmacy",
+        "sub_industry": "Consumer Health & Pharmacy Retail",
         "activities": [
           "pharmacy retail",
           "consumer health"
         ]
       },
       {
-        "sub_industry": "Banking & retirement finance",
+        "sub_industry": "Plasma & Vaccines",
         "activities": [
-          "pension",
-          "retirement banking"
+          "plasma therapies",
+          "vaccines"
         ]
       },
       {
-        "sub_industry": "Elder care real estate",
+        "sub_industry": "Senior Care & Housing",
         "activities": [
           "senior housing",
-          "care facilities"
+          "aged care"
         ]
       },
       {
-        "sub_industry": "Robotics & automation",
+        "sub_industry": "Healthcare Services",
         "activities": [
-          "care robotics",
-          "automation"
+          "clinical services",
+          "care provision"
         ]
       }
     ]
@@ -1288,73 +1278,73 @@
     "theme": "water scarcity",
     "layer1": [
       {
-        "sub_industry": "Water utilities",
+        "sub_industry": "Water Utilities & Treatment",
         "activities": [
           "water supply",
           "water treatment"
         ]
       },
       {
-        "sub_industry": "Agriculture & irrigation",
+        "sub_industry": "Water-Intensive Mining",
+        "activities": [
+          "mineral processing water use",
+          "mine water management"
+        ]
+      },
+      {
+        "sub_industry": "Semiconductor Fab Water Use",
+        "activities": [
+          "ultrapure water",
+          "fab water consumption"
+        ]
+      },
+      {
+        "sub_industry": "Agriculture & Irrigation Demand",
         "activities": [
           "irrigation",
-          "agricultural inputs"
+          "agricultural water"
         ]
       },
       {
-        "sub_industry": "Industrial water use",
+        "sub_industry": "Water Treatment Chemicals & Materials",
         "activities": [
-          "industrial water",
-          "process water"
+          "treatment chemicals",
+          "filtration membranes"
         ]
       },
       {
-        "sub_industry": "Mining & water-intensive extraction",
+        "sub_industry": "Industrial Process Water",
         "activities": [
-          "mining operations",
-          "mineral processing"
+          "process water",
+          "industrial cooling water"
         ]
       },
       {
-        "sub_industry": "Water infrastructure & equipment",
+        "sub_industry": "Water Infrastructure & Equipment",
         "activities": [
           "pumps",
           "water infrastructure"
         ]
       },
       {
-        "sub_industry": "Chemicals & materials",
+        "sub_industry": "Hydropower Generation",
         "activities": [
-          "water treatment chemicals",
-          "membranes"
+          "hydroelectric generation",
+          "reservoir power"
         ]
       },
       {
-        "sub_industry": "Food & beverage production",
+        "sub_industry": "Food & Beverage Water Use",
         "activities": [
-          "food processing",
-          "beverages"
+          "beverage production",
+          "food processing water"
         ]
       },
       {
-        "sub_industry": "Property & casualty insurance",
+        "sub_industry": "Drought Insurance",
         "activities": [
-          "drought insurance",
+          "drought cover",
           "climate underwriting"
-        ]
-      },
-      {
-        "sub_industry": "Power generation water use",
-        "activities": [
-          "cooling water",
-          "hydropower"
-        ]
-      },
-      {
-        "sub_industry": "Semiconductor water use",
-        "activities": [
-          "ultrapure water",
-          "fab water use"
         ]
       }
     ]
@@ -1363,73 +1353,73 @@
     "theme": "interest rate hikes",
     "layer1": [
       {
-        "sub_industry": "Commercial & retail banks",
+        "sub_industry": "Net-Interest-Margin Banks",
         "activities": [
-          "lending",
-          "net interest margin"
+          "bank lending margins",
+          "deposit spreads"
         ]
       },
       {
-        "sub_industry": "Insurance",
+        "sub_industry": "Insurance Investment Income",
         "activities": [
-          "insurance float",
-          "underwriting"
+          "insurance float yield",
+          "fixed-income portfolios"
         ]
       },
       {
-        "sub_industry": "Asset & wealth management",
+        "sub_industry": "Capital Markets & Trading",
         "activities": [
-          "asset management",
-          "wealth management"
+          "rates trading",
+          "markets revenue"
         ]
       },
       {
-        "sub_industry": "Capital markets & trading",
+        "sub_industry": "Rate-Sensitive Real Estate",
         "activities": [
-          "markets trading",
-          "investment banking"
+          "property valuations",
+          "REIT financing costs"
         ]
       },
       {
-        "sub_industry": "Real estate & REITs",
+        "sub_industry": "Consumer & Mortgage Credit",
         "activities": [
-          "property",
-          "real estate investment"
+          "mortgage lending",
+          "consumer credit"
         ]
       },
       {
-        "sub_industry": "Consumer & auto finance",
+        "sub_industry": "Treasury & Fixed Income",
         "activities": [
-          "consumer credit",
-          "auto loans"
+          "treasury operations",
+          "bond portfolios"
         ]
       },
       {
-        "sub_industry": "Exchanges & market infrastructure",
+        "sub_industry": "Exchanges & Clearing",
         "activities": [
-          "exchange operations",
-          "clearing"
+          "interest-rate derivatives",
+          "clearing volumes"
         ]
       },
       {
-        "sub_industry": "Treasury operations",
+        "sub_industry": "Asset & Wealth Management",
         "activities": [
-          "treasury",
-          "fixed income"
+          "asset management flows",
+          "fund yields"
         ]
       },
       {
-        "sub_industry": "Credit cards",
+        "sub_industry": "Rate-Exposed Credit Cards",
         "activities": [
-          "card lending",
-          "revolving credit"
+          "card revolving credit",
+          "card rates"
         ]
       },
       {
-        "sub_industry": "Diversified financials",
+        "sub_industry": "Auto & Equipment Finance",
         "activities": [
-          "diversified finance",
-          "financial services"
+          "auto lending",
+          "equipment finance"
         ]
       }
     ]
@@ -1438,73 +1428,73 @@
     "theme": "gold and safe haven demand",
     "layer1": [
       {
-        "sub_industry": "Precious metals mining",
+        "sub_industry": "Gold & Precious-Metals Mining",
         "activities": [
           "gold mining",
-          "precious metals"
+          "precious-metals production"
         ]
       },
       {
-        "sub_industry": "Diversified mining",
+        "sub_industry": "Copper & Base-Metals Mining",
         "activities": [
-          "base metals",
+          "copper mining",
+          "base metals"
+        ]
+      },
+      {
+        "sub_industry": "Bullion Trading & Vaulting",
+        "activities": [
+          "bullion trading",
+          "precious-metals custody"
+        ]
+      },
+      {
+        "sub_industry": "Commodities Trading Desks",
+        "activities": [
+          "commodities trading",
+          "metals trading"
+        ]
+      },
+      {
+        "sub_industry": "Precious-Metals Exchanges",
+        "activities": [
+          "metals exchange",
+          "commodity clearing"
+        ]
+      },
+      {
+        "sub_industry": "Diversified Mining Royalties",
+        "activities": [
+          "mining royalties",
           "diversified mining"
         ]
       },
       {
-        "sub_industry": "Banks & bullion",
+        "sub_industry": "Safe-Haven Asset Management",
         "activities": [
-          "bullion trading",
-          "treasury"
+          "gold funds",
+          "safe-haven allocation"
         ]
       },
       {
-        "sub_industry": "Asset & wealth management",
+        "sub_industry": "Central-Bank-Linked Treasury",
         "activities": [
-          "asset management",
-          "wealth management"
+          "reserve assets",
+          "treasury metals holdings"
         ]
       },
       {
-        "sub_industry": "Commodities trading",
-        "activities": [
-          "commodities trading",
-          "commodity markets"
-        ]
-      },
-      {
-        "sub_industry": "Exchanges & market infrastructure",
-        "activities": [
-          "commodity exchange",
-          "clearing"
-        ]
-      },
-      {
-        "sub_industry": "Insurance",
+        "sub_industry": "Insurance Reserve Assets",
         "activities": [
           "insurance reserves",
-          "underwriting"
+          "hard-asset allocation"
         ]
       },
       {
-        "sub_industry": "Diversified financials",
+        "sub_industry": "Mining Equipment & Services",
         "activities": [
-          "financial services",
-          "diversified finance"
-        ]
-      },
-      {
-        "sub_industry": "Base metals & copper",
-        "activities": [
-          "copper",
-          "industrial metals"
-        ]
-      },
-      {
-        "sub_industry": "Safe-haven treasury & reserves",
-        "activities": [
-          "treasury operations",
-          "reserves"
+          "mining equipment",
+          "mine services"
         ]
       }
     ]

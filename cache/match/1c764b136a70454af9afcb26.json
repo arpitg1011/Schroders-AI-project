@@ -7,7 +7,12 @@
     "COMMONWEALTH BANK OF AUS": {},
     "TENCENT HOLDINGS LI (CN)": {},
     "ALIBABA GRP HLDG (HK)": {},
-    "BHP GROUP (AU)": {},
+    "BHP GROUP (AU)": {
+      "Copper": {
+        "sub_theme": "Copper & Base-Metals Mining",
+        "reason": "sector relevance"
+      }
+    },
     "WISETECH GLOBAL": {},
     "DELTA ELECTRONICS": {},
     "NATIONAL AUSTRALIA BANK": {},
@@ -19,7 +24,12 @@
     "DBS GROUP HOLDINGS": {},
     "BANK OF CHINA H": {},
     "SAMSUNG ELECTRO-MECH. CO": {},
-    "MACQUARIE GROUP": {},
+    "MACQUARIE GROUP": {
+      "Commodities and Global Markets": {
+        "sub_theme": "Commodities Trading Desks",
+        "reason": "sector relevance"
+      }
+    },
     "RELIANCE INDUSTRIES": {},
     "XIAOMI CORP B": {},
     "ICICI BANK": {},
@@ -27,7 +37,12 @@
     "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
-    "RIO TINTO LTD (AU)": {},
+    "RIO TINTO LTD (AU)": {
+      "Copper": {
+        "sub_theme": "Copper & Base-Metals Mining",
+        "reason": "sector relevance"
+      }
+    },
     "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
@@ -39,19 +54,19 @@
     "BAIDU (HK)": {},
     "INFOSYS": {},
     "LENOVO GROUP": {},
-    "HONGKONG EXCH & CLEARING": {},
+    "HONGKONG EXCH & CLEARING": {
+      "Commodities": {
+        "sub_theme": "Precious-Metals Exchanges",
+        "reason": "sector relevance"
+      }
+    },
     "GIGABYTE TECHNOLOGY CO": {},
     "KB FINANCIAL GROUP": {},
     "GOLD CIRCUIT ELECTRONICS": {},
     "GDS HOLDINGS A (HK)": {},
     "ASE TECHNOLOGY HOLDING": {},
     "CSL": {},
-    "WESFARMERS": {
-      "Kmart Group": {
-        "sub_theme": "Retail grocery chains",
-        "reason": "retail grocery retailer"
-      }
-    },
+    "WESFARMERS": {},
     "SINGAPORE TELECOM": {},
     "LITE-ON TECHNOLOGY CORP": {},
     "UNIMICRON TECHNOLOGY": {},
@@ -70,12 +85,7 @@
     "NAVER": {},
     "KUAISHOU TECHNOLOGY B": {},
     "KING SLIDE WORKS CO": {},
-    "PING AN INSURANCE H": {
-      "Property and Casualty Insurance": {
-        "sub_theme": "Property & casualty insurers",
-        "reason": "Relevant insurer"
-      }
-    },
+    "PING AN INSURANCE H": {},
     "ACCTON TECHNOLOGY CORP": {},
     "ZHONGJI INNO A(HK-C)": {},
     "WISTRON CORP": {},

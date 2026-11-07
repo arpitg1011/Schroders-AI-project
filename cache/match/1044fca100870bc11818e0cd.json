@@ -3,48 +3,51 @@
   "match_map": {
     "TAIWAN SEMICONDUCTOR MFG": {
       "Foundry": {
-        "sub_theme": "AI semiconductors & accelerators",
+        "sub_theme": "US-China Semiconductor Export Controls",
         "reason": "sector relevance"
       }
     },
-    "SAMSUNG ELECTRONICS CO": {
-      "Device Solutions (DS)": {
-        "sub_theme": "Memory for AI",
-        "reason": "sector relevance"
-      }
-    },
+    "SAMSUNG ELECTRONICS CO": {},
     "SK HYNIX": {
       "Manufacture and Sale of Semiconductor Products": {
-        "sub_theme": "Memory for AI",
+        "sub_theme": "US-China Semiconductor Export Controls",
         "reason": "sector relevance"
       }
     },
     "COMMONWEALTH BANK OF AUS": {},
-    "TENCENT HOLDINGS LI (CN)": {
-      "Fintech and Business Services": {
-        "sub_theme": "Cloud AI platforms",
-        "reason": "sector relevance"
-      }
-    },
+    "TENCENT HOLDINGS LI (CN)": {},
     "ALIBABA GRP HLDG (HK)": {},
-    "BHP GROUP (AU)": {},
-    "WISETECH GLOBAL": {},
-    "DELTA ELECTRONICS": {
-      "Infrastructure Business Group": {
-        "sub_theme": "Data center power & cooling",
+    "BHP GROUP (AU)": {
+      "Iron Ore": {
+        "sub_theme": "China Export-Dependent Commodities",
+        "reason": "sector relevance"
+      },
+      "Copper": {
+        "sub_theme": "Rare Earth & Critical Minerals",
         "reason": "sector relevance"
       }
     },
+    "WISETECH GLOBAL": {},
+    "DELTA ELECTRONICS": {},
     "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {
       "Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": {
-        "sub_theme": "AI semiconductors & accelerators",
+        "sub_theme": "China Tech Decoupling Exposure",
         "reason": "sector relevance"
       }
     },
     "ICBC H": {},
     "WESTPAC BANKING": {},
-    "HON HAI PRECISION IND CO": {},
+    "HON HAI PRECISION IND CO": {
+      "FII Subgroup": {
+        "sub_theme": "Consumer Electronics Supply Chain",
+        "reason": "sector relevance"
+      },
+      "FIH Subgroup": {
+        "sub_theme": "US-China Tariff-Exposed Manufacturing",
+        "reason": "sector relevance"
+      }
+    },
     "CHINA CONSTRUCTION BK H": {},
     "DBS GROUP HOLDINGS": {},
     "BANK OF CHINA H": {},
@@ -52,8 +55,8 @@
     "MACQUARIE GROUP": {},
     "RELIANCE INDUSTRIES": {},
     "XIAOMI CORP B": {
-      "Smart EV, AI and Other New Initiatives": {
-        "sub_theme": "Consumer AI & devices",
+      "Smartphones": {
+        "sub_theme": "China Tech Decoupling Exposure",
         "reason": "sector relevance"
       }
     },
@@ -62,8 +65,22 @@
     "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
-    "RIO TINTO LTD (AU)": {},
-    "UNITED MICROELECTRONICS": {},
+    "RIO TINTO LTD (AU)": {
+      "Iron Ore": {
+        "sub_theme": "China Export-Dependent Commodities",
+        "reason": "sector relevance"
+      },
+      "Aluminium & Lithium": {
+        "sub_theme": "Rare Earth & Critical Minerals",
+        "reason": "sector relevance"
+      }
+    },
+    "UNITED MICROELECTRONICS": {
+      "Wafer Fabrication": {
+        "sub_theme": "US-China Semiconductor Export Controls",
+        "reason": "sector relevance"
+      }
+    },
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
     "SK SQUARE CO": {},
@@ -71,12 +88,7 @@
     "BHARTI AIRTEL": {},
     "HDFC BANK": {},
     "AIA GROUP": {},
-    "BAIDU (HK)": {
-      "Baidu General Business": {
-        "sub_theme": "Cloud AI platforms",
-        "reason": "sector relevance"
-      }
-    },
+    "BAIDU (HK)": {},
     "INFOSYS": {},
     "LENOVO GROUP": {},
     "HONGKONG EXCH & CLEARING": {},
@@ -84,7 +96,16 @@
     "KB FINANCIAL GROUP": {},
     "GOLD CIRCUIT ELECTRONICS": {},
     "GDS HOLDINGS A (HK)": {},
-    "ASE TECHNOLOGY HOLDING": {},
+    "ASE TECHNOLOGY HOLDING": {
+      "Packaging": {
+        "sub_theme": "Cross-Strait / Taiwan Risk",
+        "reason": "sector relevance"
+      },
+      "Testing": {
+        "sub_theme": "Cross-Strait / Taiwan Risk",
+        "reason": "sector relevance"
+      }
+    },
     "CSL": {},
     "WESFARMERS": {},
     "SINGAPORE TELECOM": {},
@@ -92,74 +113,40 @@
     "UNIMICRON TECHNOLOGY": {},
     "NETEASE": {},
     "GOODMAN GROUP": {},
-    "ASIA VITAL COMPONENTS": {
-      "Overseas Operating Department": {
-        "sub_theme": "Data center power & cooling",
-        "reason": "sector relevance"
-      }
-    },
+    "ASIA VITAL COMPONENTS": {},
     "QUANTA COMPUTER": {
       "The Electronics Sector": {
-        "sub_theme": "AI server hardware",
+        "sub_theme": "Consumer Electronics Supply Chain",
         "reason": "sector relevance"
       }
     },
     "NAN YA PLASTIC": {},
     "HANMI SEMICONDUCTOR CO": {},
-    "GLOBAL UNICHIP CORP": {
-      "Semiconductor Equipment and Services": {
-        "sub_theme": "AI chip design & IP",
-        "reason": "sector relevance"
-      }
-    },
+    "GLOBAL UNICHIP CORP": {},
     "INFRATIL": {},
     "ELITE MATERIAL CO": {},
     "MPI CORP": {},
     "HCL TECHNOLOGIES": {},
     "SAMSUNG SDS CO": {},
-    "NAVER": {
-      "Enterprise": {
-        "sub_theme": "Cloud AI platforms",
-        "reason": "sector relevance"
-      }
-    },
+    "NAVER": {},
     "KUAISHOU TECHNOLOGY B": {},
     "KING SLIDE WORKS CO": {},
     "PING AN INSURANCE H": {},
     "ACCTON TECHNOLOGY CORP": {},
-    "ZHONGJI INNO A(HK-C)": {
-      "Optical Communication Transceiver Modules and Devices": {
-        "sub_theme": "Networking & interconnect",
-        "reason": "sector relevance"
-      }
-    },
+    "ZHONGJI INNO A(HK-C)": {},
     "WISTRON CORP": {},
-    "ALCHIP TECHNOLOGIES": {
-      "Semiconductors": {
-        "sub_theme": "AI chip design & IP",
-        "reason": "sector relevance"
-      }
-    },
+    "ALCHIP TECHNOLOGIES": {},
     "BIZLINK HOLDING": {},
     "ZHEN DING TECHNOLOGY": {},
     "ASPEED TECHNOLOGY": {},
-    "WIWYNN CORPORATION": {
-      "Computer Hardware": {
-        "sub_theme": "AI server hardware",
-        "reason": "sector relevance"
-      }
-    },
+    "WIWYNN CORPORATION": {},
     "CAMBRICON TECH A (HK-C)": {
       "Cloud Product Line": {
-        "sub_theme": "AI semiconductors & accelerators",
+        "sub_theme": "US-China Semiconductor Export Controls",
         "reason": "sector relevance"
       },
       "Edge Product Line": {
-        "sub_theme": "AI semiconductors & accelerators",
-        "reason": "sector relevance"
-      },
-      "IP Licensing and Software": {
-        "sub_theme": "AI chip design & IP",
+        "sub_theme": "China Tech Decoupling Exposure",
         "reason": "sector relevance"
       }
     },

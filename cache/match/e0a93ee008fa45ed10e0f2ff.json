@@ -1,7 +1,12 @@
 {
   "_v": 1,
   "match_map": {
-    "TAIWAN SEMICONDUCTOR MFG": {},
+    "TAIWAN SEMICONDUCTOR MFG": {
+      "Foundry": {
+        "sub_theme": "Semiconductor Fab Water Use",
+        "reason": "sector relevance"
+      }
+    },
     "SAMSUNG ELECTRONICS CO": {},
     "SK HYNIX": {},
     "COMMONWEALTH BANK OF AUS": {},
@@ -9,11 +14,11 @@
     "ALIBABA GRP HLDG (HK)": {},
     "BHP GROUP (AU)": {
       "Copper": {
-        "sub_theme": "Base metals & copper",
+        "sub_theme": "Water-Intensive Mining",
         "reason": "sector relevance"
       },
       "Iron Ore": {
-        "sub_theme": "Diversified mining",
+        "sub_theme": "Water-Intensive Mining",
         "reason": "sector relevance"
       }
     },
@@ -21,42 +26,14 @@
     "DELTA ELECTRONICS": {},
     "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {},
-    "ICBC H": {
-      "Corporate Banking": {
-        "sub_theme": "Banks & bullion",
-        "reason": "sector relevance"
-      }
-    },
+    "ICBC H": {},
     "WESTPAC BANKING": {},
     "HON HAI PRECISION IND CO": {},
-    "CHINA CONSTRUCTION BK H": {
-      "Treasury Business": {
-        "sub_theme": "Banks & bullion",
-        "reason": "sector relevance"
-      }
-    },
+    "CHINA CONSTRUCTION BK H": {},
     "DBS GROUP HOLDINGS": {},
-    "BANK OF CHINA H": {
-      "Treasury Operations": {
-        "sub_theme": "Banks & bullion",
-        "reason": "sector relevance"
-      },
-      "Insurance": {
-        "sub_theme": "Insurance",
-        "reason": "sector relevance"
-      }
-    },
+    "BANK OF CHINA H": {},
     "SAMSUNG ELECTRO-MECH. CO": {},
-    "MACQUARIE GROUP": {
-      "Commodities and Global Markets": {
-        "sub_theme": "Commodities trading",
-        "reason": "sector relevance"
-      },
-      "Macquarie Asset Management": {
-        "sub_theme": "Asset & wealth management",
-        "reason": "sector relevance"
-      }
-    },
+    "MACQUARIE GROUP": {},
     "RELIANCE INDUSTRIES": {},
     "XIAOMI CORP B": {},
     "ICICI BANK": {},
@@ -66,51 +43,33 @@
     "TATA CONSULTANCY": {},
     "RIO TINTO LTD (AU)": {
       "Copper": {
-        "sub_theme": "Base metals & copper",
+        "sub_theme": "Water-Intensive Mining",
         "reason": "sector relevance"
       },
       "Iron Ore": {
-        "sub_theme": "Diversified mining",
-        "reason": "sector relevance"
-      },
-      "Aluminium & Lithium": {
-        "sub_theme": "Diversified mining",
+        "sub_theme": "Water-Intensive Mining",
         "reason": "sector relevance"
       }
     },
-    "UNITED MICROELECTRONICS": {},
+    "UNITED MICROELECTRONICS": {
+      "Wafer Fabrication": {
+        "sub_theme": "Semiconductor Fab Water Use",
+        "reason": "sector relevance"
+      }
+    },
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
     "SK SQUARE CO": {},
     "MEITUAN B": {},
     "BHARTI AIRTEL": {},
     "HDFC BANK": {},
-    "AIA GROUP": {
-      "Writes Life Insurance": {
-        "sub_theme": "Insurance",
-        "reason": "sector relevance"
-      }
-    },
+    "AIA GROUP": {},
     "BAIDU (HK)": {},
     "INFOSYS": {},
     "LENOVO GROUP": {},
-    "HONGKONG EXCH & CLEARING": {
-      "Commodities": {
-        "sub_theme": "Exchanges & market infrastructure",
-        "reason": "sector relevance"
-      },
-      "Cash": {
-        "sub_theme": "Exchanges & market infrastructure",
-        "reason": "sector relevance"
-      }
-    },
+    "HONGKONG EXCH & CLEARING": {},
     "GIGABYTE TECHNOLOGY CO": {},
-    "KB FINANCIAL GROUP": {
-      "Securities": {
-        "sub_theme": "Asset & wealth management",
-        "reason": "sector relevance"
-      }
-    },
+    "KB FINANCIAL GROUP": {},
     "GOLD CIRCUIT ELECTRONICS": {},
     "GDS HOLDINGS A (HK)": {},
     "ASE TECHNOLOGY HOLDING": {},
@@ -123,7 +82,12 @@
     "GOODMAN GROUP": {},
     "ASIA VITAL COMPONENTS": {},
     "QUANTA COMPUTER": {},
-    "NAN YA PLASTIC": {},
+    "NAN YA PLASTIC": {
+      "Raw Materials for Plastics": {
+        "sub_theme": "Industrial Process Water",
+        "reason": "sector relevance"
+      }
+    },
     "HANMI SEMICONDUCTOR CO": {},
     "GLOBAL UNICHIP CORP": {},
     "INFRATIL": {},
@@ -134,16 +98,7 @@
     "NAVER": {},
     "KUAISHOU TECHNOLOGY B": {},
     "KING SLIDE WORKS CO": {},
-    "PING AN INSURANCE H": {
-      "Asset Management Business": {
-        "sub_theme": "Asset & wealth management",
-        "reason": "sector relevance"
-      },
-      "Life and Health Insurance": {
-        "sub_theme": "Insurance",
-        "reason": "sector relevance"
-      }
-    },
+    "PING AN INSURANCE H": {},
     "ACCTON TECHNOLOGY CORP": {},
     "ZHONGJI INNO A(HK-C)": {},
     "WISTRON CORP": {},

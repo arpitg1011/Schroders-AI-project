@@ -17,33 +17,18 @@
     "HON HAI PRECISION IND CO": {},
     "CHINA CONSTRUCTION BK H": {},
     "DBS GROUP HOLDINGS": {},
-    "BANK OF CHINA H": {
-      "Insurance": {
-        "sub_theme": "Life & health insurance",
-        "reason": "sector relevance"
-      }
-    },
+    "BANK OF CHINA H": {},
     "SAMSUNG ELECTRO-MECH. CO": {},
-    "MACQUARIE GROUP": {
-      "Macquarie Asset Management": {
-        "sub_theme": "Wealth & asset management",
-        "reason": "sector relevance"
-      }
-    },
+    "MACQUARIE GROUP": {},
     "RELIANCE INDUSTRIES": {},
     "XIAOMI CORP B": {},
-    "ICICI BANK": {
-      "Life insurance": {
-        "sub_theme": "Life & health insurance",
-        "reason": "sector relevance"
-      }
-    },
+    "ICICI BANK": {},
     "OCBC BANK": {},
     "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {
       "Life Sciences and Healthcare": {
-        "sub_theme": "Healthcare IT",
+        "sub_theme": "Healthcare IT Services",
         "reason": "sector relevance"
       }
     },
@@ -57,46 +42,36 @@
     "HDFC BANK": {},
     "AIA GROUP": {
       "Writes Life Insurance": {
-        "sub_theme": "Life & health insurance",
+        "sub_theme": "Life & Health Insurance",
         "reason": "sector relevance"
       }
     },
     "BAIDU (HK)": {},
-    "INFOSYS": {
-      "Life Science": {
-        "sub_theme": "Healthcare IT",
-        "reason": "sector relevance"
-      }
-    },
+    "INFOSYS": {},
     "LENOVO GROUP": {},
     "HONGKONG EXCH & CLEARING": {},
     "GIGABYTE TECHNOLOGY CO": {},
-    "KB FINANCIAL GROUP": {
-      "Securities": {
-        "sub_theme": "Wealth & asset management",
-        "reason": "sector relevance"
-      }
-    },
+    "KB FINANCIAL GROUP": {},
     "GOLD CIRCUIT ELECTRONICS": {},
     "GDS HOLDINGS A (HK)": {},
     "ASE TECHNOLOGY HOLDING": {},
     "CSL": {
       "CSL Behring (Incl.CSL Intellectual Property)": {
-        "sub_theme": "Pharmaceuticals & biotech",
+        "sub_theme": "Plasma & Vaccines",
         "reason": "sector relevance"
       },
       "CSL Seqirus": {
-        "sub_theme": "Pharmaceuticals & biotech",
+        "sub_theme": "Plasma & Vaccines",
         "reason": "sector relevance"
       },
       "Csl Vifor": {
-        "sub_theme": "Pharmaceuticals & biotech",
+        "sub_theme": "Pharmaceuticals & Biotech",
         "reason": "sector relevance"
       }
     },
     "WESFARMERS": {
       "Health": {
-        "sub_theme": "Consumer healthcare & retail pharmacy",
+        "sub_theme": "Consumer Health & Pharmacy Retail",
         "reason": "sector relevance"
       }
     },
@@ -112,11 +87,11 @@
     "GLOBAL UNICHIP CORP": {},
     "INFRATIL": {
       "RHCNZ Medical Imaging New Zealand": {
-        "sub_theme": "Healthcare services & diagnostics",
+        "sub_theme": "Healthcare Diagnostics & Imaging",
         "reason": "sector relevance"
       },
       "Anytime Radiology Group Australia": {
-        "sub_theme": "Healthcare services & diagnostics",
+        "sub_theme": "Healthcare Diagnostics & Imaging",
         "reason": "sector relevance"
       }
     },
@@ -129,11 +104,7 @@
     "KING SLIDE WORKS CO": {},
     "PING AN INSURANCE H": {
       "Life and Health Insurance": {
-        "sub_theme": "Life & health insurance",
-        "reason": "sector relevance"
-      },
-      "Asset Management Business": {
-        "sub_theme": "Wealth & asset management",
+        "sub_theme": "Life & Health Insurance",
         "reason": "sector relevance"
       }
     },
@@ -150,7 +121,7 @@
     "KEPPEL": {},
     "PERSISTENT SYSTEMS": {
       "Healthcare & Life Sciences": {
-        "sub_theme": "Healthcare IT",
+        "sub_theme": "Healthcare IT Services",
         "reason": "sector relevance"
       }
     },

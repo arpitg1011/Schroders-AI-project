@@ -4,20 +4,20 @@
     "TAIWAN SEMICONDUCTOR MFG": {},
     "SAMSUNG ELECTRONICS CO": {
       "Device Solutions (DS)": {
-        "sub_theme": "Memory & storage",
+        "sub_theme": "Server Memory & Storage",
         "reason": "sector relevance"
       }
     },
     "SK HYNIX": {
       "Manufacture and Sale of Semiconductor Products": {
-        "sub_theme": "Memory & storage",
+        "sub_theme": "Server Memory & Storage",
         "reason": "sector relevance"
       }
     },
     "COMMONWEALTH BANK OF AUS": {},
     "TENCENT HOLDINGS LI (CN)": {
       "Fintech and Business Services": {
-        "sub_theme": "Cloud infrastructure providers",
+        "sub_theme": "Cloud Infrastructure Providers",
         "reason": "sector relevance"
       }
     },
@@ -26,7 +26,7 @@
     "WISETECH GLOBAL": {},
     "DELTA ELECTRONICS": {
       "Infrastructure Business Group": {
-        "sub_theme": "Power & cooling solutions",
+        "sub_theme": "Data-Center Power & Cooling",
         "reason": "sector relevance"
       }
     },
@@ -58,23 +58,14 @@
     "AIA GROUP": {},
     "BAIDU (HK)": {
       "Baidu General Business": {
-        "sub_theme": "Cloud infrastructure providers",
+        "sub_theme": "Cloud Infrastructure Providers",
         "reason": "sector relevance"
       }
     },
-    "INFOSYS": {
-      "Financial Services": {
-        "sub_theme": "IT services & integration",
-        "reason": "sector relevance"
-      }
-    },
+    "INFOSYS": {},
     "LENOVO GROUP": {
       "Infrastructure Solutions Group (ISG)": {
-        "sub_theme": "Server & hardware manufacturers",
-        "reason": "sector relevance"
-      },
-      "Solutions and Services Group (SSG)": {
-        "sub_theme": "IT services & integration",
+        "sub_theme": "Cloud Server Hardware",
         "reason": "sector relevance"
       }
     },
@@ -84,7 +75,7 @@
     "GOLD CIRCUIT ELECTRONICS": {},
     "GDS HOLDINGS A (HK)": {
       "Design, Build-Out and Operation of Data Centers": {
-        "sub_theme": "Data center operators",
+        "sub_theme": "Data-Center Operators",
         "reason": "sector relevance"
       }
     },
@@ -98,13 +89,13 @@
     "GOODMAN GROUP": {},
     "ASIA VITAL COMPONENTS": {
       "Overseas Operating Department": {
-        "sub_theme": "Power & cooling solutions",
+        "sub_theme": "Data-Center Power & Cooling",
         "reason": "sector relevance"
       }
     },
     "QUANTA COMPUTER": {
       "The Electronics Sector": {
-        "sub_theme": "Server & hardware manufacturers",
+        "sub_theme": "Cloud Server Hardware",
         "reason": "sector relevance"
       }
     },
@@ -118,21 +109,17 @@
       "HCL Software": {
         "sub_theme": "Enterprise SaaS",
         "reason": "sector relevance"
-      },
-      "IT and Business Services": {
-        "sub_theme": "IT services & integration",
-        "reason": "sector relevance"
       }
     },
     "SAMSUNG SDS CO": {
       "IT Service": {
-        "sub_theme": "IT services & integration",
+        "sub_theme": "Cloud Migration & IT Services",
         "reason": "sector relevance"
       }
     },
     "NAVER": {
       "Enterprise": {
-        "sub_theme": "Cloud infrastructure providers",
+        "sub_theme": "Cloud Infrastructure Providers",
         "reason": "sector relevance"
       }
     },
@@ -141,13 +128,13 @@
     "PING AN INSURANCE H": {},
     "ACCTON TECHNOLOGY CORP": {
       "Computer Networks": {
-        "sub_theme": "Networking equipment",
+        "sub_theme": "Cloud Networking Equipment",
         "reason": "sector relevance"
       }
     },
     "ZHONGJI INNO A(HK-C)": {
       "Optical Communication Transceiver Modules and Devices": {
-        "sub_theme": "Networking equipment",
+        "sub_theme": "Optical Interconnect",
         "reason": "sector relevance"
       }
     },
@@ -158,7 +145,7 @@
     "ASPEED TECHNOLOGY": {},
     "WIWYNN CORPORATION": {
       "Computer Hardware": {
-        "sub_theme": "Server & hardware manufacturers",
+        "sub_theme": "Cloud Server Hardware",
         "reason": "sector relevance"
       }
     },
@@ -167,12 +154,7 @@
     "KEPPEL": {},
     "PERSISTENT SYSTEMS": {},
     "TECH MAHINDRA": {},
-    "WIPRO": {
-      "IT Products": {
-        "sub_theme": "Server & hardware manufacturers",
-        "reason": "sector relevance"
-      }
-    },
+    "WIPRO": {},
     "XERO (AU)": {}
   }
 }

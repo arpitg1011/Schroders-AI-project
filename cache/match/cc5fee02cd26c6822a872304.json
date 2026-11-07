@@ -5,25 +5,21 @@
     "SAMSUNG ELECTRONICS CO": {},
     "SK HYNIX": {},
     "COMMONWEALTH BANK OF AUS": {},
-    "TENCENT HOLDINGS LI (CN)": {},
-    "ALIBABA GRP HLDG (HK)": {},
-    "BHP GROUP (AU)": {
-      "Copper": {
-        "sub_theme": "Critical minerals & materials",
+    "TENCENT HOLDINGS LI (CN)": {
+      "Fintech and Business Services": {
+        "sub_theme": "Mobile Wallets & Payment Apps",
         "reason": "sector relevance"
       }
     },
+    "ALIBABA GRP HLDG (HK)": {
+      "Alibaba China E-commerce Group": {
+        "sub_theme": "E-Commerce Checkout & Platforms",
+        "reason": "sector relevance"
+      }
+    },
+    "BHP GROUP (AU)": {},
     "WISETECH GLOBAL": {},
-    "DELTA ELECTRONICS": {
-      "Power Supply and Spare Parts Business Group": {
-        "sub_theme": "Power electronics & inverters",
-        "reason": "sector relevance"
-      },
-      "Infrastructure Business Group": {
-        "sub_theme": "Grid & transmission equipment",
-        "reason": "sector relevance"
-      }
-    },
+    "DELTA ELECTRONICS": {},
     "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {},
     "ICBC H": {},
@@ -35,42 +31,28 @@
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
     "RELIANCE INDUSTRIES": {
-      "Oil and Gas": {
-        "sub_theme": "Green hydrogen",
+      "Digital Services": {
+        "sub_theme": "Mobile Wallets & Payment Apps",
         "reason": "sector relevance"
       }
     },
-    "XIAOMI CORP B": {
-      "Smart EV, AI and Other New Initiatives": {
-        "sub_theme": "EV & electrification",
-        "reason": "sector relevance"
-      }
-    },
+    "XIAOMI CORP B": {},
     "ICICI BANK": {},
     "OCBC BANK": {},
-    "HYUNDAI MOTOR CO": {
-      "Automotive": {
-        "sub_theme": "EV & electrification",
-        "reason": "sector relevance"
-      }
-    },
+    "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
-    "RIO TINTO LTD (AU)": {
-      "Copper": {
-        "sub_theme": "Critical minerals & materials",
-        "reason": "sector relevance"
-      },
-      "Aluminium & Lithium": {
-        "sub_theme": "Critical minerals & materials",
-        "reason": "sector relevance"
-      }
-    },
+    "RIO TINTO LTD (AU)": {},
     "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
     "SK SQUARE CO": {},
-    "MEITUAN B": {},
+    "MEITUAN B": {
+      "Core Local Commerce": {
+        "sub_theme": "E-Commerce Checkout & Platforms",
+        "reason": "sector relevance"
+      }
+    },
     "BHARTI AIRTEL": {},
     "HDFC BANK": {},
     "AIA GROUP": {},
@@ -79,7 +61,12 @@
     "LENOVO GROUP": {},
     "HONGKONG EXCH & CLEARING": {},
     "GIGABYTE TECHNOLOGY CO": {},
-    "KB FINANCIAL GROUP": {},
+    "KB FINANCIAL GROUP": {
+      "Credit Card": {
+        "sub_theme": "Card Issuing & Networks",
+        "reason": "sector relevance"
+      }
+    },
     "GOLD CIRCUIT ELECTRONICS": {},
     "GDS HOLDINGS A (HK)": {},
     "ASE TECHNOLOGY HOLDING": {},
@@ -95,17 +82,17 @@
     "NAN YA PLASTIC": {},
     "HANMI SEMICONDUCTOR CO": {},
     "GLOBAL UNICHIP CORP": {},
-    "INFRATIL": {
-      "ALL Other Segments & Corporate New Zealand": {
-        "sub_theme": "Renewable infrastructure investment",
-        "reason": "sector relevance"
-      }
-    },
+    "INFRATIL": {},
     "ELITE MATERIAL CO": {},
     "MPI CORP": {},
     "HCL TECHNOLOGIES": {},
     "SAMSUNG SDS CO": {},
-    "NAVER": {},
+    "NAVER": {
+      "Fintech": {
+        "sub_theme": "Mobile Wallets & Payment Apps",
+        "reason": "sector relevance"
+      }
+    },
     "KUAISHOU TECHNOLOGY B": {},
     "KING SLIDE WORKS CO": {},
     "PING AN INSURANCE H": {},
@@ -118,22 +105,8 @@
     "ASPEED TECHNOLOGY": {},
     "WIWYNN CORPORATION": {},
     "CAMBRICON TECH A (HK-C)": {},
-    "DELTA ELECTRONICS THAI": {
-      "Power Electronics": {
-        "sub_theme": "Power electronics & inverters",
-        "reason": "sector relevance"
-      },
-      "Infrastructure": {
-        "sub_theme": "Grid & transmission equipment",
-        "reason": "sector relevance"
-      }
-    },
-    "KEPPEL": {
-      "Connectivity": {
-        "sub_theme": "Renewable utilities",
-        "reason": "sector relevance"
-      }
-    },
+    "DELTA ELECTRONICS THAI": {},
+    "KEPPEL": {},
     "PERSISTENT SYSTEMS": {},
     "TECH MAHINDRA": {},
     "WIPRO": {},
