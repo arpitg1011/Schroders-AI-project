@@ -569,11 +569,17 @@ def section_overview(analysis: dict):
             label = "★ Favourited" if is_fav else "☆ Favourite"
             help_txt = ("Remove from My Favourites" if is_fav
                         else "Save to My Favourites (for the Comparison tab)")
-            # type="primary" (gold/blue accent) when already favourited, so the
-            # state is visually distinct from the un-favourited secondary button.
+            # When favourited, tint only THIS button gold (scoped by its key's
+            # wrapper class, so Login/Analyze primary buttons are unaffected).
+            if is_fav:
+                st.markdown(
+                    f"<style>.st-key-fav_toggle_overview button "
+                    f"{{background:{T.GOLD} !important;color:{T.NAVY_BG} !important;}}"
+                    f".st-key-fav_toggle_overview button:hover "
+                    f"{{background:#FFD24D !important;}}</style>",
+                    unsafe_allow_html=True)
             if st.button(label, key="fav_toggle_overview",
-                         use_container_width=True, help=help_txt,
-                         type=("primary" if is_fav else "secondary")):
+                         use_container_width=True, help=help_txt):
                 res = (_remove_favourite if is_fav else _add_favourite)(theme_name)
                 if not res.get("ok"):
                     st.error(f"Could not update favourites: {res.get('message','')}")

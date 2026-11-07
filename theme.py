@@ -138,23 +138,12 @@ small, .stCaption, [data-testid="stCaptionContainer"] {{ color: {MUTED} !importa
   border:0 !important; border-radius:10px !important; font-weight:600 !important;
   padding:.5rem 1.2rem !important; }}
 .stButton button:hover {{ background:{BLUE_LIGHT} !important; }}
-/* Primary buttons get the gold accent so toggled/primary state is distinct. */
-.stButton button[kind="primary"] {{ background:{GOLD} !important;
-  color:{NAVY_BG} !important; }}
-.stButton button[kind="primary"]:hover {{ background:#FFD24D !important; }}
 
-/* Select boxes / dropdowns - match the panel palette, not default dark grey. */
-.stSelectbox div[data-baseweb="select"] > div {{
-  background:{PANEL} !important; border:1px solid {BORDER} !important;
-  border-radius:10px !important; color:{TEXT} !important; }}
-.stSelectbox div[data-baseweb="select"] span {{ color:{TEXT} !important; }}
-.stSelectbox svg {{ fill:{MUTED} !important; }}
-/* The dropdown popover menu. */
-div[data-baseweb="popover"] ul,
-div[data-baseweb="popover"] div[role="listbox"] {{
-  background:{PANEL_2} !important; border:1px solid {BORDER} !important; }}
-div[data-baseweb="popover"] li {{ color:{TEXT} !important; background:transparent !important; }}
-div[data-baseweb="popover"] li:hover {{ background:{BLUE} !important; color:white !important; }}
+/* Select boxes - tint the closed control to the panel palette (navy), not the
+   default dark grey. Kept minimal: only the visible background + text, so we do
+   not interfere with baseweb's internal rendering (which hid the control). */
+div[data-baseweb="select"] > div:first-child {{
+  background:{PANEL} !important; border-color:{BORDER} !important; }}
 
 /* Dataframe */
 [data-testid="stDataFrame"] {{ border:1px solid {BORDER}; border-radius:10px; }}
