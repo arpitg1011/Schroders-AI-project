@@ -188,6 +188,47 @@ def _is_logged_in() -> bool:
     return bool(st.session_state.get("auth"))
 
 
+# ---------------------------------------------------------------------------
+# Favourite themes - Supabase for logged-in users, session for anonymous.
+# Stored as a list of theme strings (display form). Comparison tab reads these.
+# ---------------------------------------------------------------------------
+def _get_favourites() -> list:
+    """Return the current user's favourite theme strings (newest first)."""
+    if _is_logged_in():
+        res = sb.list_favourites(st.session_state["auth"]["session"])
+        if res.get("ok"):
+            return [f["theme"] for f in res["favourites"]]
+        return []
+    return list(st.session_state.get("_fav_themes", []))
+
+
+def _is_favourite(theme: str) -> bool:
+    key = (theme or "").strip().lower()
+    return any(key == t.strip().lower() for t in _get_favourites())
+
+
+def _add_favourite(theme: str) -> None:
+    theme = (theme or "").strip()
+    if not theme:
+        return
+    if _is_logged_in():
+        sb.add_favourite(st.session_state["auth"]["session"], theme)
+    else:
+        favs = st.session_state.setdefault("_fav_themes", [])
+        if not any(theme.lower() == t.lower() for t in favs):
+            favs.insert(0, theme)
+
+
+def _remove_favourite(theme: str) -> None:
+    theme = (theme or "").strip()
+    if _is_logged_in():
+        sb.remove_favourite(st.session_state["auth"]["session"], theme)
+    else:
+        favs = st.session_state.get("_fav_themes", [])
+        st.session_state["_fav_themes"] = [t for t in favs
+                                           if t.lower() != theme.lower()]
+
+
 def render_login_gate() -> bool:
     """Render login/signup. Returns True if the user may proceed.
 
@@ -774,12 +815,14 @@ def section_contributors(analysis: dict):
                "(company exposure x portfolio weight). Full figures below.")
 
     # Full detail table (same order).
+    scores = analysis.get("scores", {})
     df = pd.DataFrame([{
         "Company": c["company"],
         "Sector": c["sector"],
         "Portfolio Wt %": round(c["portfolio_wt"] * 100, 1),
         "Exposure %": round(c["company_exposure"]),
         "Contribution %": round(c["contribution"], 2),
+        "Confidence": scores.get(c["company"], {}).get("confidence_level", "None"),
     } for c in rows])
     st.dataframe(df, use_container_width=True, hide_index=True)
 
@@ -797,14 +840,16 @@ def section_company(analysis: dict):
         st.warning(f"{choice}: no S&P segment data available - flagged, exposure 0%.")
         return
 
-    matched_rev = sum(b["revenue_pct"] for b in sr["segment_breakdown"]
-                      if b["alignment_score"] > 0)
+    matched_rev = sr.get("matched_revenue_pct", sr["company_exposure"])
+    n_matched = sum(1 for b in sr["segment_breakdown"] if b["alignment_score"] > 0)
+    conf_level = sr.get("confidence_level", "None")
 
     c1, c2, c3 = st.columns(3)
     _kpi_card(c1, "Company Exposure", f"{sr['company_exposure']:.0f}%",
               f"{T.band_badge(sr.get('exposure_band','-'))} &nbsp; exact {sr['company_exposure']:.2f}%", "kpi-accent")
-    _kpi_card(c2, "Matched Revenue", f"{matched_rev:.0f}%",
-              "share of revenue in theme-matched segments")
+    _kpi_card(c2, "Confidence", conf_level if conf_level != "None" else "n/a",
+              "how strongly the evidence supports this classification "
+              f"({n_matched} of {len(sr['segment_breakdown'])} segments matched)")
     _kpi_card(c3, "Matched Sub-Themes", str(len(sr["matched_sub_industries"])),
               ", ".join(sr["matched_sub_industries"]) or "none")
 
@@ -812,11 +857,15 @@ def section_company(analysis: dict):
         st.warning("Insufficient data: no segment matched this theme, exposure 0%.")
 
     # Exposure is purely revenue-based: a segment the model judged part of the
-    # theme contributes 100% of its revenue share, everything else 0%.
+    # theme contributes 100% of its revenue share, everything else 0%. Confidence
+    # is a deterministic High/Medium/Low from the matched-revenue share and how
+    # many segments corroborate - not an LLM number.
     st.caption(
-        f"Exposure = the {matched_rev:.0f}% of this company's segment revenue that "
-        f"sits in segments judged part of the theme. No similarity weighting is "
-        f"applied; see the per-segment decision and rationale below."
+        f"Exposure = the {matched_rev:.0f}% of this company's segment revenue in "
+        f"segments judged part of the theme ({n_matched} segment"
+        f"{'s' if n_matched != 1 else ''} matched). Confidence is **{conf_level}** — "
+        f"derived deterministically from that revenue share and segment breadth, "
+        f"not an LLM number. See the per-segment decision and rationale below."
     )
 
     st.write("")
@@ -1114,7 +1163,28 @@ def main():
         )
         return
 
-    if analysis.get("cached"):
+    # Favourite toggle for the analyzed theme (feeds the Comparison tab).
+    _analyzed_theme = (analysis.get("taxonomy", {}) or {}).get("theme", "").strip()
+    if _analyzed_theme:
+        fav_col, cap_col = st.columns([1.4, 5])
+        with fav_col:
+            if _is_favourite(_analyzed_theme):
+                if st.button("★ Favourited", key="fav_toggle",
+                             use_container_width=True,
+                             help="Remove from My Favourites"):
+                    _remove_favourite(_analyzed_theme)
+                    st.rerun()
+            else:
+                if st.button("☆ Favourite", key="fav_toggle",
+                             use_container_width=True,
+                             help="Save to My Favourites (for the Comparison tab)"):
+                    _add_favourite(_analyzed_theme)
+                    st.rerun()
+        with cap_col:
+            if analysis.get("cached"):
+                st.caption("Taxonomy served from cache (reproducible). "
+                           "Tick 'Regenerate' to refresh.")
+    elif analysis.get("cached"):
         st.caption("Taxonomy served from cache (reproducible). Tick 'Regenerate' to refresh.")
 
     if (analysis.get("metrics", {}) or {}).get("scoring_mode") == "embedding_fallback":

@@ -620,6 +620,35 @@ def exposure_band(exposure_pct: float) -> str:
             return label
     return "Negligible"
 
+
+def qualitative_confidence(matched_rev_pct: float, n_matched_segments: int,
+                           has_segment_data: bool) -> str:
+    """Deterministic High/Medium/Low confidence in a company's classification.
+
+    Not an LLM number - derived only from reproducible facts:
+      * matched_rev_pct: share (0-100) of the company's revenue in segments the
+        model judged part of the theme (more on-theme revenue => more confident);
+      * n_matched_segments: how many distinct segments corroborate (breadth);
+      * has_segment_data: a company with no real segment data is never confident.
+
+    Returns "High", "Medium", "Low", or "None" (nothing matched / no data).
+    """
+    if not has_segment_data or matched_rev_pct <= 0 or n_matched_segments <= 0:
+        return "None"
+    # Primary signal: how much of the business is on-theme.
+    if matched_rev_pct >= 66.0:
+        level = "High"
+    elif matched_rev_pct >= 33.0:
+        level = "Medium"
+    else:
+        level = "Low"
+    # Breadth nudge: a single thin segment match is less robust - cap at Medium
+    # when only one segment (and a minority of revenue) supports it.
+    if n_matched_segments == 1 and matched_rev_pct < 66.0:
+        level = "Low" if matched_rev_pct < 33.0 else "Medium"
+    return level
+
+
 _embedding_model = None
 _embed_cache: dict[str, "np.ndarray"] = {}
 
@@ -753,16 +782,20 @@ def _score_company_binary(base: dict, working: list, total: float,
         })
 
     company_exposure = round(min(100.0, max(0.0, exposure)), 2)
+    n_matched_segments = sum(1 for b in breakdown if b["alignment_score"] > 0)
     base["company_exposure"] = company_exposure
     base["exposure_band"] = exposure_band(company_exposure)
     base["matched_sub_industries"] = matched_subs
     base["matched_activities"] = []
     base["segment_breakdown"] = breakdown
     base["sub_theme_attribution"] = {k: round(v, 2) for k, v in sub_attr.items()}
-    # Numeric confidence is retired (it was exposure relabeled). A qualitative
-    # confidence will replace it later; keep the field as None so the UI can
-    # detect "not computed" rather than show a fake 0.
-    base["confidence"] = None
+    # Numeric confidence is retired (it was exposure relabeled, and an LLM
+    # number would not be deterministic). Instead a DETERMINISTIC qualitative
+    # level from reproducible facts: matched-revenue share + segment breadth.
+    base["matched_revenue_pct"] = company_exposure  # share of rev in matched segs
+    base["confidence"] = None  # numeric confidence retired
+    base["confidence_level"] = qualitative_confidence(
+        company_exposure, n_matched_segments, base.get("has_segment_data", True))
     base["match_reasons"] = matched_reasons
     base["insufficient_data"] = (company_exposure == 0.0)
 
@@ -810,7 +843,9 @@ def score_company(company_row: dict, taxonomy: dict,
         "evidence_snippet": "",
         "segment_breakdown": [],
         "sub_theme_attribution": {},
-        "confidence": 0.0,
+        "confidence": None,
+        "confidence_level": "None",
+        "matched_revenue_pct": 0.0,
         "insufficient_data": True,
         "exposure_band": "Negligible",
     }
@@ -945,12 +980,13 @@ def score_company(company_row: dict, taxonomy: dict,
     base["segment_breakdown"] = breakdown
     base["sub_theme_attribution"] = {k: round(v, 2) for k, v in sub_attr.items()}  # Req 14.2
 
-    # Confidence = revenue-weighted average alignment across present segments (Req 14.1).
-    # This reflects how much of the company's revenue is confidently thematic.
-    conf = 0.0
-    for b in breakdown:
-        conf += (b["revenue_pct"] / 100.0) * b["alignment_score"]
-    base["confidence"] = round(min(1.0, max(0.0, conf)), 4)
+    # Fallback path qualitative confidence: use matched-revenue share (segments
+    # that cleared the similarity threshold) + breadth, same deterministic rule.
+    base["confidence"] = None
+    base["matched_revenue_pct"] = company_exposure
+    n_matched_segments = sum(1 for b in breakdown if b["alignment_score"] > 0)
+    base["confidence_level"] = qualitative_confidence(
+        company_exposure, n_matched_segments, base.get("has_segment_data", True))
     # Insufficient data: positive revenue but nothing matched the theme (Req 14.4).
     base["insufficient_data"] = (company_exposure == 0.0)
 

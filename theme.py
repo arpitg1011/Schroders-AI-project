@@ -170,6 +170,19 @@ def band_badge(band: str) -> str:
     return f'<span class="badge" style="background:{color}">{band}</span>'
 
 
+# Qualitative confidence badge: High (green) / Medium (gold) / Low (muted).
+# Deterministic - derived from matched-revenue share + segment breadth, never
+# an LLM number.
+_CONFIDENCE_COLORS = {"High": GOOD, "Medium": GOLD, "Low": MUTED, "None": MUTED}
+
+
+def confidence_badge(level: str) -> str:
+    color = _CONFIDENCE_COLORS.get(level, MUTED)
+    label = level if level and level != "None" else "n/a"
+    return (f'<span class="badge" style="background:{color};color:#0A1A2F;">'
+            f'{label}</span>')
+
+
 # News signal badge: Tailwind (green) / Headwind (red) / Neutral (grey),
 # with Low/Med/High shown as intensity. Purely qualitative - no numbers.
 def signal_badge(direction: str, strength: str) -> str:

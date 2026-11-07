@@ -101,8 +101,36 @@ def test_none_map_uses_embedding_fallback():
     sr = engine.score_company(row, TAX, match_map=None)
     assert sr["ok"] is True
     assert 0.0 <= sr["company_exposure"] <= 100.0
-    # Fallback path still produces the numeric confidence field (a float).
-    assert isinstance(sr["confidence"], float)
+    # Numeric confidence is retired on both paths; a qualitative level is set.
+    assert sr["confidence"] is None
+    assert sr["confidence_level"] in {"High", "Medium", "Low", "None"}
+
+
+# ---- deterministic qualitative confidence ----
+
+def test_qualitative_confidence_levels():
+    qc = engine.qualitative_confidence
+    # No data / nothing matched -> None.
+    assert qc(0.0, 0, True) == "None"
+    assert qc(50.0, 1, False) == "None"
+    # Majority of revenue on-theme, multiple segments -> High.
+    assert qc(80.0, 2, True) == "High"
+    # Mid revenue share -> Medium.
+    assert qc(50.0, 2, True) == "Medium"
+    # Small share -> Low.
+    assert qc(10.0, 2, True) == "Low"
+    # Single thin segment is capped (not High) even if it is the whole match.
+    assert qc(40.0, 1, True) == "Medium"
+    assert qc(20.0, 1, True) == "Low"
+
+
+def test_binary_score_sets_confidence_level():
+    row = _row("TSMC", [("Foundry", 100.0)])
+    mm = {"Foundry": {"sub_theme": "Integrated Device Manufacturers (IDMs)",
+                      "reason": "chips"}}
+    sr = engine.score_company(row, TAX, match_map=mm)
+    assert sr["confidence_level"] == "High"       # 100% matched revenue
+    assert sr["matched_revenue_pct"] == 100.0
 
 
 # ---- cache key stability ----

@@ -225,3 +225,65 @@ def save_taxonomy(session: dict, theme: str, layer1: list) -> dict:
         return _ok()
     except Exception as exc:
         return _err("SAVE_FAILED", "Could not save the taxonomy.", detail=str(exc))
+
+
+# ---------------------------------------------------------------------------
+# Favourite themes (per-profile) - a quick list a user can compare later.
+# Stored as one row per (user, theme_key). Anonymous users keep favourites in
+# session only (handled in app.py); these functions are the logged-in path.
+# ---------------------------------------------------------------------------
+def list_favourites(session: dict):
+    """Return the user's favourite themes, newest first:
+    {ok: True, favourites: [{"theme": str, "theme_key": str}, ...]}."""
+    client = _get_client()
+    if client is None:
+        return _err("SUPABASE_UNCONFIGURED", "Favourites are not configured.")
+    if not _restore_session(session.get("access_token", ""), session.get("refresh_token", "")):
+        return _err("NO_SESSION", "Your session expired. Please log in again.")
+    try:
+        res = (client.table("favourite_themes")
+               .select("theme, theme_key, created_at")
+               .order("created_at", desc=True)
+               .execute())
+        rows = res.data or []
+        return _ok(favourites=[{"theme": r["theme"], "theme_key": r["theme_key"]}
+                               for r in rows])
+    except Exception as exc:
+        return _err("LOAD_FAILED", "Could not load favourites.", detail=str(exc))
+
+
+def add_favourite(session: dict, theme: str) -> dict:
+    """Add a theme to the user's favourites (idempotent via upsert)."""
+    client = _get_client()
+    if client is None:
+        return _err("SUPABASE_UNCONFIGURED", "Favourites are not configured.")
+    if not _restore_session(session.get("access_token", ""), session.get("refresh_token", "")):
+        return _err("NO_SESSION", "Your session expired. Please log in again.")
+    try:
+        uid = client.auth.get_user().user.id
+        payload = {"user_id": uid, "theme_key": theme.strip().lower(),
+                   "theme": theme.strip()}
+        client.table("favourite_themes").upsert(
+            payload, on_conflict="user_id,theme_key").execute()
+        return _ok()
+    except Exception as exc:
+        return _err("SAVE_FAILED", "Could not save the favourite.", detail=str(exc))
+
+
+def remove_favourite(session: dict, theme: str) -> dict:
+    """Remove a theme from the user's favourites."""
+    client = _get_client()
+    if client is None:
+        return _err("SUPABASE_UNCONFIGURED", "Favourites are not configured.")
+    if not _restore_session(session.get("access_token", ""), session.get("refresh_token", "")):
+        return _err("NO_SESSION", "Your session expired. Please log in again.")
+    try:
+        uid = client.auth.get_user().user.id
+        (client.table("favourite_themes")
+         .delete()
+         .eq("user_id", uid)
+         .eq("theme_key", theme.strip().lower())
+         .execute())
+        return _ok()
+    except Exception as exc:
+        return _err("DELETE_FAILED", "Could not remove the favourite.", detail=str(exc))
