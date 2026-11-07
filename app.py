@@ -520,6 +520,23 @@ def section_overview(analysis: dict):
     direction = "Overweight" if tilt > 0 else ("Underweight" if tilt < 0 else "Neutral")
     tilt_cls = "pos" if tilt > 0 else ("neg" if tilt < 0 else "")
 
+    # Theme title + favourite toggle on the right (feeds the Comparison tab).
+    theme_name = (analysis.get("taxonomy", {}) or {}).get("theme", "").strip()
+    if theme_name:
+        th_col, fav_col = st.columns([5, 1.3])
+        with th_col:
+            st.markdown(f'<div class="panel-title" style="margin-top:2px;">'
+                        f'{theme_name}</div>', unsafe_allow_html=True)
+        with fav_col:
+            is_fav = _is_favourite(theme_name)
+            label = "★ Favourited" if is_fav else "☆ Favourite"
+            help_txt = ("Remove from My Favourites" if is_fav
+                        else "Save to My Favourites (for the Comparison tab)")
+            if st.button(label, key="fav_toggle_overview",
+                         use_container_width=True, help=help_txt):
+                (_remove_favourite if is_fav else _add_favourite)(theme_name)
+                st.rerun()
+
     c1, c2, c3 = st.columns(3)
     _kpi_card(c1, "Portfolio Thematic Exposure", f"{pexp:.0f}%",
               f"{T.band_badge(m.get('portfolio_band','-'))} &nbsp; exact {pexp:.2f}%", "kpi-accent")
@@ -1226,6 +1243,26 @@ def main():
     # Theme input row.
     if "theme" not in st.session_state:
         st.session_state["theme"] = ""
+    # A favourites-dropdown pick (below) stages a theme into the text box.
+    _pending = st.session_state.pop("_pending_theme", None)
+    if _pending is not None:
+        st.session_state["theme"] = _pending
+
+    # Optional "My favourites" shortcut above the box: pick one to fill the
+    # theme box (then Analyze as usual). Free text stays the primary path, so
+    # preset themes typed exactly still resolve from cache invisibly.
+    _favs = _get_favourites()
+    if _favs:
+        fsel_col, _ = st.columns([2.4, 4.9])
+        with fsel_col:
+            pick = st.selectbox(
+                "My favourites", ["My favourites…"] + _favs,
+                index=0, key="fav_pick", label_visibility="collapsed",
+            )
+            if pick != "My favourites…" and pick != st.session_state.get("theme", ""):
+                st.session_state["_pending_theme"] = pick
+                st.rerun()
+
     tc = st.columns([4.2, 1.1, 1, 1.4])
     theme = tc[0].text_input(
         "Investment theme", value=st.session_state["theme"], label_visibility="collapsed",
@@ -1300,28 +1337,7 @@ def main():
         )
         return
 
-    # Favourite toggle for the analyzed theme (feeds the Comparison tab).
-    _analyzed_theme = (analysis.get("taxonomy", {}) or {}).get("theme", "").strip()
-    if _analyzed_theme:
-        fav_col, cap_col = st.columns([1.4, 5])
-        with fav_col:
-            if _is_favourite(_analyzed_theme):
-                if st.button("★ Favourited", key="fav_toggle",
-                             use_container_width=True,
-                             help="Remove from My Favourites"):
-                    _remove_favourite(_analyzed_theme)
-                    st.rerun()
-            else:
-                if st.button("☆ Favourite", key="fav_toggle",
-                             use_container_width=True,
-                             help="Save to My Favourites (for the Comparison tab)"):
-                    _add_favourite(_analyzed_theme)
-                    st.rerun()
-        with cap_col:
-            if analysis.get("cached"):
-                st.caption("Taxonomy served from cache (reproducible). "
-                           "Tick 'Regenerate' to refresh.")
-    elif analysis.get("cached"):
+    if analysis.get("cached"):
         st.caption("Taxonomy served from cache (reproducible). Tick 'Regenerate' to refresh.")
 
     if (analysis.get("metrics", {}) or {}).get("scoring_mode") == "embedding_fallback":
