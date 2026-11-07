@@ -1,0 +1,160 @@
+{
+  "_v": 1,
+  "match_map": {
+    "TAIWAN SEMICONDUCTOR MFG": {},
+    "SAMSUNG ELECTRONICS CO": {},
+    "SK HYNIX": {},
+    "COMMONWEALTH BANK OF AUS": {},
+    "TENCENT HOLDINGS LI (CN)": {},
+    "ALIBABA GRP HLDG (HK)": {},
+    "BHP GROUP (AU)": {},
+    "WISETECH GLOBAL": {},
+    "DELTA ELECTRONICS": {},
+    "NATIONAL AUSTRALIA BANK": {},
+    "MEDIATEK INC": {
+      "Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": {
+        "sub_theme": "Wireless semiconductors",
+        "reason": "sector relevance"
+      }
+    },
+    "ICBC H": {},
+    "WESTPAC BANKING": {},
+    "HON HAI PRECISION IND CO": {
+      "FII Subgroup": {
+        "sub_theme": "Contract electronics manufacturing",
+        "reason": "sector relevance"
+      }
+    },
+    "CHINA CONSTRUCTION BK H": {},
+    "DBS GROUP HOLDINGS": {},
+    "BANK OF CHINA H": {},
+    "SAMSUNG ELECTRO-MECH. CO": {},
+    "MACQUARIE GROUP": {},
+    "RELIANCE INDUSTRIES": {},
+    "XIAOMI CORP B": {
+      "Smartphones": {
+        "sub_theme": "Smartphones & devices",
+        "reason": "sector relevance"
+      }
+    },
+    "ICICI BANK": {},
+    "OCBC BANK": {},
+    "HYUNDAI MOTOR CO": {},
+    "CHROMA ATE": {},
+    "TATA CONSULTANCY": {},
+    "RIO TINTO LTD (AU)": {},
+    "UNITED MICROELECTRONICS": {},
+    "ANZ GROUP HOLDINGS": {},
+    "KING YUAN ELECTRONICS CO": {},
+    "SK SQUARE CO": {},
+    "MEITUAN B": {},
+    "BHARTI AIRTEL": {
+      "Mobile Services India": {
+        "sub_theme": "Mobile network operators",
+        "reason": "sector relevance"
+      },
+      "Mobile Services Africa": {
+        "sub_theme": "Mobile network operators",
+        "reason": "sector relevance"
+      },
+      "Passive Infrastructure Services": {
+        "sub_theme": "Telecom tower & passive infrastructure",
+        "reason": "sector relevance"
+      },
+      "Airtel Business": {
+        "sub_theme": "Data & connectivity services",
+        "reason": "sector relevance"
+      }
+    },
+    "HDFC BANK": {},
+    "AIA GROUP": {},
+    "BAIDU (HK)": {},
+    "INFOSYS": {},
+    "LENOVO GROUP": {},
+    "HONGKONG EXCH & CLEARING": {
+      "Data and Connectivity": {
+        "sub_theme": "Data & connectivity services",
+        "reason": "sector relevance"
+      }
+    },
+    "GIGABYTE TECHNOLOGY CO": {},
+    "KB FINANCIAL GROUP": {},
+    "GOLD CIRCUIT ELECTRONICS": {
+      "Manufacturing and Sales of Printed Circuit Boards": {
+        "sub_theme": "Printed circuit boards",
+        "reason": "sector relevance"
+      }
+    },
+    "GDS HOLDINGS A (HK)": {},
+    "ASE TECHNOLOGY HOLDING": {},
+    "CSL": {},
+    "WESFARMERS": {},
+    "SINGAPORE TELECOM": {
+      "Optus": {
+        "sub_theme": "Mobile network operators",
+        "reason": "sector relevance"
+      },
+      "Singtel Singapore": {
+        "sub_theme": "Mobile network operators",
+        "reason": "sector relevance"
+      },
+      "Digital Infraco": {
+        "sub_theme": "Telecom tower & passive infrastructure",
+        "reason": "sector relevance"
+      }
+    },
+    "LITE-ON TECHNOLOGY CORP": {},
+    "UNIMICRON TECHNOLOGY": {},
+    "NETEASE": {},
+    "GOODMAN GROUP": {},
+    "ASIA VITAL COMPONENTS": {},
+    "QUANTA COMPUTER": {},
+    "NAN YA PLASTIC": {},
+    "HANMI SEMICONDUCTOR CO": {},
+    "GLOBAL UNICHIP CORP": {},
+    "INFRATIL": {},
+    "ELITE MATERIAL CO": {},
+    "MPI CORP": {},
+    "HCL TECHNOLOGIES": {},
+    "SAMSUNG SDS CO": {},
+    "NAVER": {},
+    "KUAISHOU TECHNOLOGY B": {},
+    "KING SLIDE WORKS CO": {},
+    "PING AN INSURANCE H": {},
+    "ACCTON TECHNOLOGY CORP": {
+      "Computer Networks": {
+        "sub_theme": "Networking & transmission equipment",
+        "reason": "sector relevance"
+      }
+    },
+    "ZHONGJI INNO A(HK-C)": {
+      "Optical Communication Transceiver Modules and Devices": {
+        "sub_theme": "Optical & fiber components",
+        "reason": "sector relevance"
+      }
+    },
+    "WISTRON CORP": {},
+    "ALCHIP TECHNOLOGIES": {},
+    "BIZLINK HOLDING": {
+      "Computer Transmission": {
+        "sub_theme": "Connectors & antennas",
+        "reason": "sector relevance"
+      }
+    },
+    "ZHEN DING TECHNOLOGY": {
+      "The Manufacture of Various Types of Printed Circuit Boards": {
+        "sub_theme": "Printed circuit boards",
+        "reason": "sector relevance"
+      }
+    },
+    "ASPEED TECHNOLOGY": {},
+    "WIWYNN CORPORATION": {},
+    "CAMBRICON TECH A (HK-C)": {},
+    "DELTA ELECTRONICS THAI": {},
+    "KEPPEL": {},
+    "PERSISTENT SYSTEMS": {},
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
+    "XERO (AU)": {}
+  }
+}

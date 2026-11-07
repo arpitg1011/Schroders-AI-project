@@ -1,0 +1,263 @@
+{
+  "_v": 1,
+  "match_map": {
+    "TAIWAN SEMICONDUCTOR MFG": {},
+    "SAMSUNG ELECTRONICS CO": {},
+    "SK HYNIX": {},
+    "COMMONWEALTH BANK OF AUS": {
+      "Retail Banking Services (Incl. Bankwest)": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Business Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Institutional Banking and Markets": {
+        "sub_theme": "Capital markets & trading",
+        "reason": "sector relevance"
+      }
+    },
+    "TENCENT HOLDINGS LI (CN)": {},
+    "ALIBABA GRP HLDG (HK)": {},
+    "BHP GROUP (AU)": {},
+    "WISETECH GLOBAL": {},
+    "DELTA ELECTRONICS": {},
+    "NATIONAL AUSTRALIA BANK": {
+      "Business and Private Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Personal Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      }
+    },
+    "MEDIATEK INC": {},
+    "ICBC H": {
+      "Corporate Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Personal Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      }
+    },
+    "WESTPAC BANKING": {
+      "Consumer": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Institutional": {
+        "sub_theme": "Capital markets & trading",
+        "reason": "sector relevance"
+      }
+    },
+    "HON HAI PRECISION IND CO": {},
+    "CHINA CONSTRUCTION BK H": {
+      "Corporate Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Treasury Business": {
+        "sub_theme": "Treasury operations",
+        "reason": "sector relevance"
+      }
+    },
+    "DBS GROUP HOLDINGS": {
+      "Institutional Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Markets Trading": {
+        "sub_theme": "Capital markets & trading",
+        "reason": "sector relevance"
+      }
+    },
+    "BANK OF CHINA H": {
+      "Corporate Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Treasury Operations": {
+        "sub_theme": "Treasury operations",
+        "reason": "sector relevance"
+      },
+      "Insurance": {
+        "sub_theme": "Insurance",
+        "reason": "sector relevance"
+      }
+    },
+    "SAMSUNG ELECTRO-MECH. CO": {},
+    "MACQUARIE GROUP": {
+      "Banking and Financial Services": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Macquarie Asset Management": {
+        "sub_theme": "Asset & wealth management",
+        "reason": "sector relevance"
+      },
+      "Commodities and Global Markets": {
+        "sub_theme": "Capital markets & trading",
+        "reason": "sector relevance"
+      }
+    },
+    "RELIANCE INDUSTRIES": {},
+    "XIAOMI CORP B": {},
+    "ICICI BANK": {
+      "Retail banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Treasury": {
+        "sub_theme": "Treasury operations",
+        "reason": "sector relevance"
+      },
+      "Life insurance": {
+        "sub_theme": "Insurance",
+        "reason": "sector relevance"
+      }
+    },
+    "OCBC BANK": {
+      "Global Wholesale Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Global Markets": {
+        "sub_theme": "Capital markets & trading",
+        "reason": "sector relevance"
+      },
+      "Insurance": {
+        "sub_theme": "Insurance",
+        "reason": "sector relevance"
+      }
+    },
+    "HYUNDAI MOTOR CO": {
+      "Finance": {
+        "sub_theme": "Consumer & auto finance",
+        "reason": "sector relevance"
+      }
+    },
+    "CHROMA ATE": {},
+    "TATA CONSULTANCY": {},
+    "RIO TINTO LTD (AU)": {},
+    "UNITED MICROELECTRONICS": {},
+    "ANZ GROUP HOLDINGS": {
+      "Australia Commercial": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Institutional": {
+        "sub_theme": "Capital markets & trading",
+        "reason": "sector relevance"
+      }
+    },
+    "KING YUAN ELECTRONICS CO": {},
+    "SK SQUARE CO": {},
+    "MEITUAN B": {},
+    "BHARTI AIRTEL": {},
+    "HDFC BANK": {
+      "Wholesale Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Treasury": {
+        "sub_theme": "Treasury operations",
+        "reason": "sector relevance"
+      }
+    },
+    "AIA GROUP": {
+      "Writes Life Insurance": {
+        "sub_theme": "Insurance",
+        "reason": "sector relevance"
+      }
+    },
+    "BAIDU (HK)": {},
+    "INFOSYS": {},
+    "LENOVO GROUP": {},
+    "HONGKONG EXCH & CLEARING": {
+      "Cash": {
+        "sub_theme": "Exchanges & market infrastructure",
+        "reason": "sector relevance"
+      },
+      "Equity and Financial Derivatives": {
+        "sub_theme": "Exchanges & market infrastructure",
+        "reason": "sector relevance"
+      }
+    },
+    "GIGABYTE TECHNOLOGY CO": {},
+    "KB FINANCIAL GROUP": {
+      "Banking Business - Corporate Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Securities": {
+        "sub_theme": "Capital markets & trading",
+        "reason": "sector relevance"
+      },
+      "Credit Card": {
+        "sub_theme": "Credit cards",
+        "reason": "sector relevance"
+      }
+    },
+    "GOLD CIRCUIT ELECTRONICS": {},
+    "GDS HOLDINGS A (HK)": {},
+    "ASE TECHNOLOGY HOLDING": {},
+    "CSL": {},
+    "WESFARMERS": {},
+    "SINGAPORE TELECOM": {},
+    "LITE-ON TECHNOLOGY CORP": {},
+    "UNIMICRON TECHNOLOGY": {},
+    "NETEASE": {},
+    "GOODMAN GROUP": {
+      "Property investment": {
+        "sub_theme": "Real estate & REITs",
+        "reason": "sector relevance"
+      }
+    },
+    "ASIA VITAL COMPONENTS": {},
+    "QUANTA COMPUTER": {},
+    "NAN YA PLASTIC": {},
+    "HANMI SEMICONDUCTOR CO": {},
+    "GLOBAL UNICHIP CORP": {},
+    "INFRATIL": {},
+    "ELITE MATERIAL CO": {},
+    "MPI CORP": {},
+    "HCL TECHNOLOGIES": {},
+    "SAMSUNG SDS CO": {},
+    "NAVER": {},
+    "KUAISHOU TECHNOLOGY B": {},
+    "KING SLIDE WORKS CO": {},
+    "PING AN INSURANCE H": {
+      "Banking": {
+        "sub_theme": "Commercial & retail banks",
+        "reason": "sector relevance"
+      },
+      "Life and Health Insurance": {
+        "sub_theme": "Insurance",
+        "reason": "sector relevance"
+      },
+      "Asset Management Business": {
+        "sub_theme": "Asset & wealth management",
+        "reason": "sector relevance"
+      }
+    },
+    "ACCTON TECHNOLOGY CORP": {},
+    "ZHONGJI INNO A(HK-C)": {},
+    "WISTRON CORP": {},
+    "ALCHIP TECHNOLOGIES": {},
+    "BIZLINK HOLDING": {},
+    "ZHEN DING TECHNOLOGY": {},
+    "ASPEED TECHNOLOGY": {},
+    "WIWYNN CORPORATION": {},
+    "CAMBRICON TECH A (HK-C)": {},
+    "DELTA ELECTRONICS THAI": {},
+    "KEPPEL": {},
+    "PERSISTENT SYSTEMS": {},
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
+    "XERO (AU)": {}
+  }
+}

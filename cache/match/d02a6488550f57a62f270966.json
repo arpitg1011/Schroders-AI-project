@@ -4,50 +4,59 @@
     "TAIWAN SEMICONDUCTOR MFG": {},
     "SAMSUNG ELECTRONICS CO": {},
     "SK HYNIX": {},
-    "COMMONWEALTH BANK OF AUS": {
-      "Retail Banking Services (Incl. Bankwest)": {
-        "sub_theme": "Digital banking services",
-        "reason": "digital banking activities"
-      }
-    },
+    "COMMONWEALTH BANK OF AUS": {},
     "TENCENT HOLDINGS LI (CN)": {
       "Fintech and Business Services": {
-        "sub_theme": "Mobile wallet providers",
-        "reason": "mobile payment platform"
+        "sub_theme": "Mobile wallets & fintech",
+        "reason": "sector relevance"
       }
     },
-    "ALIBABA GRP HLDG (HK)": {},
+    "ALIBABA GRP HLDG (HK)": {
+      "Alibaba China E-commerce Group": {
+        "sub_theme": "E-commerce platforms",
+        "reason": "sector relevance"
+      }
+    },
     "BHP GROUP (AU)": {},
     "WISETECH GLOBAL": {},
     "DELTA ELECTRONICS": {},
-    "NATIONAL AUSTRALIA BANK": {
-      "Personal Banking": {
-        "sub_theme": "Digital banking services",
-        "reason": "digital banking activities"
-      }
-    },
+    "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {},
-    "ICBC H": {
-      "Personal Banking": {
-        "sub_theme": "Digital banking services",
-        "reason": "digital banking activities"
-      }
-    },
-    "WESTPAC BANKING": {
-      "Consumer": {
-        "sub_theme": "Digital banking services",
-        "reason": "digital banking activities"
-      }
-    },
+    "ICBC H": {},
+    "WESTPAC BANKING": {},
     "HON HAI PRECISION IND CO": {},
     "CHINA CONSTRUCTION BK H": {},
-    "DBS GROUP HOLDINGS": {},
+    "DBS GROUP HOLDINGS": {
+      "Consumer Banking/Wealth Management": {
+        "sub_theme": "Digital banking",
+        "reason": "sector relevance"
+      }
+    },
     "BANK OF CHINA H": {},
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
-    "RELIANCE INDUSTRIES": {},
-    "XIAOMI CORP B": {},
-    "ICICI BANK": {},
+    "RELIANCE INDUSTRIES": {
+      "Digital Services": {
+        "sub_theme": "Mobile wallets & fintech",
+        "reason": "sector relevance"
+      },
+      "Retail": {
+        "sub_theme": "E-commerce platforms",
+        "reason": "sector relevance"
+      }
+    },
+    "XIAOMI CORP B": {
+      "Internet Services": {
+        "sub_theme": "Mobile wallets & fintech",
+        "reason": "sector relevance"
+      }
+    },
+    "ICICI BANK": {
+      "Retail banking": {
+        "sub_theme": "Digital banking",
+        "reason": "sector relevance"
+      }
+    },
     "OCBC BANK": {},
     "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {},
@@ -57,12 +66,17 @@
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
     "SK SQUARE CO": {},
-    "MEITUAN B": {},
+    "MEITUAN B": {
+      "Core Local Commerce": {
+        "sub_theme": "E-commerce platforms",
+        "reason": "sector relevance"
+      }
+    },
     "BHARTI AIRTEL": {},
     "HDFC BANK": {
       "Retail Banking - Digital Banking": {
-        "sub_theme": "Digital banking services",
-        "reason": "digital banking offering"
+        "sub_theme": "Digital banking",
+        "reason": "sector relevance"
       }
     },
     "AIA GROUP": {},
@@ -73,8 +87,8 @@
     "GIGABYTE TECHNOLOGY CO": {},
     "KB FINANCIAL GROUP": {
       "Credit Card": {
-        "sub_theme": "Payment processors",
-        "reason": "card transaction processing"
+        "sub_theme": "Card networks & issuing",
+        "reason": "sector relevance"
       }
     },
     "GOLD CIRCUIT ELECTRONICS": {},
@@ -99,8 +113,12 @@
     "SAMSUNG SDS CO": {},
     "NAVER": {
       "Fintech": {
-        "sub_theme": "Payment processors",
-        "reason": "Fintech aligns with payment processing"
+        "sub_theme": "Mobile wallets & fintech",
+        "reason": "sector relevance"
+      },
+      "Commerce": {
+        "sub_theme": "E-commerce platforms",
+        "reason": "sector relevance"
       }
     },
     "KUAISHOU TECHNOLOGY B": {},

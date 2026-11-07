@@ -3,24 +3,15 @@
   "match_map": {
     "TAIWAN SEMICONDUCTOR MFG": {
       "Foundry": {
-        "sub_theme": "Chip fabrication",
-        "reason": "core foundry business"
+        "sub_theme": "Semiconductor foundries",
+        "reason": "sector relevance"
       }
     },
-    "SAMSUNG ELECTRONICS CO": {
-      "Harman": {
-        "sub_theme": "Automotive electronics",
-        "reason": "automotive electronics business"
-      },
-      "Device Solutions (DS)": {
-        "sub_theme": "Chip fabrication",
-        "reason": "semiconductor device manufacturing"
-      }
-    },
+    "SAMSUNG ELECTRONICS CO": {},
     "SK HYNIX": {
       "Manufacture and Sale of Semiconductor Products": {
-        "sub_theme": "Chip fabrication",
-        "reason": "semiconductor manufacturing"
+        "sub_theme": "Memory & components",
+        "reason": "sector relevance"
       }
     },
     "COMMONWEALTH BANK OF AUS": {},
@@ -32,44 +23,53 @@
     "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {
       "Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": {
-        "sub_theme": "Chip fabrication",
-        "reason": "Semiconductor chip design"
+        "sub_theme": "Semiconductor supply chain",
+        "reason": "sector relevance"
       }
     },
     "ICBC H": {},
     "WESTPAC BANKING": {},
-    "HON HAI PRECISION IND CO": {},
+    "HON HAI PRECISION IND CO": {
+      "FII Subgroup": {
+        "sub_theme": "Electronics manufacturing",
+        "reason": "sector relevance"
+      },
+      "FIH Subgroup": {
+        "sub_theme": "Electronics manufacturing",
+        "reason": "sector relevance"
+      }
+    },
     "CHINA CONSTRUCTION BK H": {},
     "DBS GROUP HOLDINGS": {},
     "BANK OF CHINA H": {},
-    "SAMSUNG ELECTRO-MECH. CO": {
-      "Package Solution": {
-        "sub_theme": "Chip fabrication",
-        "reason": "semiconductor packaging"
-      }
-    },
+    "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
     "RELIANCE INDUSTRIES": {},
-    "XIAOMI CORP B": {},
+    "XIAOMI CORP B": {
+      "Smartphones": {
+        "sub_theme": "Consumer electronics brands",
+        "reason": "sector relevance"
+      }
+    },
     "ICICI BANK": {},
     "OCBC BANK": {},
     "HYUNDAI MOTOR CO": {},
-    "CHROMA ATE": {
-      "Automatic Equipment Department": {
-        "sub_theme": "Semiconductor equipment",
-        "reason": "semiconductor test equipment"
-      }
-    },
+    "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
     "RIO TINTO LTD (AU)": {},
     "UNITED MICROELECTRONICS": {
       "Wafer Fabrication": {
-        "sub_theme": "Chip fabrication",
-        "reason": "semiconductor fab"
+        "sub_theme": "Semiconductor foundries",
+        "reason": "sector relevance"
       }
     },
     "ANZ GROUP HOLDINGS": {},
-    "KING YUAN ELECTRONICS CO": {},
+    "KING YUAN ELECTRONICS CO": {
+      "Contract Electronics Manufacturing Services": {
+        "sub_theme": "Semiconductor supply chain",
+        "reason": "sector relevance"
+      }
+    },
     "SK SQUARE CO": {},
     "MEITUAN B": {},
     "BHARTI AIRTEL": {},
@@ -81,12 +81,25 @@
     "HONGKONG EXCH & CLEARING": {},
     "GIGABYTE TECHNOLOGY CO": {},
     "KB FINANCIAL GROUP": {},
-    "GOLD CIRCUIT ELECTRONICS": {},
+    "GOLD CIRCUIT ELECTRONICS": {
+      "Manufacturing and Sales of Printed Circuit Boards": {
+        "sub_theme": "Printed circuit boards",
+        "reason": "sector relevance"
+      }
+    },
     "GDS HOLDINGS A (HK)": {},
     "ASE TECHNOLOGY HOLDING": {
+      "Packaging": {
+        "sub_theme": "Semiconductor supply chain",
+        "reason": "sector relevance"
+      },
       "Testing": {
-        "sub_theme": "Chip fabrication",
-        "reason": "Die testing"
+        "sub_theme": "Semiconductor supply chain",
+        "reason": "sector relevance"
+      },
+      "Electronic Manufacturing Services (EMS)": {
+        "sub_theme": "Electronics manufacturing",
+        "reason": "sector relevance"
       }
     },
     "CSL": {},
@@ -97,7 +110,12 @@
     "NETEASE": {},
     "GOODMAN GROUP": {},
     "ASIA VITAL COMPONENTS": {},
-    "QUANTA COMPUTER": {},
+    "QUANTA COMPUTER": {
+      "The Electronics Sector": {
+        "sub_theme": "Electronics manufacturing",
+        "reason": "sector relevance"
+      }
+    },
     "NAN YA PLASTIC": {},
     "HANMI SEMICONDUCTOR CO": {},
     "GLOBAL UNICHIP CORP": {},
@@ -115,7 +133,12 @@
     "WISTRON CORP": {},
     "ALCHIP TECHNOLOGIES": {},
     "BIZLINK HOLDING": {},
-    "ZHEN DING TECHNOLOGY": {},
+    "ZHEN DING TECHNOLOGY": {
+      "The Manufacture of Various Types of Printed Circuit Boards": {
+        "sub_theme": "Printed circuit boards",
+        "reason": "sector relevance"
+      }
+    },
     "ASPEED TECHNOLOGY": {},
     "WIWYNN CORPORATION": {},
     "CAMBRICON TECH A (HK-C)": {},

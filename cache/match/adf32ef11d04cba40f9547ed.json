@@ -7,9 +7,23 @@
     "COMMONWEALTH BANK OF AUS": {},
     "TENCENT HOLDINGS LI (CN)": {},
     "ALIBABA GRP HLDG (HK)": {},
-    "BHP GROUP (AU)": {},
+    "BHP GROUP (AU)": {
+      "Copper": {
+        "sub_theme": "Battery materials & mining",
+        "reason": "sector relevance"
+      }
+    },
     "WISETECH GLOBAL": {},
-    "DELTA ELECTRONICS": {},
+    "DELTA ELECTRONICS": {
+      "Power Supply and Spare Parts Business Group": {
+        "sub_theme": "Power electronics & drivetrain",
+        "reason": "sector relevance"
+      },
+      "Automation Business Group": {
+        "sub_theme": "Power electronics & drivetrain",
+        "reason": "sector relevance"
+      }
+    },
     "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {},
     "ICBC H": {},
@@ -24,7 +38,7 @@
     "XIAOMI CORP B": {
       "Smart EV, AI and Other New Initiatives": {
         "sub_theme": "EV manufacturers",
-        "reason": "EV development"
+        "reason": "sector relevance"
       }
     },
     "ICICI BANK": {},
@@ -32,20 +46,33 @@
     "HYUNDAI MOTOR CO": {
       "Automotive": {
         "sub_theme": "EV manufacturers",
-        "reason": "vehicle production"
+        "reason": "sector relevance"
+      },
+      "Finance": {
+        "sub_theme": "Auto finance",
+        "reason": "sector relevance"
       }
     },
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
     "RIO TINTO LTD (AU)": {
       "Aluminium & Lithium": {
-        "sub_theme": "Lithium mining",
-        "reason": "lithium extraction"
+        "sub_theme": "Battery materials & mining",
+        "reason": "sector relevance"
+      },
+      "Copper": {
+        "sub_theme": "Battery materials & mining",
+        "reason": "sector relevance"
       }
     },
     "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {},
-    "KING YUAN ELECTRONICS CO": {},
+    "KING YUAN ELECTRONICS CO": {
+      "Contract Electronics Manufacturing Services": {
+        "sub_theme": "Contract electronics manufacturing",
+        "reason": "sector relevance"
+      }
+    },
     "SK SQUARE CO": {},
     "MEITUAN B": {},
     "BHARTI AIRTEL": {},
@@ -63,11 +90,25 @@
     "CSL": {},
     "WESFARMERS": {},
     "SINGAPORE TELECOM": {},
-    "LITE-ON TECHNOLOGY CORP": {},
+    "LITE-ON TECHNOLOGY CORP": {
+      "Information and Consumer Electronics Sector": {
+        "sub_theme": "Power electronics & drivetrain",
+        "reason": "sector relevance"
+      }
+    },
     "UNIMICRON TECHNOLOGY": {},
     "NETEASE": {},
     "GOODMAN GROUP": {},
-    "ASIA VITAL COMPONENTS": {},
+    "ASIA VITAL COMPONENTS": {
+      "Overseas Operating Department": {
+        "sub_theme": "Thermal management",
+        "reason": "sector relevance"
+      },
+      "Integrated Management Division": {
+        "sub_theme": "Thermal management",
+        "reason": "sector relevance"
+      }
+    },
     "QUANTA COMPUTER": {},
     "NAN YA PLASTIC": {},
     "HANMI SEMICONDUCTOR CO": {},
@@ -85,12 +126,30 @@
     "ZHONGJI INNO A(HK-C)": {},
     "WISTRON CORP": {},
     "ALCHIP TECHNOLOGIES": {},
-    "BIZLINK HOLDING": {},
+    "BIZLINK HOLDING": {
+      "Industrial Application Segment": {
+        "sub_theme": "Electronic components & connectors",
+        "reason": "sector relevance"
+      },
+      "Computer Transmission": {
+        "sub_theme": "Electronic components & connectors",
+        "reason": "sector relevance"
+      }
+    },
     "ZHEN DING TECHNOLOGY": {},
     "ASPEED TECHNOLOGY": {},
     "WIWYNN CORPORATION": {},
     "CAMBRICON TECH A (HK-C)": {},
-    "DELTA ELECTRONICS THAI": {},
+    "DELTA ELECTRONICS THAI": {
+      "Power Electronics": {
+        "sub_theme": "Power electronics & drivetrain",
+        "reason": "sector relevance"
+      },
+      "Mobility": {
+        "sub_theme": "EV manufacturers",
+        "reason": "sector relevance"
+      }
+    },
     "KEPPEL": {},
     "PERSISTENT SYSTEMS": {},
     "TECH MAHINDRA": {},

@@ -7,9 +7,23 @@
     "COMMONWEALTH BANK OF AUS": {},
     "TENCENT HOLDINGS LI (CN)": {},
     "ALIBABA GRP HLDG (HK)": {},
-    "BHP GROUP (AU)": {},
+    "BHP GROUP (AU)": {
+      "Copper": {
+        "sub_theme": "Critical minerals & materials",
+        "reason": "sector relevance"
+      }
+    },
     "WISETECH GLOBAL": {},
-    "DELTA ELECTRONICS": {},
+    "DELTA ELECTRONICS": {
+      "Power Supply and Spare Parts Business Group": {
+        "sub_theme": "Power electronics & inverters",
+        "reason": "sector relevance"
+      },
+      "Infrastructure Business Group": {
+        "sub_theme": "Grid & transmission equipment",
+        "reason": "sector relevance"
+      }
+    },
     "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {},
     "ICBC H": {},
@@ -20,14 +34,38 @@
     "BANK OF CHINA H": {},
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
-    "RELIANCE INDUSTRIES": {},
-    "XIAOMI CORP B": {},
+    "RELIANCE INDUSTRIES": {
+      "Oil and Gas": {
+        "sub_theme": "Green hydrogen",
+        "reason": "sector relevance"
+      }
+    },
+    "XIAOMI CORP B": {
+      "Smart EV, AI and Other New Initiatives": {
+        "sub_theme": "EV & electrification",
+        "reason": "sector relevance"
+      }
+    },
     "ICICI BANK": {},
     "OCBC BANK": {},
-    "HYUNDAI MOTOR CO": {},
+    "HYUNDAI MOTOR CO": {
+      "Automotive": {
+        "sub_theme": "EV & electrification",
+        "reason": "sector relevance"
+      }
+    },
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
-    "RIO TINTO LTD (AU)": {},
+    "RIO TINTO LTD (AU)": {
+      "Copper": {
+        "sub_theme": "Critical minerals & materials",
+        "reason": "sector relevance"
+      },
+      "Aluminium & Lithium": {
+        "sub_theme": "Critical minerals & materials",
+        "reason": "sector relevance"
+      }
+    },
     "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
@@ -47,12 +85,7 @@
     "ASE TECHNOLOGY HOLDING": {},
     "CSL": {},
     "WESFARMERS": {},
-    "SINGAPORE TELECOM": {
-      "NCS": {
-        "sub_theme": "Managed Security Services",
-        "reason": "provides managed security services"
-      }
-    },
+    "SINGAPORE TELECOM": {},
     "LITE-ON TECHNOLOGY CORP": {},
     "UNIMICRON TECHNOLOGY": {},
     "NETEASE": {},
@@ -62,7 +95,12 @@
     "NAN YA PLASTIC": {},
     "HANMI SEMICONDUCTOR CO": {},
     "GLOBAL UNICHIP CORP": {},
-    "INFRATIL": {},
+    "INFRATIL": {
+      "ALL Other Segments & Corporate New Zealand": {
+        "sub_theme": "Renewable infrastructure investment",
+        "reason": "sector relevance"
+      }
+    },
     "ELITE MATERIAL CO": {},
     "MPI CORP": {},
     "HCL TECHNOLOGIES": {},
@@ -80,8 +118,22 @@
     "ASPEED TECHNOLOGY": {},
     "WIWYNN CORPORATION": {},
     "CAMBRICON TECH A (HK-C)": {},
-    "DELTA ELECTRONICS THAI": {},
-    "KEPPEL": {},
+    "DELTA ELECTRONICS THAI": {
+      "Power Electronics": {
+        "sub_theme": "Power electronics & inverters",
+        "reason": "sector relevance"
+      },
+      "Infrastructure": {
+        "sub_theme": "Grid & transmission equipment",
+        "reason": "sector relevance"
+      }
+    },
+    "KEPPEL": {
+      "Connectivity": {
+        "sub_theme": "Renewable utilities",
+        "reason": "sector relevance"
+      }
+    },
     "PERSISTENT SYSTEMS": {},
     "TECH MAHINDRA": {},
     "WIPRO": {},

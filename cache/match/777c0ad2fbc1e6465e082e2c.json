@@ -7,8 +7,26 @@
     "COMMONWEALTH BANK OF AUS": {},
     "TENCENT HOLDINGS LI (CN)": {},
     "ALIBABA GRP HLDG (HK)": {},
-    "BHP GROUP (AU)": {},
-    "WISETECH GLOBAL": {},
+    "BHP GROUP (AU)": {
+      "Iron Ore": {
+        "sub_theme": "Commodities & mining",
+        "reason": "sector relevance"
+      },
+      "Copper": {
+        "sub_theme": "Commodities & mining",
+        "reason": "sector relevance"
+      }
+    },
+    "WISETECH GLOBAL": {
+      "Wtg Ex. E2open": {
+        "sub_theme": "Supply chain software",
+        "reason": "sector relevance"
+      },
+      "E2open": {
+        "sub_theme": "Supply chain software",
+        "reason": "sector relevance"
+      }
+    },
     "DELTA ELECTRONICS": {},
     "NATIONAL AUSTRALIA BANK": {},
     "MEDIATEK INC": {},
@@ -21,23 +39,31 @@
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
     "RELIANCE INDUSTRIES": {
-      "Digital Services": {
-        "sub_theme": "Enterprise Software SaaS",
-        "reason": "cloud-related digital services"
+      "Oil to Chemicals (O2C)": {
+        "sub_theme": "Energy & fuel refining",
+        "reason": "sector relevance"
+      },
+      "Oil and Gas": {
+        "sub_theme": "Oil & gas",
+        "reason": "sector relevance"
       }
     },
-    "XIAOMI CORP B": {
-      "Internet Services": {
-        "sub_theme": "Enterprise Software SaaS",
-        "reason": "cloud-based internet services"
-      }
-    },
+    "XIAOMI CORP B": {},
     "ICICI BANK": {},
     "OCBC BANK": {},
     "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
-    "RIO TINTO LTD (AU)": {},
+    "RIO TINTO LTD (AU)": {
+      "Iron Ore": {
+        "sub_theme": "Commodities & mining",
+        "reason": "sector relevance"
+      },
+      "Copper": {
+        "sub_theme": "Commodities & mining",
+        "reason": "sector relevance"
+      }
+    },
     "UNITED MICROELECTRONICS": {},
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
@@ -53,28 +79,36 @@
     "GIGABYTE TECHNOLOGY CO": {},
     "KB FINANCIAL GROUP": {},
     "GOLD CIRCUIT ELECTRONICS": {},
-    "GDS HOLDINGS A (HK)": {
-      "Design, Build-Out and Operation of Data Centers": {
-        "sub_theme": "Data Center Real Estate",
-        "reason": "data center operations"
-      }
-    },
+    "GDS HOLDINGS A (HK)": {},
     "ASE TECHNOLOGY HOLDING": {},
     "CSL": {},
-    "WESFARMERS": {},
-    "SINGAPORE TELECOM": {},
-    "LITE-ON TECHNOLOGY CORP": {
-      "Cloud and Internet of Things Department": {
-        "sub_theme": "Cloud Infrastructure Providers",
-        "reason": "cloud department"
+    "WESFARMERS": {
+      "Bunnings": {
+        "sub_theme": "Consumer goods & retail",
+        "reason": "sector relevance"
+      },
+      "Kmart Group": {
+        "sub_theme": "Consumer goods & retail",
+        "reason": "sector relevance"
       }
     },
+    "SINGAPORE TELECOM": {},
+    "LITE-ON TECHNOLOGY CORP": {},
     "UNIMICRON TECHNOLOGY": {},
     "NETEASE": {},
     "GOODMAN GROUP": {},
     "ASIA VITAL COMPONENTS": {},
     "QUANTA COMPUTER": {},
-    "NAN YA PLASTIC": {},
+    "NAN YA PLASTIC": {
+      "Raw Materials for Plastics": {
+        "sub_theme": "Manufacturing inputs",
+        "reason": "sector relevance"
+      },
+      "Plastics Product": {
+        "sub_theme": "Manufacturing inputs",
+        "reason": "sector relevance"
+      }
+    },
     "HANMI SEMICONDUCTOR CO": {},
     "GLOBAL UNICHIP CORP": {},
     "INFRATIL": {},
@@ -94,26 +128,17 @@
     "ZHEN DING TECHNOLOGY": {},
     "ASPEED TECHNOLOGY": {},
     "WIWYNN CORPORATION": {},
-    "CAMBRICON TECH A (HK-C)": {
-      "Cloud Product Line": {
-        "sub_theme": "Cloud Infrastructure Providers",
-        "reason": "Provides cloud services"
-      },
-      "Edge Product Line": {
-        "sub_theme": "Cloud Infrastructure Providers",
-        "reason": "Edge computing infrastructure"
+    "CAMBRICON TECH A (HK-C)": {},
+    "DELTA ELECTRONICS THAI": {},
+    "KEPPEL": {
+      "Connectivity": {
+        "sub_theme": "Port & infrastructure",
+        "reason": "sector relevance"
       }
     },
-    "DELTA ELECTRONICS THAI": {},
-    "KEPPEL": {},
     "PERSISTENT SYSTEMS": {},
     "TECH MAHINDRA": {},
     "WIPRO": {},
-    "XERO (AU)": {
-      "Providing Online Solutions for Small Businesses and Their Advisors": {
-        "sub_theme": "Enterprise Software SaaS",
-        "reason": "Cloud accounting SaaS"
-      }
-    }
+    "XERO (AU)": {}
   }
 }

@@ -1,0 +1,261 @@
+{
+  "_v": 1,
+  "match_map": {
+    "TAIWAN SEMICONDUCTOR MFG": {
+      "Foundry": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip production"
+      }
+    },
+    "SAMSUNG ELECTRONICS CO": {
+      "Device Solutions (DS)": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip components"
+      }
+    },
+    "SK HYNIX": {
+      "Manufacture and Sale of Semiconductor Products": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip production"
+      }
+    },
+    "COMMONWEALTH BANK OF AUS": {},
+    "TENCENT HOLDINGS LI (CN)": {
+      "Fintech and Business Services": {
+        "sub_theme": "Financial services",
+        "reason": "AI-driven fintech"
+      }
+    },
+    "ALIBABA GRP HLDG (HK)": {
+      "Alibaba China E-commerce Group": {
+        "sub_theme": "E-commerce platforms",
+        "reason": "AI-powered e\u2011commerce"
+      }
+    },
+    "BHP GROUP (AU)": {},
+    "WISETECH GLOBAL": {
+      "E2open": {
+        "sub_theme": "Enterprise software",
+        "reason": "AI-enabled supply\u2011chain software"
+      }
+    },
+    "DELTA ELECTRONICS": {
+      "Automation Business Group": {
+        "sub_theme": "Robotics",
+        "reason": "AI-driven automation"
+      }
+    },
+    "NATIONAL AUSTRALIA BANK": {},
+    "MEDIATEK INC": {
+      "Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "AI chip design"
+      }
+    },
+    "ICBC H": {},
+    "WESTPAC BANKING": {},
+    "HON HAI PRECISION IND CO": {},
+    "CHINA CONSTRUCTION BK H": {},
+    "DBS GROUP HOLDINGS": {},
+    "BANK OF CHINA H": {},
+    "SAMSUNG ELECTRO-MECH. CO": {},
+    "MACQUARIE GROUP": {},
+    "RELIANCE INDUSTRIES": {},
+    "XIAOMI CORP B": {
+      "Smart EV, AI and Other New Initiatives": {
+        "sub_theme": "Autonomous vehicles",
+        "reason": "AI in electric vehicles"
+      }
+    },
+    "ICICI BANK": {},
+    "OCBC BANK": {},
+    "HYUNDAI MOTOR CO": {},
+    "CHROMA ATE": {},
+    "TATA CONSULTANCY": {},
+    "RIO TINTO LTD (AU)": {},
+    "UNITED MICROELECTRONICS": {
+      "Wafer Fabrication": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "semiconductor fab"
+      }
+    },
+    "ANZ GROUP HOLDINGS": {},
+    "KING YUAN ELECTRONICS CO": {},
+    "SK SQUARE CO": {},
+    "MEITUAN B": {
+      "Core Local Commerce": {
+        "sub_theme": "E-commerce platforms",
+        "reason": "e\u2011commerce platform"
+      }
+    },
+    "BHARTI AIRTEL": {},
+    "HDFC BANK": {},
+    "AIA GROUP": {},
+    "BAIDU (HK)": {
+      "Baidu General Business": {
+        "sub_theme": "Cloud computing services",
+        "reason": "AI cloud services"
+      }
+    },
+    "INFOSYS": {},
+    "LENOVO GROUP": {},
+    "HONGKONG EXCH & CLEARING": {},
+    "GIGABYTE TECHNOLOGY CO": {
+      "Brand Business Division": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "GPU production for AI"
+      }
+    },
+    "KB FINANCIAL GROUP": {},
+    "GOLD CIRCUIT ELECTRONICS": {},
+    "GDS HOLDINGS A (HK)": {
+      "Design, Build-Out and Operation of Data Centers": {
+        "sub_theme": "Cloud computing services",
+        "reason": "data center operation for AI workloads"
+      }
+    },
+    "ASE TECHNOLOGY HOLDING": {
+      "Packaging": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "semiconductor packaging"
+      },
+      "Testing": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "semiconductor testing"
+      },
+      "Electronic Manufacturing Services (EMS)": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "EMS for chips"
+      }
+    },
+    "CSL": {},
+    "WESFARMERS": {},
+    "SINGAPORE TELECOM": {},
+    "LITE-ON TECHNOLOGY CORP": {
+      "Cloud and Internet of Things Department": {
+        "sub_theme": "Cloud computing services",
+        "reason": "cloud & IoT services"
+      }
+    },
+    "UNIMICRON TECHNOLOGY": {},
+    "NETEASE": {},
+    "GOODMAN GROUP": {},
+    "ASIA VITAL COMPONENTS": {},
+    "QUANTA COMPUTER": {},
+    "NAN YA PLASTIC": {},
+    "HANMI SEMICONDUCTOR CO": {
+      "Semiconductors": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip production"
+      }
+    },
+    "GLOBAL UNICHIP CORP": {
+      "Semiconductor Equipment and Services": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "equipment for chip fabs"
+      }
+    },
+    "INFRATIL": {
+      "Anytime Radiology Group Australia": {
+        "sub_theme": "Healthcare diagnostics",
+        "reason": "radiology AI"
+      },
+      "RHCNZ Medical Imaging New Zealand": {
+        "sub_theme": "Healthcare diagnostics",
+        "reason": "medical imaging AI"
+      }
+    },
+    "ELITE MATERIAL CO": {},
+    "MPI CORP": {
+      "Semiconductor Equipment and Services": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "AI chip equipment"
+      }
+    },
+    "HCL TECHNOLOGIES": {
+      "HCL Software": {
+        "sub_theme": "Enterprise software",
+        "reason": "AI enterprise software"
+      }
+    },
+    "SAMSUNG SDS CO": {},
+    "NAVER": {
+      "Search Platform": {
+        "sub_theme": "Enterprise software",
+        "reason": "AI search"
+      },
+      "Commerce": {
+        "sub_theme": "E-commerce platforms",
+        "reason": "AI recommendation"
+      },
+      "Fintech": {
+        "sub_theme": "Financial services",
+        "reason": "AI fintech"
+      },
+      "Enterprise": {
+        "sub_theme": "Enterprise software",
+        "reason": "AI enterprise solutions"
+      }
+    },
+    "KUAISHOU TECHNOLOGY B": {},
+    "KING SLIDE WORKS CO": {},
+    "PING AN INSURANCE H": {},
+    "ACCTON TECHNOLOGY CORP": {},
+    "ZHONGJI INNO A(HK-C)": {},
+    "WISTRON CORP": {},
+    "ALCHIP TECHNOLOGIES": {
+      "Semiconductors": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "AI chip production"
+      }
+    },
+    "BIZLINK HOLDING": {},
+    "ZHEN DING TECHNOLOGY": {},
+    "ASPEED TECHNOLOGY": {
+      "Semiconductors": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "AI chip production"
+      }
+    },
+    "WIWYNN CORPORATION": {},
+    "CAMBRICON TECH A (HK-C)": {
+      "Cloud Product Line": {
+        "sub_theme": "Cloud computing services",
+        "reason": "AI model hosting"
+      },
+      "IP Licensing and Software": {
+        "sub_theme": "Enterprise software",
+        "reason": "AI software licensing"
+      }
+    },
+    "DELTA ELECTRONICS THAI": {
+      "Automation": {
+        "sub_theme": "Robotics",
+        "reason": "AI\u2011driven automation"
+      }
+    },
+    "KEPPEL": {},
+    "PERSISTENT SYSTEMS": {
+      "Healthcare & Life Sciences": {
+        "sub_theme": "Healthcare diagnostics",
+        "reason": "AI medical imaging"
+      },
+      "Software, Hi-Tech and Emerging Industries": {
+        "sub_theme": "Enterprise software",
+        "reason": "AI software solutions"
+      },
+      "Banking, Financial Services and Insurance (BFSI)": {
+        "sub_theme": "Financial services",
+        "reason": "AI trading/risk"
+      }
+    },
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
+    "XERO (AU)": {
+      "Providing Online Solutions for Small Businesses and Their Advisors": {
+        "sub_theme": "Enterprise software",
+        "reason": "AI-enabled cloud accounting"
+      }
+    }
+  }
+}

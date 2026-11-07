@@ -1191,6 +1191,55 @@ def _store_cached_taxonomy(theme: str, taxonomy: dict) -> None:
         pass  # cache write failure is non-fatal
 
 
+# ---------------------------------------------------------------------------
+# Global preset themes (committed, available to EVERYONE).
+# A curated set of themes each with a canonical 10-sub-theme taxonomy and a
+# precomputed match map, shipped in cache/. These load instantly for any user
+# (logged-in or anonymous) and any sub-theme count 3..10 is served by taking
+# the top-N of the canonical 10 - no live LLM call. Themes NOT in this set go
+# through the normal per-profile (Supabase) or live-generation path.
+# ---------------------------------------------------------------------------
+_PRESETS_PATH = "cache/presets.json"
+_presets_cache: dict | None = None
+
+
+def load_presets() -> dict:
+    """Load the committed preset taxonomies: {theme_key: {theme, layer1[10]}}.
+    Memoized. Missing/invalid file -> empty dict (no presets)."""
+    global _presets_cache
+    if _presets_cache is not None:
+        return _presets_cache
+    data: dict = {}
+    try:
+        if _osp.exists(_PRESETS_PATH):
+            with open(_PRESETS_PATH, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+            if isinstance(raw, dict):
+                for k, v in raw.items():
+                    if (isinstance(v, dict) and isinstance(v.get("layer1"), list)
+                            and v["layer1"]):
+                        data[k.strip().lower()] = v
+    except Exception:
+        data = {}
+    _presets_cache = data
+    return data
+
+
+def get_preset_taxonomy(theme: str) -> dict | None:
+    """Canonical taxonomy for a preset theme (exact, case-insensitive match),
+    else None. Returns a copy so callers can trim/mutate freely."""
+    presets = load_presets()
+    hit = presets.get((theme or "").strip().lower())
+    if not hit:
+        return None
+    return {"theme": hit.get("theme", theme),
+            "layer1": [dict(s) for s in hit["layer1"]]}
+
+
+def is_preset_theme(theme: str) -> bool:
+    return (theme or "").strip().lower() in load_presets()
+
+
 def generate_taxonomy(theme: str, n: int = _DEFAULT_SUBS, force_refresh: bool = False,
                       existing: list | None = None) -> dict:
     """Expand a theme into a taxonomy of n sub-themes via a single Groq call.
@@ -1571,6 +1620,30 @@ def _parse_match_response(raw: str, valid_subs: set) -> dict | None:
     return out
 
 
+def _preset_match_map(theme: str, companies: list, valid_subs: set) -> dict | None:
+    """If `theme` is a global preset, return its canonical match map filtered to
+    `valid_subs` (the requested sub-theme subset), else None.
+
+    The canonical map is cached once against the preset's full 10-sub taxonomy
+    and the given company/segment set. Filtering to the requested sub-themes
+    means every count 3..10 is served from that single cache with no LLM call.
+    """
+    canonical = get_preset_taxonomy(theme)
+    if canonical is None:
+        return None
+    canonical_key = _match_cache_key(theme, canonical, companies)
+    full = _load_cached_match(canonical_key)
+    if full is None:
+        return None  # preset defined but canonical map not cached for this portfolio
+    # Filter: keep only matched segments whose sub_theme is in the requested set.
+    filtered: dict[str, dict] = {}
+    for company, seg_map in full.items():
+        kept = {seg: info for seg, info in seg_map.items()
+                if info.get("sub_theme") in valid_subs}
+        filtered[company] = kept
+    return filtered
+
+
 def match_segments_llm(taxonomy: dict, company_rows: list,
                        force_refresh: bool = False) -> dict:
     """Classify every company segment to a sub-theme via one cached Groq call.
@@ -1598,6 +1671,15 @@ def match_segments_llm(taxonomy: dict, company_rows: list,
 
     if not companies or not valid_subs:
         return ok(match_map={}, cached=False)
+
+    # --- Preset short-circuit: a global preset theme has a canonical 10-sub
+    # match map cached once. ANY requested sub-theme set that is a subset of the
+    # canonical 10 is served by filtering that map to the requested sub-themes -
+    # no live LLM call, and it covers every count 3..10 from one cache. ---
+    if not force_refresh:
+        preset_mm = _preset_match_map(theme, companies, valid_subs)
+        if preset_mm is not None:
+            return ok(match_map=preset_mm, cached=True)
 
     key = _match_cache_key(theme, taxonomy, companies)
     if not force_refresh:

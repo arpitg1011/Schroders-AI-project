@@ -1,0 +1,556 @@
+{
+  "_v": 1,
+  "match_map": {
+    "TAIWAN SEMICONDUCTOR MFG": {
+      "Foundry": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip fab"
+      }
+    },
+    "SAMSUNG ELECTRONICS CO": {
+      "Harman": {
+        "sub_theme": "Automotive supply chain",
+        "reason": "auto components"
+      },
+      "Device Experience (DX)": {
+        "sub_theme": "Consumer electronics",
+        "reason": "consumer devices"
+      },
+      "SDC": {
+        "sub_theme": "Consumer electronics",
+        "reason": "display panels"
+      },
+      "Device Solutions (DS)": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip production"
+      }
+    },
+    "SK HYNIX": {
+      "Manufacture and Sale of Semiconductor Products": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip production"
+      }
+    },
+    "COMMONWEALTH BANK OF AUS": {
+      "Retail Banking Services (Incl. Bankwest)": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Business Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      },
+      "Institutional Banking and Markets": {
+        "sub_theme": "Financial services",
+        "reason": "banking"
+      }
+    },
+    "TENCENT HOLDINGS LI (CN)": {
+      "Fintech and Business Services": {
+        "sub_theme": "Financial services",
+        "reason": "fintech"
+      }
+    },
+    "ALIBABA GRP HLDG (HK)": {},
+    "BHP GROUP (AU)": {},
+    "WISETECH GLOBAL": {},
+    "DELTA ELECTRONICS": {
+      "Power Supply and Spare Parts Business Group": {
+        "sub_theme": "Consumer electronics",
+        "reason": "electronics components"
+      },
+      "Transportation Business Group": {
+        "sub_theme": "Shipping and logistics",
+        "reason": "transport services"
+      }
+    },
+    "NATIONAL AUSTRALIA BANK": {
+      "Business and Private Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Personal Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Corporate and Institutional Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "New Zealand Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      }
+    },
+    "MEDIATEK INC": {
+      "Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip design"
+      }
+    },
+    "ICBC H": {
+      "Corporate Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Personal Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      }
+    },
+    "WESTPAC BANKING": {
+      "Consumer": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Business & Wealth": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Institutional": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Westpac New Zealand": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      }
+    },
+    "HON HAI PRECISION IND CO": {},
+    "CHINA CONSTRUCTION BK H": {
+      "Treasury Business": {
+        "sub_theme": "Financial services",
+        "reason": "currency hedging"
+      },
+      "Personal Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Corporate Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      }
+    },
+    "DBS GROUP HOLDINGS": {
+      "Consumer Banking/Wealth Management": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Institutional Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Markets Trading": {
+        "sub_theme": "Financial services",
+        "reason": "trading services"
+      }
+    },
+    "BANK OF CHINA H": {
+      "Corporate Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Personal Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Treasury Operations": {
+        "sub_theme": "Financial services",
+        "reason": "currency hedging"
+      },
+      "Investment Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Insurance": {
+        "sub_theme": "Financial services",
+        "reason": "insurance services"
+      }
+    },
+    "SAMSUNG ELECTRO-MECH. CO": {
+      "Component": {
+        "sub_theme": "Consumer electronics",
+        "reason": "electronics components"
+      },
+      "Package Solution": {
+        "sub_theme": "Consumer electronics",
+        "reason": "electronics components"
+      },
+      "Optics Solution": {
+        "sub_theme": "Consumer electronics",
+        "reason": "electronics components"
+      }
+    },
+    "MACQUARIE GROUP": {
+      "Macquarie Asset Management": {
+        "sub_theme": "Financial services",
+        "reason": "asset management"
+      },
+      "Banking and Financial Services": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Commodities and Global Markets": {
+        "sub_theme": "Financial services",
+        "reason": "trading services"
+      },
+      "Macquarie Capital": {
+        "sub_theme": "Financial services",
+        "reason": "investment services"
+      }
+    },
+    "RELIANCE INDUSTRIES": {
+      "Digital Services": {
+        "sub_theme": "Cloud computing services",
+        "reason": "digital/cloud services"
+      }
+    },
+    "XIAOMI CORP B": {
+      "Smartphones": {
+        "sub_theme": "Consumer electronics",
+        "reason": "mobile devices"
+      },
+      "IoT and Lifestyle Products": {
+        "sub_theme": "Consumer electronics",
+        "reason": "connected devices"
+      },
+      "Internet Services": {
+        "sub_theme": "Cloud computing services",
+        "reason": "online services"
+      },
+      "Smart EV, AI and Other New Initiatives": {
+        "sub_theme": "Automotive supply chain",
+        "reason": "EV components"
+      }
+    },
+    "ICICI BANK": {
+      "Retail banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Wholesale banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Treasury": {
+        "sub_theme": "Financial services",
+        "reason": "currency hedging"
+      },
+      "Other Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Life insurance": {
+        "sub_theme": "Financial services",
+        "reason": "insurance services"
+      }
+    },
+    "OCBC BANK": {
+      "Global Wholesale Banking": {
+        "sub_theme": "Financial services",
+        "reason": "trade financing"
+      },
+      "Global Consumer/Private Banking": {
+        "sub_theme": "Financial services",
+        "reason": "retail banking"
+      },
+      "Global Markets": {
+        "sub_theme": "Financial services",
+        "reason": "currency hedging"
+      }
+    },
+    "HYUNDAI MOTOR CO": {
+      "Automotive": {
+        "sub_theme": "Automotive supply chain",
+        "reason": "vehicle assembly"
+      },
+      "Finance": {
+        "sub_theme": "Financial services",
+        "reason": "auto financing"
+      }
+    },
+    "CHROMA ATE": {},
+    "TATA CONSULTANCY": {
+      "Banking, Financial Services and Insurance": {
+        "sub_theme": "Financial services",
+        "reason": "financial services"
+      }
+    },
+    "RIO TINTO LTD (AU)": {},
+    "UNITED MICROELECTRONICS": {
+      "Wafer Fabrication": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip fab"
+      }
+    },
+    "ANZ GROUP HOLDINGS": {
+      "Institutional": {
+        "sub_theme": "Financial services",
+        "reason": "trade financing"
+      },
+      "Australia Commercial": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "Suncorp Bank": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      },
+      "New Zealand": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      }
+    },
+    "KING YUAN ELECTRONICS CO": {
+      "Contract Electronics Manufacturing Services": {
+        "sub_theme": "Consumer electronics",
+        "reason": "electronics manufacturing"
+      }
+    },
+    "SK SQUARE CO": {},
+    "MEITUAN B": {},
+    "BHARTI AIRTEL": {},
+    "HDFC BANK": {
+      "Treasury": {
+        "sub_theme": "Financial services",
+        "reason": "currency hedging"
+      },
+      "Retail Banking - Digital Banking": {
+        "sub_theme": "Financial services",
+        "reason": "retail banking"
+      },
+      "Retail Banking - Non Digital Banking": {
+        "sub_theme": "Financial services",
+        "reason": "retail banking"
+      },
+      "Wholesale Banking": {
+        "sub_theme": "Financial services",
+        "reason": "trade financing"
+      },
+      "Other Banking Operations": {
+        "sub_theme": "Financial services",
+        "reason": "banking services"
+      }
+    },
+    "AIA GROUP": {},
+    "BAIDU (HK)": {
+      "Baidu General Business": {
+        "sub_theme": "Cloud computing services",
+        "reason": "Cloud services"
+      }
+    },
+    "INFOSYS": {
+      "Financial Services": {
+        "sub_theme": "Financial services",
+        "reason": "Trade financing"
+      }
+    },
+    "LENOVO GROUP": {
+      "Intelligent Devices Group (IDG)": {
+        "sub_theme": "Consumer electronics",
+        "reason": "Device manufacturing"
+      }
+    },
+    "HONGKONG EXCH & CLEARING": {},
+    "GIGABYTE TECHNOLOGY CO": {
+      "Brand Business Division": {
+        "sub_theme": "Consumer electronics",
+        "reason": "PC and component sales"
+      }
+    },
+    "KB FINANCIAL GROUP": {
+      "Securities": {
+        "sub_theme": "Financial services",
+        "reason": "Securities business"
+      },
+      "Banking Business - Corporate Banking": {
+        "sub_theme": "Financial services",
+        "reason": "Corporate banking"
+      },
+      "Banking Business - Other Banking Services": {
+        "sub_theme": "Financial services",
+        "reason": "Banking services"
+      },
+      "Credit Card": {
+        "sub_theme": "Financial services",
+        "reason": "Credit card services"
+      }
+    },
+    "GOLD CIRCUIT ELECTRONICS": {
+      "Manufacturing and Sales of Printed Circuit Boards": {
+        "sub_theme": "Consumer electronics",
+        "reason": "PCB manufacturing"
+      }
+    },
+    "GDS HOLDINGS A (HK)": {
+      "Design, Build-Out and Operation of Data Centers": {
+        "sub_theme": "Cloud computing services",
+        "reason": "Data center operation"
+      }
+    },
+    "ASE TECHNOLOGY HOLDING": {
+      "Packaging": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "Chip packaging"
+      },
+      "Testing": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "Chip testing"
+      },
+      "Electronic Manufacturing Services (EMS)": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "EMS"
+      }
+    },
+    "CSL": {},
+    "WESFARMERS": {},
+    "SINGAPORE TELECOM": {
+      "NCS": {
+        "sub_theme": "Cloud computing services",
+        "reason": "cloud services provider"
+      },
+      "Digital Infraco": {
+        "sub_theme": "Cloud computing services",
+        "reason": "data center infrastructure"
+      }
+    },
+    "LITE-ON TECHNOLOGY CORP": {
+      "Information and Consumer Electronics Sector": {
+        "sub_theme": "Consumer electronics",
+        "reason": "consumer electronics products"
+      },
+      "Cloud and Internet of Things Department": {
+        "sub_theme": "Cloud computing services",
+        "reason": "cloud and IoT services"
+      }
+    },
+    "UNIMICRON TECHNOLOGY": {},
+    "NETEASE": {},
+    "GOODMAN GROUP": {},
+    "ASIA VITAL COMPONENTS": {},
+    "QUANTA COMPUTER": {
+      "The Electronics Sector": {
+        "sub_theme": "Consumer electronics",
+        "reason": "electronics manufacturing"
+      }
+    },
+    "NAN YA PLASTIC": {
+      "Electronic Materials": {
+        "sub_theme": "Consumer electronics",
+        "reason": "materials for electronic goods"
+      }
+    },
+    "HANMI SEMICONDUCTOR CO": {
+      "Semiconductors": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "chip production"
+      }
+    },
+    "GLOBAL UNICHIP CORP": {
+      "Semiconductor Equipment and Services": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "fab equipment"
+      }
+    },
+    "INFRATIL": {},
+    "ELITE MATERIAL CO": {},
+    "MPI CORP": {
+      "Semiconductor Equipment and Services": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "fab equipment"
+      }
+    },
+    "HCL TECHNOLOGIES": {},
+    "SAMSUNG SDS CO": {},
+    "NAVER": {
+      "Fintech": {
+        "sub_theme": "Financial services",
+        "reason": "fintech operations"
+      }
+    },
+    "KUAISHOU TECHNOLOGY B": {},
+    "KING SLIDE WORKS CO": {},
+    "PING AN INSURANCE H": {
+      "Banking": {
+        "sub_theme": "Financial services",
+        "reason": "banking activities"
+      },
+      "Asset Management Business": {
+        "sub_theme": "Financial services",
+        "reason": "asset management"
+      },
+      "Finance Enablement Business": {
+        "sub_theme": "Financial services",
+        "reason": "finance enablement"
+      }
+    },
+    "ACCTON TECHNOLOGY CORP": {},
+    "ZHONGJI INNO A(HK-C)": {},
+    "WISTRON CORP": {
+      "Research and Development and Manufacturing Services Operations": {
+        "sub_theme": "Consumer electronics",
+        "reason": "EMS for consumer devices"
+      }
+    },
+    "ALCHIP TECHNOLOGIES": {
+      "Semiconductors": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "core semiconductor business"
+      }
+    },
+    "BIZLINK HOLDING": {
+      "Home Appliance Segment": {
+        "sub_theme": "Consumer electronics",
+        "reason": "home appliance business"
+      }
+    },
+    "ZHEN DING TECHNOLOGY": {
+      "The Manufacture of Various Types of Printed Circuit Boards": {
+        "sub_theme": "Consumer electronics",
+        "reason": "PCB manufacturing for electronics"
+      }
+    },
+    "ASPEED TECHNOLOGY": {
+      "Semiconductors": {
+        "sub_theme": "Semiconductor manufacturing",
+        "reason": "core semiconductor business"
+      }
+    },
+    "WIWYNN CORPORATION": {
+      "Computer Hardware": {
+        "sub_theme": "Consumer electronics",
+        "reason": "computer hardware sales"
+      }
+    },
+    "CAMBRICON TECH A (HK-C)": {
+      "Cloud Product Line": {
+        "sub_theme": "Cloud computing services",
+        "reason": "cloud services offering"
+      },
+      "Edge Product Line": {
+        "sub_theme": "Cloud computing services",
+        "reason": "edge computing services"
+      }
+    },
+    "DELTA ELECTRONICS THAI": {
+      "Power Electronics": {
+        "sub_theme": "Renewable energy equipment",
+        "reason": "power electronics for renewables"
+      },
+      "Mobility": {
+        "sub_theme": "Automotive supply chain",
+        "reason": "vehicle-related products"
+      }
+    },
+    "KEPPEL": {},
+    "PERSISTENT SYSTEMS": {
+      "Banking, Financial Services and Insurance (BFSI)": {
+        "sub_theme": "Financial services",
+        "reason": "financial services segment"
+      }
+    },
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
+    "XERO (AU)": {}
+  }
+}

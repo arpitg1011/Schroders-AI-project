@@ -1,0 +1,173 @@
+{
+  "_v": 1,
+  "match_map": {
+    "TAIWAN SEMICONDUCTOR MFG": {
+      "Foundry": {
+        "sub_theme": "AI semiconductors & accelerators",
+        "reason": "sector relevance"
+      }
+    },
+    "SAMSUNG ELECTRONICS CO": {
+      "Device Solutions (DS)": {
+        "sub_theme": "Memory for AI",
+        "reason": "sector relevance"
+      }
+    },
+    "SK HYNIX": {
+      "Manufacture and Sale of Semiconductor Products": {
+        "sub_theme": "Memory for AI",
+        "reason": "sector relevance"
+      }
+    },
+    "COMMONWEALTH BANK OF AUS": {},
+    "TENCENT HOLDINGS LI (CN)": {
+      "Fintech and Business Services": {
+        "sub_theme": "Cloud AI platforms",
+        "reason": "sector relevance"
+      }
+    },
+    "ALIBABA GRP HLDG (HK)": {},
+    "BHP GROUP (AU)": {},
+    "WISETECH GLOBAL": {},
+    "DELTA ELECTRONICS": {
+      "Infrastructure Business Group": {
+        "sub_theme": "Data center power & cooling",
+        "reason": "sector relevance"
+      }
+    },
+    "NATIONAL AUSTRALIA BANK": {},
+    "MEDIATEK INC": {
+      "Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": {
+        "sub_theme": "AI semiconductors & accelerators",
+        "reason": "sector relevance"
+      }
+    },
+    "ICBC H": {},
+    "WESTPAC BANKING": {},
+    "HON HAI PRECISION IND CO": {},
+    "CHINA CONSTRUCTION BK H": {},
+    "DBS GROUP HOLDINGS": {},
+    "BANK OF CHINA H": {},
+    "SAMSUNG ELECTRO-MECH. CO": {},
+    "MACQUARIE GROUP": {},
+    "RELIANCE INDUSTRIES": {},
+    "XIAOMI CORP B": {
+      "Smart EV, AI and Other New Initiatives": {
+        "sub_theme": "Consumer AI & devices",
+        "reason": "sector relevance"
+      }
+    },
+    "ICICI BANK": {},
+    "OCBC BANK": {},
+    "HYUNDAI MOTOR CO": {},
+    "CHROMA ATE": {},
+    "TATA CONSULTANCY": {},
+    "RIO TINTO LTD (AU)": {},
+    "UNITED MICROELECTRONICS": {},
+    "ANZ GROUP HOLDINGS": {},
+    "KING YUAN ELECTRONICS CO": {},
+    "SK SQUARE CO": {},
+    "MEITUAN B": {},
+    "BHARTI AIRTEL": {},
+    "HDFC BANK": {},
+    "AIA GROUP": {},
+    "BAIDU (HK)": {
+      "Baidu General Business": {
+        "sub_theme": "Cloud AI platforms",
+        "reason": "sector relevance"
+      }
+    },
+    "INFOSYS": {},
+    "LENOVO GROUP": {},
+    "HONGKONG EXCH & CLEARING": {},
+    "GIGABYTE TECHNOLOGY CO": {},
+    "KB FINANCIAL GROUP": {},
+    "GOLD CIRCUIT ELECTRONICS": {},
+    "GDS HOLDINGS A (HK)": {},
+    "ASE TECHNOLOGY HOLDING": {},
+    "CSL": {},
+    "WESFARMERS": {},
+    "SINGAPORE TELECOM": {},
+    "LITE-ON TECHNOLOGY CORP": {},
+    "UNIMICRON TECHNOLOGY": {},
+    "NETEASE": {},
+    "GOODMAN GROUP": {},
+    "ASIA VITAL COMPONENTS": {
+      "Overseas Operating Department": {
+        "sub_theme": "Data center power & cooling",
+        "reason": "sector relevance"
+      }
+    },
+    "QUANTA COMPUTER": {
+      "The Electronics Sector": {
+        "sub_theme": "AI server hardware",
+        "reason": "sector relevance"
+      }
+    },
+    "NAN YA PLASTIC": {},
+    "HANMI SEMICONDUCTOR CO": {},
+    "GLOBAL UNICHIP CORP": {
+      "Semiconductor Equipment and Services": {
+        "sub_theme": "AI chip design & IP",
+        "reason": "sector relevance"
+      }
+    },
+    "INFRATIL": {},
+    "ELITE MATERIAL CO": {},
+    "MPI CORP": {},
+    "HCL TECHNOLOGIES": {},
+    "SAMSUNG SDS CO": {},
+    "NAVER": {
+      "Enterprise": {
+        "sub_theme": "Cloud AI platforms",
+        "reason": "sector relevance"
+      }
+    },
+    "KUAISHOU TECHNOLOGY B": {},
+    "KING SLIDE WORKS CO": {},
+    "PING AN INSURANCE H": {},
+    "ACCTON TECHNOLOGY CORP": {},
+    "ZHONGJI INNO A(HK-C)": {
+      "Optical Communication Transceiver Modules and Devices": {
+        "sub_theme": "Networking & interconnect",
+        "reason": "sector relevance"
+      }
+    },
+    "WISTRON CORP": {},
+    "ALCHIP TECHNOLOGIES": {
+      "Semiconductors": {
+        "sub_theme": "AI chip design & IP",
+        "reason": "sector relevance"
+      }
+    },
+    "BIZLINK HOLDING": {},
+    "ZHEN DING TECHNOLOGY": {},
+    "ASPEED TECHNOLOGY": {},
+    "WIWYNN CORPORATION": {
+      "Computer Hardware": {
+        "sub_theme": "AI server hardware",
+        "reason": "sector relevance"
+      }
+    },
+    "CAMBRICON TECH A (HK-C)": {
+      "Cloud Product Line": {
+        "sub_theme": "AI semiconductors & accelerators",
+        "reason": "sector relevance"
+      },
+      "Edge Product Line": {
+        "sub_theme": "AI semiconductors & accelerators",
+        "reason": "sector relevance"
+      },
+      "IP Licensing and Software": {
+        "sub_theme": "AI chip design & IP",
+        "reason": "sector relevance"
+      }
+    },
+    "DELTA ELECTRONICS THAI": {},
+    "KEPPEL": {},
+    "PERSISTENT SYSTEMS": {},
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
+    "XERO (AU)": {}
+  }
+}

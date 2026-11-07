@@ -1,0 +1,167 @@
+{
+  "_v": 1,
+  "match_map": {
+    "TAIWAN SEMICONDUCTOR MFG": {
+      "Foundry": {
+        "sub_theme": "Foundry Services",
+        "reason": "core foundry business"
+      }
+    },
+    "SAMSUNG ELECTRONICS CO": {
+      "Device Solutions (DS)": {
+        "sub_theme": "Integrated Device Manufacturers",
+        "reason": "semiconductor device manufacturing"
+      }
+    },
+    "SK HYNIX": {
+      "Manufacture and Sale of Semiconductor Products": {
+        "sub_theme": "Memory Chip Producers",
+        "reason": "memory chip manufacturing"
+      }
+    },
+    "COMMONWEALTH BANK OF AUS": {},
+    "TENCENT HOLDINGS LI (CN)": {},
+    "ALIBABA GRP HLDG (HK)": {},
+    "BHP GROUP (AU)": {},
+    "WISETECH GLOBAL": {},
+    "DELTA ELECTRONICS": {},
+    "NATIONAL AUSTRALIA BANK": {},
+    "MEDIATEK INC": {
+      "Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": {
+        "sub_theme": "Logic Chip Makers",
+        "reason": "mobile SoC design"
+      }
+    },
+    "ICBC H": {},
+    "WESTPAC BANKING": {},
+    "HON HAI PRECISION IND CO": {},
+    "CHINA CONSTRUCTION BK H": {},
+    "DBS GROUP HOLDINGS": {},
+    "BANK OF CHINA H": {},
+    "SAMSUNG ELECTRO-MECH. CO": {
+      "Package Solution": {
+        "sub_theme": "Semiconductor Packaging & Testing",
+        "reason": "semiconductor packaging services"
+      }
+    },
+    "MACQUARIE GROUP": {},
+    "RELIANCE INDUSTRIES": {},
+    "XIAOMI CORP B": {},
+    "ICICI BANK": {},
+    "OCBC BANK": {},
+    "HYUNDAI MOTOR CO": {},
+    "CHROMA ATE": {
+      "Measuring Instruments Business": {
+        "sub_theme": "Semiconductor Equipment Suppliers",
+        "reason": "semiconductor test equipment"
+      },
+      "Automatic Equipment Department": {
+        "sub_theme": "Semiconductor Equipment Suppliers",
+        "reason": "semiconductor equipment supplier"
+      }
+    },
+    "TATA CONSULTANCY": {},
+    "RIO TINTO LTD (AU)": {},
+    "UNITED MICROELECTRONICS": {
+      "Wafer Fabrication": {
+        "sub_theme": "Integrated Device Manufacturers",
+        "reason": "wafer fab"
+      }
+    },
+    "ANZ GROUP HOLDINGS": {},
+    "KING YUAN ELECTRONICS CO": {},
+    "SK SQUARE CO": {},
+    "MEITUAN B": {},
+    "BHARTI AIRTEL": {},
+    "HDFC BANK": {},
+    "AIA GROUP": {},
+    "BAIDU (HK)": {},
+    "INFOSYS": {},
+    "LENOVO GROUP": {},
+    "HONGKONG EXCH & CLEARING": {},
+    "GIGABYTE TECHNOLOGY CO": {},
+    "KB FINANCIAL GROUP": {},
+    "GOLD CIRCUIT ELECTRONICS": {},
+    "GDS HOLDINGS A (HK)": {},
+    "ASE TECHNOLOGY HOLDING": {},
+    "CSL": {},
+    "WESFARMERS": {},
+    "SINGAPORE TELECOM": {},
+    "LITE-ON TECHNOLOGY CORP": {},
+    "UNIMICRON TECHNOLOGY": {},
+    "NETEASE": {},
+    "GOODMAN GROUP": {},
+    "ASIA VITAL COMPONENTS": {},
+    "QUANTA COMPUTER": {},
+    "NAN YA PLASTIC": {},
+    "HANMI SEMICONDUCTOR CO": {
+      "Semiconductors": {
+        "sub_theme": "Integrated Device Manufacturers",
+        "reason": "core semiconductor business"
+      }
+    },
+    "GLOBAL UNICHIP CORP": {
+      "Semiconductor Equipment and Services": {
+        "sub_theme": "Semiconductor Equipment Suppliers",
+        "reason": "equipment supplier"
+      }
+    },
+    "INFRATIL": {},
+    "ELITE MATERIAL CO": {},
+    "MPI CORP": {
+      "Semiconductor Equipment and Services": {
+        "sub_theme": "Semiconductor Equipment Suppliers",
+        "reason": "equipment supplier"
+      }
+    },
+    "HCL TECHNOLOGIES": {},
+    "SAMSUNG SDS CO": {},
+    "NAVER": {},
+    "KUAISHOU TECHNOLOGY B": {},
+    "KING SLIDE WORKS CO": {},
+    "PING AN INSURANCE H": {},
+    "ACCTON TECHNOLOGY CORP": {},
+    "ZHONGJI INNO A(HK-C)": {},
+    "WISTRON CORP": {},
+    "ALCHIP TECHNOLOGIES": {
+      "Semiconductors": {
+        "sub_theme": "Integrated Device Manufacturers",
+        "reason": "generic semiconductor manufacturing"
+      }
+    },
+    "BIZLINK HOLDING": {},
+    "ZHEN DING TECHNOLOGY": {},
+    "ASPEED TECHNOLOGY": {
+      "Semiconductors": {
+        "sub_theme": "Logic Chip Makers",
+        "reason": "designs logic ASICs"
+      }
+    },
+    "WIWYNN CORPORATION": {},
+    "CAMBRICON TECH A (HK-C)": {
+      "Cloud Product Line": {
+        "sub_theme": "Logic Chip Makers",
+        "reason": "AI processor product"
+      },
+      "Edge Product Line": {
+        "sub_theme": "Logic Chip Makers",
+        "reason": "AI processor product"
+      },
+      "IP Licensing and Software": {
+        "sub_theme": "Logic Chip Makers",
+        "reason": "Chip IP licensing"
+      }
+    },
+    "DELTA ELECTRONICS THAI": {
+      "Power Electronics": {
+        "sub_theme": "Power Semiconductor Companies",
+        "reason": "Power semiconductor products"
+      }
+    },
+    "KEPPEL": {},
+    "PERSISTENT SYSTEMS": {},
+    "TECH MAHINDRA": {},
+    "WIPRO": {},
+    "XERO (AU)": {}
+  }
+}

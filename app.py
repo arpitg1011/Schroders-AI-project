@@ -73,6 +73,23 @@ def _resolve_taxonomy(theme: str, n: int, portfolio_df, segments,
     """
     n = max(engine._MIN_SUBS, min(engine._MAX_SUBS, int(n)))
 
+    # --- Global preset themes: canonical 10-sub taxonomy shipped for EVERYONE
+    # (logged-in or not). Any count 3..10 is served by taking the top-N
+    # sub-themes by portfolio exposure from the canonical 10 - instant, no LLM.
+    # Regenerate still forces a fresh live generation (and, if logged in, saves
+    # it to the profile, overriding the preset for that user). ---
+    if not force_refresh:
+        preset = engine.get_preset_taxonomy(theme)
+        if preset is not None:
+            canonical = preset["layer1"]
+            if n >= len(canonical):
+                layer1 = canonical
+            else:
+                ranked = _rank_subs_by_exposure(canonical, portfolio_df, segments, theme)
+                layer1 = ranked[:n]
+            return {"ok": True, "cached": True,
+                    "taxonomy": {"theme": preset["theme"], "layer1": layer1}}
+
     # --- Anonymous: original file-cache behaviour, now count-aware. ---
     if not _is_logged_in():
         return engine.generate_taxonomy(theme, n=n, force_refresh=force_refresh)

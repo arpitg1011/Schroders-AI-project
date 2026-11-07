@@ -7,12 +7,7 @@
     "COMMONWEALTH BANK OF AUS": {},
     "TENCENT HOLDINGS LI (CN)": {},
     "ALIBABA GRP HLDG (HK)": {},
-    "BHP GROUP (AU)": {
-      "Coal": {
-        "sub_theme": "Energy",
-        "reason": "energy commodity"
-      }
-    },
+    "BHP GROUP (AU)": {},
     "WISETECH GLOBAL": {},
     "DELTA ELECTRONICS": {},
     "NATIONAL AUSTRALIA BANK": {},
@@ -22,37 +17,13 @@
     "HON HAI PRECISION IND CO": {},
     "CHINA CONSTRUCTION BK H": {},
     "DBS GROUP HOLDINGS": {},
-    "BANK OF CHINA H": {
-      "Insurance": {
-        "sub_theme": "Insurance",
-        "reason": "insurance business"
-      }
-    },
+    "BANK OF CHINA H": {},
     "SAMSUNG ELECTRO-MECH. CO": {},
     "MACQUARIE GROUP": {},
-    "RELIANCE INDUSTRIES": {
-      "Oil to Chemicals (O2C)": {
-        "sub_theme": "Energy",
-        "reason": "oil & chemicals"
-      },
-      "Oil and Gas": {
-        "sub_theme": "Energy",
-        "reason": "oil & gas"
-      }
-    },
+    "RELIANCE INDUSTRIES": {},
     "XIAOMI CORP B": {},
-    "ICICI BANK": {
-      "Life insurance": {
-        "sub_theme": "Insurance",
-        "reason": "insurance business"
-      }
-    },
-    "OCBC BANK": {
-      "Insurance": {
-        "sub_theme": "Insurance",
-        "reason": "insurance business"
-      }
-    },
+    "ICICI BANK": {},
+    "OCBC BANK": {},
     "HYUNDAI MOTOR CO": {},
     "CHROMA ATE": {},
     "TATA CONSULTANCY": {},
@@ -61,31 +32,26 @@
     "ANZ GROUP HOLDINGS": {},
     "KING YUAN ELECTRONICS CO": {},
     "SK SQUARE CO": {},
-    "MEITUAN B": {
-      "Core Local Commerce": {
-        "sub_theme": "Food & Beverage",
-        "reason": "food delivery platform"
-      }
-    },
+    "MEITUAN B": {},
     "BHARTI AIRTEL": {},
     "HDFC BANK": {},
     "AIA GROUP": {},
     "BAIDU (HK)": {},
     "INFOSYS": {},
     "LENOVO GROUP": {},
-    "HONGKONG EXCH & CLEARING": {
-      "Commodities": {
-        "sub_theme": "Agriculture",
-        "reason": "trading of agri commodities"
-      }
-    },
+    "HONGKONG EXCH & CLEARING": {},
     "GIGABYTE TECHNOLOGY CO": {},
     "KB FINANCIAL GROUP": {},
     "GOLD CIRCUIT ELECTRONICS": {},
     "GDS HOLDINGS A (HK)": {},
     "ASE TECHNOLOGY HOLDING": {},
     "CSL": {},
-    "WESFARMERS": {},
+    "WESFARMERS": {
+      "Kmart Group": {
+        "sub_theme": "Retail grocery chains",
+        "reason": "retail grocery retailer"
+      }
+    },
     "SINGAPORE TELECOM": {},
     "LITE-ON TECHNOLOGY CORP": {},
     "UNIMICRON TECHNOLOGY": {},
@@ -105,13 +71,9 @@
     "KUAISHOU TECHNOLOGY B": {},
     "KING SLIDE WORKS CO": {},
     "PING AN INSURANCE H": {
-      "Life and Health Insurance": {
-        "sub_theme": "Insurance",
-        "reason": "storm damage claims relevance"
-      },
       "Property and Casualty Insurance": {
-        "sub_theme": "Insurance",
-        "reason": "storm damage claims relevance"
+        "sub_theme": "Property & casualty insurers",
+        "reason": "Relevant insurer"
       }
     },
     "ACCTON TECHNOLOGY CORP": {},
@@ -123,19 +85,9 @@
     "ASPEED TECHNOLOGY": {},
     "WIWYNN CORPORATION": {},
     "CAMBRICON TECH A (HK-C)": {},
-    "DELTA ELECTRONICS THAI": {
-      "Power Electronics": {
-        "sub_theme": "Energy",
-        "reason": "Energy equipment"
-      }
-    },
+    "DELTA ELECTRONICS THAI": {},
     "KEPPEL": {},
-    "PERSISTENT SYSTEMS": {
-      "Banking, Financial Services and Insurance (BFSI)": {
-        "sub_theme": "Insurance",
-        "reason": "Insurance services"
-      }
-    },
+    "PERSISTENT SYSTEMS": {},
     "TECH MAHINDRA": {},
     "WIPRO": {},
     "XERO (AU)": {}

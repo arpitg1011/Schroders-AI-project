@@ -1,0 +1,434 @@
+[
+  {
+    "theme": "electric vehicles",
+    "layer1": [
+      {"sub_industry": "EV manufacturers", "activities": ["electric vehicle assembly", "EV model production"]},
+      {"sub_industry": "Battery producers", "activities": ["lithium-ion cells", "battery packs"]},
+      {"sub_industry": "Power electronics & drivetrain", "activities": ["inverters", "EV power supplies"]},
+      {"sub_industry": "Charging infrastructure", "activities": ["charging stations", "charging networks"]},
+      {"sub_industry": "Battery materials & mining", "activities": ["lithium", "cathode materials"]},
+      {"sub_industry": "Automotive semiconductors", "activities": ["automotive chips", "power semiconductors"]},
+      {"sub_industry": "Electronic components & connectors", "activities": ["wiring harnesses", "connectors"]},
+      {"sub_industry": "Thermal management", "activities": ["cooling systems", "heat dissipation"]},
+      {"sub_industry": "Auto finance", "activities": ["vehicle financing", "auto loans"]},
+      {"sub_industry": "Contract electronics manufacturing", "activities": ["EV electronics assembly", "EMS"]}
+    ],
+    "matches": {
+      "HYUNDAI MOTOR CO": {"Automotive": "EV manufacturers", "Finance": "Auto finance"},
+      "XIAOMI CORP B": {"Smart EV, AI and Other New Initiatives": "EV manufacturers"},
+      "DELTA ELECTRONICS": {"Power Supply and Spare Parts Business Group": "Power electronics & drivetrain", "Automation Business Group": "Power electronics & drivetrain"},
+      "DELTA ELECTRONICS THAI": {"Power Electronics": "Power electronics & drivetrain", "Mobility": "EV manufacturers"},
+      "BHP GROUP (AU)": {"Copper": "Battery materials & mining"},
+      "RIO TINTO LTD (AU)": {"Aluminium & Lithium": "Battery materials & mining", "Copper": "Battery materials & mining"},
+      "SAMSUNG SDS CO": {},
+      "BIZLINK HOLDING": {"Industrial Application Segment": "Electronic components & connectors", "Computer Transmission": "Electronic components & connectors"},
+      "ASIA VITAL COMPONENTS": {"Overseas Operating Department": "Thermal management", "Integrated Management Division": "Thermal management"},
+      "KING YUAN ELECTRONICS CO": {"Contract Electronics Manufacturing Services": "Contract electronics manufacturing"},
+      "LITE-ON TECHNOLOGY CORP": {"Information and Consumer Electronics Sector": "Power electronics & drivetrain"}
+    }
+  },
+  {
+    "theme": "digital payments",
+    "layer1": [
+      {"sub_industry": "Payment processors", "activities": ["transaction processing", "merchant acquiring"]},
+      {"sub_industry": "Mobile wallets & fintech", "activities": ["mobile wallet", "digital payments app"]},
+      {"sub_industry": "Digital banking", "activities": ["online banking", "digital retail banking"]},
+      {"sub_industry": "Card networks & issuing", "activities": ["card issuance", "card networks"]},
+      {"sub_industry": "E-commerce platforms", "activities": ["online marketplace checkout", "e-commerce payments"]},
+      {"sub_industry": "POS hardware", "activities": ["point-of-sale terminals", "payment hardware"]},
+      {"sub_industry": "Payment security", "activities": ["fraud detection", "transaction security"]},
+      {"sub_industry": "Remittance & cross-border", "activities": ["cross-border transfers", "remittances"]},
+      {"sub_industry": "Payment semiconductors", "activities": ["secure element chips", "NFC chips"]},
+      {"sub_industry": "Merchant services", "activities": ["merchant onboarding", "settlement services"]}
+    ],
+    "matches": {
+      "TENCENT HOLDINGS LI (CN)": {"Fintech and Business Services": "Mobile wallets & fintech"},
+      "ALIBABA GRP HLDG (HK)": {"Alibaba China E-commerce Group": "E-commerce platforms"},
+      "MEITUAN B": {"Core Local Commerce": "E-commerce platforms"},
+      "XIAOMI CORP B": {"Internet Services": "Mobile wallets & fintech"},
+      "RELIANCE INDUSTRIES": {"Digital Services": "Mobile wallets & fintech", "Retail": "E-commerce platforms"},
+      "NAVER": {"Fintech": "Mobile wallets & fintech", "Commerce": "E-commerce platforms"},
+      "KB FINANCIAL GROUP": {"Credit Card": "Card networks & issuing"},
+      "ICICI BANK": {"Retail banking": "Digital banking"},
+      "HDFC BANK": {"Retail Banking - Digital Banking": "Digital banking"},
+      "DBS GROUP HOLDINGS": {"Consumer Banking/Wealth Management": "Digital banking"},
+      "BHARTI AIRTEL": {}
+    }
+  },
+  {
+    "theme": "cloud computing",
+    "layer1": [
+      {"sub_industry": "Cloud infrastructure providers", "activities": ["public cloud", "IaaS"]},
+      {"sub_industry": "Enterprise SaaS", "activities": ["software-as-a-service", "cloud applications"]},
+      {"sub_industry": "Data center operators", "activities": ["data center hosting", "colocation"]},
+      {"sub_industry": "Server & hardware manufacturers", "activities": ["cloud servers", "rack systems"]},
+      {"sub_industry": "Cloud semiconductors", "activities": ["server CPUs", "AI accelerators"]},
+      {"sub_industry": "Networking equipment", "activities": ["switches", "data center networking"]},
+      {"sub_industry": "Memory & storage", "activities": ["DRAM", "enterprise storage"]},
+      {"sub_industry": "Cloud cybersecurity", "activities": ["cloud security", "identity management"]},
+      {"sub_industry": "IT services & integration", "activities": ["cloud migration", "managed cloud services"]},
+      {"sub_industry": "Power & cooling solutions", "activities": ["data center power", "cooling systems"]}
+    ],
+    "matches": {
+      "AMAZON": {},
+      "TENCENT HOLDINGS LI (CN)": {"Fintech and Business Services": "Cloud infrastructure providers"},
+      "ALIBABA GRP HLDG (HK)": {},
+      "BAIDU (HK)": {"Baidu General Business": "Cloud infrastructure providers"},
+      "NAVER": {"Enterprise": "Cloud infrastructure providers"},
+      "SAMSUNG SDS CO": {"IT Service": "IT services & integration"},
+      "GDS HOLDINGS A (HK)": {"Design, Build-Out and Operation of Data Centers": "Data center operators"},
+      "SK HYNIX": {"Manufacture and Sale of Semiconductor Products": "Memory & storage"},
+      "SAMSUNG ELECTRONICS CO": {"Device Solutions (DS)": "Memory & storage"},
+      "LENOVO GROUP": {"Infrastructure Solutions Group (ISG)": "Server & hardware manufacturers", "Solutions and Services Group (SSG)": "IT services & integration"},
+      "WIWYNN CORPORATION": {"Computer Hardware": "Server & hardware manufacturers"},
+      "QUANTA COMPUTER": {"The Electronics Sector": "Server & hardware manufacturers"},
+      "ACCTON TECHNOLOGY CORP": {"Computer Networks": "Networking equipment"},
+      "DELTA ELECTRONICS": {"Infrastructure Business Group": "Power & cooling solutions"},
+      "ASIA VITAL COMPONENTS": {"Overseas Operating Department": "Power & cooling solutions"},
+      "HCL TECHNOLOGIES": {"HCL Software": "Enterprise SaaS", "IT and Business Services": "IT services & integration"},
+      "INFOSYS": {"Financial Services": "IT services & integration"},
+      "WIPRO": {"IT Products": "Server & hardware manufacturers"},
+      "ZHONGJI INNO A(HK-C)": {"Optical Communication Transceiver Modules and Devices": "Networking equipment"}
+    }
+  },
+  {
+    "theme": "data centers",
+    "layer1": [
+      {"sub_industry": "Data center operators & REITs", "activities": ["data center hosting", "colocation"]},
+      {"sub_industry": "Cloud service providers", "activities": ["public cloud", "hyperscale cloud"]},
+      {"sub_industry": "Server hardware manufacturers", "activities": ["rack servers", "cloud servers"]},
+      {"sub_industry": "Networking & interconnect", "activities": ["switches", "optical transceivers"]},
+      {"sub_industry": "Memory & storage", "activities": ["DRAM", "enterprise storage"]},
+      {"sub_industry": "Data center semiconductors", "activities": ["server CPUs", "AI accelerators"]},
+      {"sub_industry": "Power & cooling solutions", "activities": ["data center power", "liquid cooling"]},
+      {"sub_industry": "Printed circuit boards", "activities": ["high-speed PCBs", "server boards"]},
+      {"sub_industry": "Electronic manufacturing services", "activities": ["server assembly", "EMS"]},
+      {"sub_industry": "Connectors & cabling", "activities": ["high-speed connectors", "cabling"]}
+    ],
+    "matches": {
+      "GDS HOLDINGS A (HK)": {"Design, Build-Out and Operation of Data Centers": "Data center operators & REITs"},
+      "GOODMAN GROUP": {},
+      "KEPPEL": {},
+      "WIWYNN CORPORATION": {"Computer Hardware": "Server hardware manufacturers"},
+      "QUANTA COMPUTER": {"The Electronics Sector": "Server hardware manufacturers"},
+      "LENOVO GROUP": {"Infrastructure Solutions Group (ISG)": "Server hardware manufacturers"},
+      "ACCTON TECHNOLOGY CORP": {"Computer Networks": "Networking & interconnect"},
+      "ZHONGJI INNO A(HK-C)": {"Optical Communication Transceiver Modules and Devices": "Networking & interconnect"},
+      "SK HYNIX": {"Manufacture and Sale of Semiconductor Products": "Memory & storage"},
+      "SAMSUNG ELECTRONICS CO": {"Device Solutions (DS)": "Memory & storage"},
+      "DELTA ELECTRONICS": {"Infrastructure Business Group": "Power & cooling solutions"},
+      "ASIA VITAL COMPONENTS": {"Overseas Operating Department": "Power & cooling solutions", "Integrated Management Division": "Power & cooling solutions"},
+      "GOLD CIRCUIT ELECTRONICS": {"Manufacturing and Sales of Printed Circuit Boards": "Printed circuit boards"},
+      "ZHEN DING TECHNOLOGY": {"The Manufacture of Various Types of Printed Circuit Boards": "Printed circuit boards"},
+      "UNIMICRON TECHNOLOGY": {"Taiwan": "Printed circuit boards"},
+      "ELITE MATERIAL CO": {"Domestic Segment": "Printed circuit boards"},
+      "BIZLINK HOLDING": {"Computer Transmission": "Connectors & cabling"},
+      "KING SLIDE WORKS CO": {"King Slide Works Co., Ltd.": "Server hardware manufacturers"}
+    }
+  },
+  {
+    "theme": "cybersecurity",
+    "layer1": [
+      {"sub_industry": "Security software", "activities": ["endpoint security", "security platforms"]},
+      {"sub_industry": "Managed security services", "activities": ["managed detection", "security operations"]},
+      {"sub_industry": "Identity & access management", "activities": ["identity verification", "access control"]},
+      {"sub_industry": "Network security hardware", "activities": ["firewalls", "network security appliances"]},
+      {"sub_industry": "Cloud security", "activities": ["cloud workload protection", "cloud security posture"]},
+      {"sub_industry": "Payment & transaction security", "activities": ["fraud prevention", "secure payments"]},
+      {"sub_industry": "Security semiconductors", "activities": ["secure element chips", "hardware security"]},
+      {"sub_industry": "IT security services", "activities": ["security consulting", "security integration"]},
+      {"sub_industry": "Data protection & encryption", "activities": ["encryption", "data loss prevention"]},
+      {"sub_industry": "Telecom network security", "activities": ["network protection", "telecom security"]}
+    ],
+    "matches": {
+      "HCL TECHNOLOGIES": {"HCL Software": "Security software", "IT and Business Services": "IT security services"},
+      "INFOSYS": {"Financial Services": "IT security services"},
+      "WIPRO": {"IT Services - Americas 1": "IT security services"},
+      "TECH MAHINDRA": {"Information Technology (IT) Services": "IT security services"},
+      "PERSISTENT SYSTEMS": {"Software, Hi-Tech and Emerging Industries": "Security software"},
+      "SAMSUNG SDS CO": {"IT Service": "IT security services"},
+      "TATA CONSULTANCY": {"Banking, Financial Services and Insurance": "IT security services"},
+      "NAVER": {"Enterprise": "Cloud security"}
+    }
+  },
+  {
+    "theme": "renewable energy",
+    "layer1": [
+      {"sub_industry": "Solar power", "activities": ["solar panels", "photovoltaics"]},
+      {"sub_industry": "Wind power", "activities": ["wind turbines", "wind farms"]},
+      {"sub_industry": "Energy storage & batteries", "activities": ["grid storage", "battery systems"]},
+      {"sub_industry": "Power electronics & inverters", "activities": ["solar inverters", "power conversion"]},
+      {"sub_industry": "Renewable utilities", "activities": ["renewable generation", "clean power utilities"]},
+      {"sub_industry": "Critical minerals & materials", "activities": ["copper", "lithium"]},
+      {"sub_industry": "Grid & transmission equipment", "activities": ["grid infrastructure", "transmission"]},
+      {"sub_industry": "EV & electrification", "activities": ["electric vehicles", "electrification"]},
+      {"sub_industry": "Green hydrogen", "activities": ["hydrogen production", "electrolysis"]},
+      {"sub_industry": "Renewable infrastructure investment", "activities": ["renewable project finance", "clean energy assets"]}
+    ],
+    "matches": {
+      "DELTA ELECTRONICS": {"Power Supply and Spare Parts Business Group": "Power electronics & inverters", "Infrastructure Business Group": "Grid & transmission equipment"},
+      "DELTA ELECTRONICS THAI": {"Power Electronics": "Power electronics & inverters", "Infrastructure": "Grid & transmission equipment"},
+      "BHP GROUP (AU)": {"Copper": "Critical minerals & materials"},
+      "RIO TINTO LTD (AU)": {"Copper": "Critical minerals & materials", "Aluminium & Lithium": "Critical minerals & materials"},
+      "INFRATIL": {"ALL Other Segments & Corporate New Zealand": "Renewable infrastructure investment"},
+      "HYUNDAI MOTOR CO": {"Automotive": "EV & electrification"},
+      "XIAOMI CORP B": {"Smart EV, AI and Other New Initiatives": "EV & electrification"},
+      "KEPPEL": {"Connectivity": "Renewable utilities"},
+      "RELIANCE INDUSTRIES": {"Oil and Gas": "Green hydrogen"}
+    }
+  },
+  {
+    "theme": "5G and wireless infrastructure",
+    "layer1": [
+      {"sub_industry": "Mobile network operators", "activities": ["mobile services", "wireless carriers"]},
+      {"sub_industry": "Telecom tower & passive infrastructure", "activities": ["cell towers", "passive infrastructure"]},
+      {"sub_industry": "Wireless semiconductors", "activities": ["RF chips", "baseband chips"]},
+      {"sub_industry": "Networking & transmission equipment", "activities": ["base stations", "network switches"]},
+      {"sub_industry": "Optical & fiber components", "activities": ["optical transceivers", "fiber"]},
+      {"sub_industry": "Smartphones & devices", "activities": ["5G smartphones", "mobile devices"]},
+      {"sub_industry": "Printed circuit boards", "activities": ["RF PCBs", "high-frequency boards"]},
+      {"sub_industry": "Connectors & antennas", "activities": ["antennas", "RF connectors"]},
+      {"sub_industry": "Data & connectivity services", "activities": ["connectivity services", "enterprise networks"]},
+      {"sub_industry": "Contract electronics manufacturing", "activities": ["telecom equipment assembly", "EMS"]}
+    ],
+    "matches": {
+      "BHARTI AIRTEL": {"Mobile Services India": "Mobile network operators", "Mobile Services Africa": "Mobile network operators", "Passive Infrastructure Services": "Telecom tower & passive infrastructure", "Airtel Business": "Data & connectivity services"},
+      "SINGAPORE TELECOM": {"Optus": "Mobile network operators", "Singtel Singapore": "Mobile network operators", "Digital Infraco": "Telecom tower & passive infrastructure"},
+      "MEDIATEK INC": {"Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": "Wireless semiconductors"},
+      "XIAOMI CORP B": {"Smartphones": "Smartphones & devices"},
+      "ACCTON TECHNOLOGY CORP": {"Computer Networks": "Networking & transmission equipment"},
+      "ZHONGJI INNO A(HK-C)": {"Optical Communication Transceiver Modules and Devices": "Optical & fiber components"},
+      "GOLD CIRCUIT ELECTRONICS": {"Manufacturing and Sales of Printed Circuit Boards": "Printed circuit boards"},
+      "ZHEN DING TECHNOLOGY": {"The Manufacture of Various Types of Printed Circuit Boards": "Printed circuit boards"},
+      "BIZLINK HOLDING": {"Computer Transmission": "Connectors & antennas"},
+      "HON HAI PRECISION IND CO": {"FII Subgroup": "Contract electronics manufacturing"},
+      "HONGKONG EXCH & CLEARING": {"Data and Connectivity": "Data & connectivity services"}
+    }
+  },
+  {
+    "theme": "defense and military spending",
+    "layer1": [
+      {"sub_industry": "Defense electronics", "activities": ["military electronics", "defense systems"]},
+      {"sub_industry": "Aerospace & platforms", "activities": ["military aircraft", "defense platforms"]},
+      {"sub_industry": "Defense semiconductors", "activities": ["rad-hard chips", "defense-grade semiconductors"]},
+      {"sub_industry": "Cybersecurity & secure comms", "activities": ["secure communications", "defense cyber"]},
+      {"sub_industry": "Surveillance & sensors", "activities": ["radar", "surveillance systems"]},
+      {"sub_industry": "Critical materials", "activities": ["rare earths", "specialty metals"]},
+      {"sub_industry": "Communications equipment", "activities": ["tactical communications", "military networks"]},
+      {"sub_industry": "Power systems", "activities": ["military power supplies", "ruggedized power"]},
+      {"sub_industry": "IT & systems integration", "activities": ["defense IT", "systems integration"]},
+      {"sub_industry": "Contract manufacturing", "activities": ["defense electronics assembly", "EMS"]}
+    ],
+    "matches": {
+      "DELTA ELECTRONICS": {"Power Supply and Spare Parts Business Group": "Power systems"},
+      "CHROMA ATE": {"Measuring Instruments Business": "Surveillance & sensors"},
+      "BHP GROUP (AU)": {"Copper": "Critical materials"},
+      "RIO TINTO LTD (AU)": {"Copper": "Critical materials"},
+      "HON HAI PRECISION IND CO": {"FII Subgroup": "Contract manufacturing"},
+      "SAMSUNG SDS CO": {"IT Service": "IT & systems integration"},
+      "TATA CONSULTANCY": {"Manufacturing": "IT & systems integration"},
+      "MEDIATEK INC": {"Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": "Communications equipment"}
+    }
+  },
+  {
+    "theme": "Taiwan Strait tensions",
+    "layer1": [
+      {"sub_industry": "Semiconductor foundries", "activities": ["wafer fabrication", "chip foundry"]},
+      {"sub_industry": "Semiconductor supply chain", "activities": ["chip packaging", "chip testing"]},
+      {"sub_industry": "Electronics manufacturing", "activities": ["contract electronics", "EMS"]},
+      {"sub_industry": "Consumer electronics brands", "activities": ["smartphones", "consumer devices"]},
+      {"sub_industry": "Shipping & logistics", "activities": ["container shipping", "logistics"]},
+      {"sub_industry": "Defense & security", "activities": ["defense electronics", "security systems"]},
+      {"sub_industry": "Critical minerals & materials", "activities": ["rare earths", "copper"]},
+      {"sub_industry": "Memory & components", "activities": ["memory chips", "electronic components"]},
+      {"sub_industry": "Printed circuit boards", "activities": ["PCBs", "circuit boards"]},
+      {"sub_industry": "Financial & insurance exposure", "activities": ["regional banking", "insurance"]}
+    ],
+    "matches": {
+      "TAIWAN SEMICONDUCTOR MFG": {"Foundry": "Semiconductor foundries"},
+      "UNITED MICROELECTRONICS": {"Wafer Fabrication": "Semiconductor foundries"},
+      "ASE TECHNOLOGY HOLDING": {"Packaging": "Semiconductor supply chain", "Testing": "Semiconductor supply chain", "Electronic Manufacturing Services (EMS)": "Electronics manufacturing"},
+      "KING YUAN ELECTRONICS CO": {"Contract Electronics Manufacturing Services": "Semiconductor supply chain"},
+      "HON HAI PRECISION IND CO": {"FII Subgroup": "Electronics manufacturing", "FIH Subgroup": "Electronics manufacturing"},
+      "MEDIATEK INC": {"Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": "Semiconductor supply chain"},
+      "XIAOMI CORP B": {"Smartphones": "Consumer electronics brands"},
+      "QUANTA COMPUTER": {"The Electronics Sector": "Electronics manufacturing"},
+      "GOLD CIRCUIT ELECTRONICS": {"Manufacturing and Sales of Printed Circuit Boards": "Printed circuit boards"},
+      "ZHEN DING TECHNOLOGY": {"The Manufacture of Various Types of Printed Circuit Boards": "Printed circuit boards"},
+      "SK HYNIX": {"Manufacture and Sale of Semiconductor Products": "Memory & components"}
+    }
+  },
+  {
+    "theme": "Red Sea shipping disruption",
+    "layer1": [
+      {"sub_industry": "Container shipping & logistics", "activities": ["container shipping", "freight logistics"]},
+      {"sub_industry": "Oil & gas", "activities": ["crude oil", "refined products"]},
+      {"sub_industry": "Energy & fuel refining", "activities": ["refining", "petrochemicals"]},
+      {"sub_industry": "Commodities & mining", "activities": ["iron ore", "metals"]},
+      {"sub_industry": "Supply chain software", "activities": ["logistics software", "supply chain tech"]},
+      {"sub_industry": "Marine insurance", "activities": ["cargo insurance", "marine underwriting"]},
+      {"sub_industry": "Consumer goods & retail", "activities": ["retail imports", "consumer goods"]},
+      {"sub_industry": "Electronics supply chain", "activities": ["component shipments", "electronics logistics"]},
+      {"sub_industry": "Port & infrastructure", "activities": ["port operations", "terminals"]},
+      {"sub_industry": "Manufacturing inputs", "activities": ["raw materials", "industrial inputs"]}
+    ],
+    "matches": {
+      "WISETECH GLOBAL": {"Wtg Ex. E2open": "Supply chain software", "E2open": "Supply chain software"},
+      "RELIANCE INDUSTRIES": {"Oil to Chemicals (O2C)": "Energy & fuel refining", "Oil and Gas": "Oil & gas"},
+      "BHP GROUP (AU)": {"Iron Ore": "Commodities & mining", "Copper": "Commodities & mining"},
+      "RIO TINTO LTD (AU)": {"Iron Ore": "Commodities & mining", "Copper": "Commodities & mining"},
+      "KEPPEL": {"Connectivity": "Port & infrastructure"},
+      "WESFARMERS": {"Bunnings": "Consumer goods & retail", "Kmart Group": "Consumer goods & retail"},
+      "NAN YA PLASTIC": {"Raw Materials for Plastics": "Manufacturing inputs", "Plastics Product": "Manufacturing inputs"}
+    }
+  },
+  {
+    "theme": "generative AI",
+    "layer1": [
+      {"sub_industry": "AI semiconductors & accelerators", "activities": ["AI chips", "GPUs"]},
+      {"sub_industry": "Cloud AI platforms", "activities": ["cloud AI services", "model hosting"]},
+      {"sub_industry": "Memory for AI", "activities": ["high-bandwidth memory", "DRAM"]},
+      {"sub_industry": "AI server hardware", "activities": ["AI servers", "accelerated computing"]},
+      {"sub_industry": "Enterprise AI software", "activities": ["AI applications", "enterprise AI"]},
+      {"sub_industry": "AI chip design & IP", "activities": ["chip design", "AI IP cores"]},
+      {"sub_industry": "Networking & interconnect", "activities": ["optical interconnect", "AI networking"]},
+      {"sub_industry": "Data center power & cooling", "activities": ["AI data center power", "liquid cooling"]},
+      {"sub_industry": "AI services & integration", "activities": ["AI consulting", "AI integration"]},
+      {"sub_industry": "Consumer AI & devices", "activities": ["on-device AI", "AI assistants"]}
+    ],
+    "matches": {
+      "SK HYNIX": {"Manufacture and Sale of Semiconductor Products": "Memory for AI"},
+      "SAMSUNG ELECTRONICS CO": {"Device Solutions (DS)": "Memory for AI"},
+      "MEDIATEK INC": {"Multimedia and Mobile Phone Chips and Other Integrated Circuit Design Products": "AI semiconductors & accelerators"},
+      "TAIWAN SEMICONDUCTOR MFG": {"Foundry": "AI semiconductors & accelerators"},
+      "ALCHIP TECHNOLOGIES": {"Semiconductors": "AI chip design & IP"},
+      "GLOBAL UNICHIP CORP": {"Semiconductor Equipment and Services": "AI chip design & IP"},
+      "CAMBRICON TECH A (HK-C)": {"Cloud Product Line": "AI semiconductors & accelerators", "Edge Product Line": "AI semiconductors & accelerators", "IP Licensing and Software": "AI chip design & IP"},
+      "WIWYNN CORPORATION": {"Computer Hardware": "AI server hardware"},
+      "QUANTA COMPUTER": {"The Electronics Sector": "AI server hardware"},
+      "ZHONGJI INNO A(HK-C)": {"Optical Communication Transceiver Modules and Devices": "Networking & interconnect"},
+      "DELTA ELECTRONICS": {"Infrastructure Business Group": "Data center power & cooling"},
+      "ASIA VITAL COMPONENTS": {"Overseas Operating Department": "Data center power & cooling"},
+      "BAIDU (HK)": {"Baidu General Business": "Cloud AI platforms"},
+      "NAVER": {"Enterprise": "Cloud AI platforms"},
+      "XIAOMI CORP B": {"Smart EV, AI and Other New Initiatives": "Consumer AI & devices"},
+      "TENCENT HOLDINGS LI (CN)": {"Fintech and Business Services": "Cloud AI platforms"}
+    }
+  },
+  {
+    "theme": "aging population",
+    "layer1": [
+      {"sub_industry": "Life & health insurance", "activities": ["life insurance", "health insurance"]},
+      {"sub_industry": "Pharmaceuticals & biotech", "activities": ["pharmaceuticals", "biologics"]},
+      {"sub_industry": "Healthcare services & diagnostics", "activities": ["diagnostics", "medical services"]},
+      {"sub_industry": "Wealth & asset management", "activities": ["retirement savings", "asset management"]},
+      {"sub_industry": "Medical devices", "activities": ["medical devices", "healthcare equipment"]},
+      {"sub_industry": "Healthcare IT", "activities": ["health IT", "medical software"]},
+      {"sub_industry": "Consumer healthcare & retail pharmacy", "activities": ["pharmacy retail", "consumer health"]},
+      {"sub_industry": "Banking & retirement finance", "activities": ["pension", "retirement banking"]},
+      {"sub_industry": "Elder care real estate", "activities": ["senior housing", "care facilities"]},
+      {"sub_industry": "Robotics & automation", "activities": ["care robotics", "automation"]}
+    ],
+    "matches": {
+      "AIA GROUP": {"Writes Life Insurance": "Life & health insurance"},
+      "PING AN INSURANCE H": {"Life and Health Insurance": "Life & health insurance", "Asset Management Business": "Wealth & asset management"},
+      "CSL": {"CSL Behring (Incl.CSL Intellectual Property)": "Pharmaceuticals & biotech", "CSL Seqirus": "Pharmaceuticals & biotech", "Csl Vifor": "Pharmaceuticals & biotech"},
+      "INFRATIL": {"RHCNZ Medical Imaging New Zealand": "Healthcare services & diagnostics", "Anytime Radiology Group Australia": "Healthcare services & diagnostics"},
+      "WESFARMERS": {"Health": "Consumer healthcare & retail pharmacy"},
+      "TATA CONSULTANCY": {"Life Sciences and Healthcare": "Healthcare IT"},
+      "INFOSYS": {"Life Science": "Healthcare IT"},
+      "PERSISTENT SYSTEMS": {"Healthcare & Life Sciences": "Healthcare IT"},
+      "BANK OF CHINA H": {"Insurance": "Life & health insurance"},
+      "ICICI BANK": {"Life insurance": "Life & health insurance"},
+      "KB FINANCIAL GROUP": {"Securities": "Wealth & asset management"},
+      "MACQUARIE GROUP": {"Macquarie Asset Management": "Wealth & asset management"}
+    }
+  },
+  {
+    "theme": "water scarcity",
+    "layer1": [
+      {"sub_industry": "Water utilities", "activities": ["water supply", "water treatment"]},
+      {"sub_industry": "Agriculture & irrigation", "activities": ["irrigation", "agricultural inputs"]},
+      {"sub_industry": "Industrial water use", "activities": ["industrial water", "process water"]},
+      {"sub_industry": "Mining & water-intensive extraction", "activities": ["mining operations", "mineral processing"]},
+      {"sub_industry": "Water infrastructure & equipment", "activities": ["pumps", "water infrastructure"]},
+      {"sub_industry": "Chemicals & materials", "activities": ["water treatment chemicals", "membranes"]},
+      {"sub_industry": "Food & beverage production", "activities": ["food processing", "beverages"]},
+      {"sub_industry": "Property & casualty insurance", "activities": ["drought insurance", "climate underwriting"]},
+      {"sub_industry": "Power generation water use", "activities": ["cooling water", "hydropower"]},
+      {"sub_industry": "Semiconductor water use", "activities": ["ultrapure water", "fab water use"]}
+    ],
+    "matches": {
+      "BHP GROUP (AU)": {"Copper": "Mining & water-intensive extraction", "Iron Ore": "Mining & water-intensive extraction"},
+      "RIO TINTO LTD (AU)": {"Copper": "Mining & water-intensive extraction", "Iron Ore": "Mining & water-intensive extraction"},
+      "NAN YA PLASTIC": {"Raw Materials for Plastics": "Chemicals & materials", "Electronic Materials": "Chemicals & materials"},
+      "RELIANCE INDUSTRIES": {"Oil to Chemicals (O2C)": "Industrial water use"},
+      "TAIWAN SEMICONDUCTOR MFG": {"Foundry": "Semiconductor water use"},
+      "UNITED MICROELECTRONICS": {"Wafer Fabrication": "Semiconductor water use"},
+      "WESFARMERS": {"Wes CEF": "Chemicals & materials"},
+      "INFRATIL": {"ALL Other Segments & Corporate New Zealand": "Power generation water use"}
+    }
+  },
+  {
+    "theme": "interest rate hikes",
+    "layer1": [
+      {"sub_industry": "Commercial & retail banks", "activities": ["lending", "net interest margin"]},
+      {"sub_industry": "Insurance", "activities": ["insurance float", "underwriting"]},
+      {"sub_industry": "Asset & wealth management", "activities": ["asset management", "wealth management"]},
+      {"sub_industry": "Capital markets & trading", "activities": ["markets trading", "investment banking"]},
+      {"sub_industry": "Real estate & REITs", "activities": ["property", "real estate investment"]},
+      {"sub_industry": "Consumer & auto finance", "activities": ["consumer credit", "auto loans"]},
+      {"sub_industry": "Exchanges & market infrastructure", "activities": ["exchange operations", "clearing"]},
+      {"sub_industry": "Treasury operations", "activities": ["treasury", "fixed income"]},
+      {"sub_industry": "Credit cards", "activities": ["card lending", "revolving credit"]},
+      {"sub_industry": "Diversified financials", "activities": ["diversified finance", "financial services"]}
+    ],
+    "matches": {
+      "COMMONWEALTH BANK OF AUS": {"Retail Banking Services (Incl. Bankwest)": "Commercial & retail banks", "Business Banking": "Commercial & retail banks", "Institutional Banking and Markets": "Capital markets & trading"},
+      "NATIONAL AUSTRALIA BANK": {"Business and Private Banking": "Commercial & retail banks", "Personal Banking": "Commercial & retail banks"},
+      "WESTPAC BANKING": {"Consumer": "Commercial & retail banks", "Institutional": "Capital markets & trading"},
+      "ANZ GROUP HOLDINGS": {"Australia Commercial": "Commercial & retail banks", "Institutional": "Capital markets & trading"},
+      "ICBC H": {"Corporate Banking": "Commercial & retail banks", "Personal Banking": "Commercial & retail banks"},
+      "CHINA CONSTRUCTION BK H": {"Corporate Banking": "Commercial & retail banks", "Treasury Business": "Treasury operations"},
+      "BANK OF CHINA H": {"Corporate Banking": "Commercial & retail banks", "Treasury Operations": "Treasury operations", "Insurance": "Insurance"},
+      "DBS GROUP HOLDINGS": {"Institutional Banking": "Commercial & retail banks", "Markets Trading": "Capital markets & trading"},
+      "OCBC BANK": {"Global Wholesale Banking": "Commercial & retail banks", "Global Markets": "Capital markets & trading", "Insurance": "Insurance"},
+      "ICICI BANK": {"Retail banking": "Commercial & retail banks", "Treasury": "Treasury operations", "Life insurance": "Insurance"},
+      "HDFC BANK": {"Wholesale Banking": "Commercial & retail banks", "Treasury": "Treasury operations"},
+      "KB FINANCIAL GROUP": {"Banking Business - Corporate Banking": "Commercial & retail banks", "Securities": "Capital markets & trading", "Credit Card": "Credit cards"},
+      "MACQUARIE GROUP": {"Banking and Financial Services": "Commercial & retail banks", "Macquarie Asset Management": "Asset & wealth management", "Commodities and Global Markets": "Capital markets & trading"},
+      "AIA GROUP": {"Writes Life Insurance": "Insurance"},
+      "PING AN INSURANCE H": {"Banking": "Commercial & retail banks", "Life and Health Insurance": "Insurance", "Asset Management Business": "Asset & wealth management"},
+      "HONGKONG EXCH & CLEARING": {"Cash": "Exchanges & market infrastructure", "Equity and Financial Derivatives": "Exchanges & market infrastructure"},
+      "GOODMAN GROUP": {"Property investment": "Real estate & REITs"},
+      "HYUNDAI MOTOR CO": {"Finance": "Consumer & auto finance"}
+    }
+  },
+  {
+    "theme": "gold and safe haven demand",
+    "layer1": [
+      {"sub_industry": "Precious metals mining", "activities": ["gold mining", "precious metals"]},
+      {"sub_industry": "Diversified mining", "activities": ["base metals", "diversified mining"]},
+      {"sub_industry": "Banks & bullion", "activities": ["bullion trading", "treasury"]},
+      {"sub_industry": "Asset & wealth management", "activities": ["asset management", "wealth management"]},
+      {"sub_industry": "Commodities trading", "activities": ["commodities trading", "commodity markets"]},
+      {"sub_industry": "Exchanges & market infrastructure", "activities": ["commodity exchange", "clearing"]},
+      {"sub_industry": "Insurance", "activities": ["insurance reserves", "underwriting"]},
+      {"sub_industry": "Diversified financials", "activities": ["financial services", "diversified finance"]},
+      {"sub_industry": "Base metals & copper", "activities": ["copper", "industrial metals"]},
+      {"sub_industry": "Safe-haven treasury & reserves", "activities": ["treasury operations", "reserves"]}
+    ],
+    "matches": {
+      "BHP GROUP (AU)": {"Copper": "Base metals & copper", "Iron Ore": "Diversified mining"},
+      "RIO TINTO LTD (AU)": {"Copper": "Base metals & copper", "Iron Ore": "Diversified mining", "Aluminium & Lithium": "Diversified mining"},
+      "MACQUARIE GROUP": {"Commodities and Global Markets": "Commodities trading", "Macquarie Asset Management": "Asset & wealth management"},
+      "HONGKONG EXCH & CLEARING": {"Commodities": "Exchanges & market infrastructure", "Cash": "Exchanges & market infrastructure"},
+      "BANK OF CHINA H": {"Treasury Operations": "Banks & bullion", "Insurance": "Insurance"},
+      "ICBC H": {"Corporate Banking": "Banks & bullion"},
+      "CHINA CONSTRUCTION BK H": {"Treasury Business": "Banks & bullion"},
+      "KB FINANCIAL GROUP": {"Securities": "Asset & wealth management"},
+      "AIA GROUP": {"Writes Life Insurance": "Insurance"},
+      "PING AN INSURANCE H": {"Asset Management Business": "Asset & wealth management", "Life and Health Insurance": "Insurance"}
+    }
+  }
+]
