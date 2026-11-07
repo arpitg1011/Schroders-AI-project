@@ -243,26 +243,30 @@ def _is_favourite(theme: str) -> bool:
     return any(key == t.strip().lower() for t in _get_favourites())
 
 
-def _add_favourite(theme: str) -> None:
+def _add_favourite(theme: str) -> dict:
+    """Add a favourite. Returns {ok, message?} so the caller can surface
+    Supabase errors (e.g. the favourite_themes table not yet created)."""
     theme = (theme or "").strip()
     if not theme:
-        return
+        return {"ok": False, "message": "Empty theme."}
     if _is_logged_in():
-        sb.add_favourite(st.session_state["auth"]["session"], theme)
-    else:
-        favs = st.session_state.setdefault("_fav_themes", [])
-        if not any(theme.lower() == t.lower() for t in favs):
-            favs.insert(0, theme)
+        res = sb.add_favourite(st.session_state["auth"]["session"], theme)
+        return res if isinstance(res, dict) else {"ok": True}
+    favs = st.session_state.setdefault("_fav_themes", [])
+    if not any(theme.lower() == t.lower() for t in favs):
+        favs.insert(0, theme)
+    return {"ok": True}
 
 
-def _remove_favourite(theme: str) -> None:
+def _remove_favourite(theme: str) -> dict:
     theme = (theme or "").strip()
     if _is_logged_in():
-        sb.remove_favourite(st.session_state["auth"]["session"], theme)
-    else:
-        favs = st.session_state.get("_fav_themes", [])
-        st.session_state["_fav_themes"] = [t for t in favs
-                                           if t.lower() != theme.lower()]
+        res = sb.remove_favourite(st.session_state["auth"]["session"], theme)
+        return res if isinstance(res, dict) else {"ok": True}
+    favs = st.session_state.get("_fav_themes", [])
+    st.session_state["_fav_themes"] = [t for t in favs
+                                       if t.lower() != theme.lower()]
+    return {"ok": True}
 
 
 def render_login_gate() -> bool:
@@ -565,10 +569,16 @@ def section_overview(analysis: dict):
             label = "★ Favourited" if is_fav else "☆ Favourite"
             help_txt = ("Remove from My Favourites" if is_fav
                         else "Save to My Favourites (for the Comparison tab)")
+            # type="primary" (gold/blue accent) when already favourited, so the
+            # state is visually distinct from the un-favourited secondary button.
             if st.button(label, key="fav_toggle_overview",
-                         use_container_width=True, help=help_txt):
-                (_remove_favourite if is_fav else _add_favourite)(theme_name)
-                st.rerun()
+                         use_container_width=True, help=help_txt,
+                         type=("primary" if is_fav else "secondary")):
+                res = (_remove_favourite if is_fav else _add_favourite)(theme_name)
+                if not res.get("ok"):
+                    st.error(f"Could not update favourites: {res.get('message','')}")
+                else:
+                    st.rerun()
 
     c1, c2, c3 = st.columns(3)
     _kpi_card(c1, "Portfolio Thematic Exposure", f"{pexp:.0f}%",
